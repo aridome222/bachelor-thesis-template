@@ -18,3 +18,10 @@ clean-intermediate-file:
 
 clean: clean-intermediate-file
 	rm -f *.pdf
+
+clear:
+	rm -f *.aux *.dvi *.fdb_latexmk *.fls *.log *.synctex.gz *.out *.toc
+
+run:
+	latexmk paper.tex -f
+	rm -f *.aux *.dvi *.fdb_latexmk *.fls *.log *.synctex.gz *.out *.toc
