@@ -1,28 +1,41 @@
-\chapter{MixVRTの外観と機能}\label{cha:Function}
-本章では、本研究で試作したツールMixVRT(Mix Visual Regression Test)の外観と機能について説明する。
-MixVRT(Mix Visual Regression Test)は、WebページのHTMLコードと画像に基づく視覚的回帰テスト支援ツールである。
+\chapter{ \toolName の外観と機能}\label{cha:Function}
+本章では、本研究で試作したツール\toolName (Mix Visual Regression Test)の外観と機能について説明する。
+\toolName (Mix Visual Regression Test)は、WebページのHTMLコードと画像に基づく視覚的回帰テスト支援ツールである。
 
 
 \section{外観}\label{sec:area_detection}
+\toolName の外観を、図3.1に示す。\toolName は、以下に示す4つのタブメニューボタンと2つのエリアからなる。
+なお、以下の数字は、図3.1の数字と対応している。
+\begin{itemize}
+    \item[①] オリジナル画像表示タブメニューボタン
+    \item[②] 画像比較に基づく差分箇所表示タブメニューボタン
+    \item[③] HTMLの変更に基づく影響箇所表示タブメニューボタン
+    \item[④] レイアウトの副作用箇所表示タブメニューボタン
+    \item[⑤] 画像表示エリア
+\end{itemize}
+\par
+
+\subsection{オリジナル画像表示タブメニューボタン}\label{subsec:original_tab}
+オリジナル画像表示タブメニューボタンを押すと、変更前のWebページ画面画像と変更後のWebページ画面画像を表示する。
 
 
+\subsection{画像比較に基づく差分箇所表示タブメニューボタン}\label{subsec:img_tab}
+画像比較に基づく差分箇所表示タブメニューボタンを押すと、画像比較に基づく差分箇所を強調表示した、変更前のWebページ画面画像と変更後のWebページ画面画像を表示する。
 
-\subsection{オリジナル画像表示タブ}\label{subsec:att}
-
-
-\subsection{画像比較表示タブ}\label{subsec:a}
-
-
-\subsection{HTMLの変更による影響箇所表示タブ}\label{subsec:tt}
+\subsection{HTMLの変更に基づく影響箇所表示タブメニューボタン}\label{subsec:html_tab}
+HTMLの変更に基づく影響箇所表示タブメニューボタンを押すと、HTMLの変更に基づく影響箇所を強調表示した、変更前のWebページ画面画像と変更後のWebページ画面画像を表示する。
 
 
-\subsection{レイアウトの副作用表示タブ}\label{subsec:at}
+\subsection{レイアウトの副作用箇所表示タブメニューボタン}\label{subsec:subeffect_tab}
+レイアウトの副作用箇所画像表示タブメニューボタンを押すと、レイアウトの副作用箇所を強調表示した、変更前のWebページ画面画像と変更後のWebページ画面画像を表示する。
 
 
+\subsection{画像表示エリア}\label{subsec:img_area}
+画像表示エリアは、Webページの変更前と変更後の画像を表示する。
 
 
 \section{機能}\label{sec:label_detection}
-MixVRTは、WebページのURLを入力とする。
+\toolName は、WebページのURLを入力とする。
 出力は、
 
 
