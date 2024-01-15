@@ -1,7 +1,7 @@
 \chapter{ \toolName の外観と機能}\label{cha:Function}
 本章では、本研究で試作したツール\toolName (Mix Visual Regression Test)の外観と機能について説明する。
 \par
-\toolName (Mix Visual Regression Test)は、Webページの画像とHTMLコードに基づく視覚的回帰テスト支援ツールである。
+\toolName (Mix Visual Regression Test)は、Webページの画像とHTMLコードに基づいてレイアウトの副作用箇所レイアウトの不具合の発見を支援する、視覚的回帰テスト支援ツールである。
 % \toolName は、WebページのURLを入力とする。
 % 出力は、レイアウトの不具合を効率的に見つけるための確認画面ビューである。
 % MixVRTの機能として、
@@ -13,11 +13,11 @@
 
 \toolName の外観を、図\ref{fig: Appearance}に示す。
 \begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_Outline_Appearance.png}
-        \caption{\toolName の外観}
-        \label{fig: Appearance}
-    \end{center}
+	\begin{center}
+		\includegraphics[width=1.0\columnwidth]{image/3_Outline_Appearance.png}
+		\caption{\toolName の外観}
+		\label{fig: Appearance}
+	\end{center}
 \end{figure}
 % \toolName は、以下に示す4つのタブからなるタブメニューと各タブに対応した内容を表示するタブコンテンツからなる。
 % なお、以下の数字は、図\ref{fig: Appearance}の数字と対応している。
@@ -38,14 +38,14 @@
 Webアプリケーションとして試作した\toolName は、以下に示す4つのタブからなるタブメニューと各タブに対応した内容を表示するタブコンテンツからなる。
 なお、以下の数字は、図\ref{fig: Appearance}の数字と対応している。
 \begin{itemize}
-    \item[①] タブメニュー
-          \begin{itemize}
-              \item オリジナル画像表示タブ
-              \item 画像比較に基づく差分箇所表示タブ
-              \item HTMLコードの変更に基づく影響箇所表示タブ
-              \item レイアウトの副作用箇所表示タブ
-          \end{itemize}
-    \item[②] タブコンテンツ
+	\item[①] タブメニュー
+	      \begin{itemize}
+		      \item オリジナル画像表示タブ
+		      \item 画像比較に基づく差分箇所表示タブ
+		      \item HTMLコードの変更に基づく影響箇所表示タブ
+		      \item レイアウトの副作用箇所表示タブ
+	      \end{itemize}
+	\item[②] タブコンテンツ
 \end{itemize}
 \par
 以降、各タブの外観と機能について説明する。
@@ -58,11 +58,11 @@ Webアプリケーションとして試作した\toolName は、以下に示す4
 \toolName に一番最初にアクセスした時やリロードした時にデフォルトでオリジナル画像表示タブを選択した状態になっている。
 このタブでは、単純にWebページの変更前後の画像を目視で確認することができる。
 \begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_original_tab.png}
-        \caption{オリジナル画像表示タブ}
-        \label{fig: Appearance_original_tab}
-    \end{center}
+	\begin{center}
+		\includegraphics[width=1.0\columnwidth]{image/3_original_tab.png}
+		\caption{オリジナル画像表示タブ}
+		\label{fig: Appearance_original_tab}
+	\end{center}
 \end{figure}
 
 
@@ -74,11 +74,11 @@ Webアプリケーションとして試作した\toolName は、以下に示す4
 削除された箇所は赤枠で囲んで強調表示し、追加された箇所は緑枠で囲んで強調表示する。
 このタブでは、変更前後のWebページで見た目の変更があった箇所を目視で確認できる。
 \begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_images_tab.png}
-        \caption{画像比較に基づく差分箇所表示タブ}
-        \label{fig: Appearance_images_tab}
-    \end{center}
+	\begin{center}
+		\includegraphics[width=1.0\columnwidth]{image/3_images_tab.png}
+		\caption{画像比較に基づく差分箇所表示タブ}
+		\label{fig: Appearance_images_tab}
+	\end{center}
 \end{figure}
 
 
@@ -91,11 +91,11 @@ HTMLの変更に基づく影響箇所表示タブを押したときの画面例�
 このタブでは、変更前後のWebページでHTMLコードの変更による影響を受けた画面要素を目視で確認できる。
 % このタブでは、変更前後のWebページで開発者が意図したまたは意図しないHTMLコードの変更による影響箇所を目視で確認できる。
 \begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_html_tab.png}
-        \caption{HTMLコードの変更に基づく影響箇所表示タブ}
-        \label{fig: Appearance_html_tab}
-    \end{center}
+	\begin{center}
+		\includegraphics[width=1.0\columnwidth]{image/3_html_tab.png}
+		\caption{HTMLコードの変更に基づく影響箇所表示タブ}
+		\label{fig: Appearance_html_tab}
+	\end{center}
 \end{figure}
 
 
@@ -107,10 +107,10 @@ HTMLの変更に基づく影響箇所表示タブを押したときの画面例�
 変更前のWebページでのレイアウトの副作用箇所は赤枠で囲んで強調表示し、変更後のwebページでのレイアウトの副作用箇所は緑枠で囲んで強調表示する。
 このタブでは、変更前後のWebページでレイアウトの不具合を含む可能性のある箇所を目視で確認できる。
 \begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_subEffect_tab.png}
-        \caption{レイアウトの副作用箇所表示タブ}
-        \label{fig: Appearance_subEffect_tab}
-    \end{center}
+	\begin{center}
+		\includegraphics[width=1.0\columnwidth]{image/3_subEffect_tab.png}
+		\caption{レイアウトの副作用箇所表示タブ}
+		\label{fig: Appearance_subEffect_tab}
+	\end{center}
 \end{figure}
 
