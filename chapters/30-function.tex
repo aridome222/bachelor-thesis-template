@@ -1,10 +1,26 @@
 \chapter{ \toolName の外観と機能}\label{cha:Function}
 本章では、本研究で試作したツール\toolName (Mix Visual Regression Test)の外観と機能について説明する。
-\par
+
 \toolName は、レイアウトの不具合の発見を支援する、視覚的回帰テスト支援ツールである。
-WebページのURLを入力とし、Webページの画像とHTMLコードに基づいてレイアウトの不具合を含む可能性がある箇所を可視化した、
-インターフェース（レイアウトの不具合確認画面ビュー）を出力する。【TODO: これを出力することでこういうことが分かるというのを考える。そうすればおのずと出力するものが分かるはず】
-\par
+入力は、WebページのURLとする。出力は、以下に示すPNG形式の画像である。なお、視覚的回帰テストを行うためのベースライン画像を生成するために、\toolName 初回実行時はWebページの変更前画像のみを出力する。
+\begin{itemize}
+    \item Webページの変更前画像と変更後画像
+    \item 画像比較に基づく差分箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像とWebページの変更後画像
+    \item HTMLの変更に基づく影響箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像とWebページの変更後画像
+    \item レイアウトの副作用箇所を色付きの枠で強調表示した、Webページの変更前画像とWebページの変更後画像
+\end{itemize}
+% WebページのURLを入力とし、Webページの画像とHTMLコードに基づいてレイアウトの不具合を含む可能性がある箇所を可視化した、
+% インターフェース（レイアウトの不具合確認画面ビュー）を出力する。【TODO: これを出力することでこういうことが分かるというのを考える。そうすればおのずと出力するものが分かるはず】
+
+\toolName は、Python3.9\cite{Python}が動作するテキスト端末上で実行する。
+\toolName 実行時のコマンドライン引数によって、視覚的回帰テストを行う対象のWebページのURLを指定する。
+\toolName 実行のための書式は、以下である。
+\begin{lstlisting}[label=list:command,frame=none,numbers=none,basicstyle={\normalsize \ttfamily \color[gray]{.15}}]
+  $ python3 MixVRT.py URL
+ \end{lstlisting}
+{\tt URL}は、WebページのURLである。なお、"https://"または"http://"から始まるURLとする。
+\toolName 実行によって\toolName が出力するPGN形式の画像は、Flask(\ref{sec:Flask}節を参照)を使用して構築したサーバ上で動作するローカルWebページで確認できる。
+
 \toolName の外観を、図\ref{fig: Appearance}に示す。
 \begin{figure}[tp]
     \begin{center}
