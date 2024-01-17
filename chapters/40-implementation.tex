@@ -1,6 +1,13 @@
 \chapter{MixVRTの実装}\label{cha:Implementation}
 本章では、\toolName の実装について説明する。
-
+\toolName のシステム構成を、図\ref{fig:System}に示す。
+\begin{figure}[tp]
+    \begin{center}
+        \includegraphics[width=1.0\columnwidth]{image/4_System.png}
+        \caption{\toolName のシステム構成}
+        \label{fig:System}
+    \end{center}
+\end{figure}
 % 私の開発したツールは、まずユーザーがWebページのURLを入力します。
 % このURLを受け取ると、ツールは該当するWebページから画像を取得し、
 % これらの画像に対して特定の処理を行います。処理された画像は"static/images"ディレクトリに保存されます。
@@ -8,11 +15,9 @@
 % "templates"フォルダにあるHTMLファイルが"static/images"ディレクトリを参照できるようになっています。
 % この仕組みにより、ユーザーはローカルに立てられたFlaskサーバを通じて、
 % Webページ上で生成された画像を確認することができます。
-
-\toolName のシステム構成を、図4.1に示す。
-\toolName の試作にあたり、以下の5つの処理部を実装する。
+本研究では、\toolName の試作にあたり、以下の5つの処理部を実装する。
 \begin{itemize}
-    \item Webページ情報取得部
+    \item Webデータ取得部
     \item 画像比較に基づく差分箇所抽出部
     \item HTMLコードの変更に基づく影響箇所抽出部
     \item レイアウトの副作用箇所抽出部
