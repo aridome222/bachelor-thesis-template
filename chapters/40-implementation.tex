@@ -15,25 +15,26 @@
 % "templates"フォルダにあるHTMLファイルが"static/images"ディレクトリを参照できるようになっています。
 % この仕組みにより、ユーザーはローカルに立てられたFlaskサーバを通じて、
 % Webページ上で生成された画像を確認することができます。
-本研究では、\toolName の試作にあたり、以下の5つの処理部を実装する。
+本研究では、\toolName の試作にあたり、以下の9つの処理部を実装する。
 \begin{itemize}
     \item Webデータ取得部
     \item 画像比較部
     \item 画像差分箇所検出部
-    \item HTML影響箇所抽出部
-    \item HTML解析部
+    \item 差分箇所枠強調マスク画像生成部
     \item HTML影響箇所検出部
-    \item レイアウトの副作用箇所抽出部
+    \item HTML解析部
+    \item 影響箇所枠強調マスク画像生成部
+    \item レイアウトの副作用箇所検出部
     \item インターフェース表示部
 \end{itemize}
-以降、\toolName を構成する5つの処理部について説明する。
+以降、\toolName を構成する9つの処理部について説明する。
 \par
 
 
 
-\section{Webページ情報取得部}\label{sec:Web_page_information_get_section}
-Webページ情報取得部は、WebページのURLを入力としてもらい、Webページの画像とHTMLコードを取得する。
-Webページの画像取得には、Selenium WebDriverを用いてWebページの画像を取得する。
+\section{Webデータ取得部}\label{sec:Web_data_get_section}
+Webデータ取得部は、WebページのURLを入力としてもらい、Webページの画像とHTMLコードの両方またはWebページの画像のみを取得する。
+Webページの画像取得には、Selenium WebDriver(\ref{sec:Selenium_WebDriver}節を参照)を用いてWebページの画像を取得する。
 Seleniumスクリプトにより、\toolName の入力であるWebページのURLにアクセスし、Webページの画像を取得する。
 HTMLコード取得には、Pythonライブラリの一つであるrequestsモジュールを用いて、WebページのURLからHTMLコードを取得する。
 
@@ -102,8 +103,8 @@ styleタグ内の場合は、CSSクラスのセレクタ名のみの変更やス
 
 
 \section{インターフェース表示部}\label{sec:Interface_Display_Section}
-インターフェース表示部は、\ref{sec:Web_page_information_get_section}節～\ref{sec:Layout_subEffect_extraction_section}節で取得・生成した画像（枠強調マスク画像を除く）を保管し、Webベースのユーザインターフェースを用いて表示する。
-MixVRTの実行コマンド初回実行時は、\ref{sec:Web_page_information_get_section}節で取得したWebページの画像を保管する。
+インターフェース表示部は、\ref{sec:Web_data_get_section}節～\ref{sec:Layout_subEffect_extraction_section}節で取得・生成した画像（枠強調マスク画像を除く）を保管し、Webベースのユーザインターフェースを用いて表示する。
+MixVRTの実行コマンド初回実行時は、\ref{sec:Web_data_get_section}節で取得したWebページの画像を保管する。
 MixVRTの実行コマンド2回目以降実行時は、初回実行時に取得する画像に加えて、\ref{sec:Difference_extraction_section}節で取得した画像、
 \ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_subEffect_extraction_section}節で生成した画像を保管する。
 
