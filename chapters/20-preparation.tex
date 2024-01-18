@@ -1,21 +1,22 @@
 \chapter{研究の準備}\label{cha:Preparation}
 
 \section{視覚的回帰テスト}\label{sec:vrt}
-視覚的回帰テスト (Visual regression testing)\cite{Visual regression testing}は、Webページのレイアウトが予期せず変更されていないことを確認するテスト手法である。
+視覚的回帰テスト (Visual regression testing)\cite{Visual regression testing}は、
+Webページの変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。
 視覚的回帰テストの基本的な手順は以下の通りである。
 \begin{enumerate}
     \setlength{\itemsep}{0pt}
           \setlength{\parsep}{0pt}
-    \item 基準画像と比較対象画像の作成
+    \item 変更前画像と変更後画像の作成
     \item 画像比較による差分検出
     \item 結果の評価
 \end{enumerate}
 
 \section{レイアウトの不具合}\label{sec:layout effect}
-レイアウトの不具合は、Webページの画面要素が適切にレイアウトされていないことである。
+レイアウトの不具合は、Webページの画面要素が適切にレイアウトされていないことである。【TODO: レイアウトの不具合検出に関する関連研究のリンクを見つける】
 レイアウトの不具合が発生すると、WebサイトやWebアプリの使いやすさを損ない、ユーザが必要な情報を見つけることが難しくなる。
 レイアウトの不具合が発生する主な原因は、画像やテキストの幅や高さを変えたり、他のHTML要素を包含しレイアウトを整理するHTML要素であるコンテナ内の高さを固定値にしたりすることに起因している。
-本研究では、レイアウトの不具合の発見支援を行う対象を、以下の画面要素とする。
+本研究では、以下の主な3つのレイアウトの不具合の発見を支援するツールを試作する。
 \begin{itemize}
     \setlength{\itemsep}{0pt}
           \setlength{\parsep}{0pt}
