@@ -1,10 +1,10 @@
 \chapter{MixVRTの実装}\label{cha:Implementation}
 本章では、\toolName の実装について説明する。
-\toolName のシステム構成を、図\ref{fig:System}に示す。
+\toolName のシステム構成（仮）を、図\ref{fig:System}に示す。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/4_System.png}
-        \caption{\toolName のシステム構成}
+        \caption{\toolName のシステム構成（仮）}
         \label{fig:System}
     \end{center}
 \end{figure}
@@ -15,33 +15,134 @@
 % "templates"フォルダにあるHTMLファイルが"static/images"ディレクトリを参照できるようになっています。
 % この仕組みにより、ユーザーはローカルに立てられたFlaskサーバを通じて、
 % Webページ上で生成された画像を確認することができます。
-本研究では、\toolName の試作にあたり、以下の9つの処理部を実装する。
+本研究では、\toolName の試作にあたり、以下の5つの処理部を実装する。
 \begin{itemize}
     \item Webデータ取得部
     \item 画像比較部
-    \item 画像差分箇所検出部
-    \item 差分箇所枠強調マスク画像生成部
-    \item HTML影響箇所検出部
-    \item HTML解析部
-    \item 影響箇所枠強調マスク画像生成部
-    \item レイアウトの副作用箇所検出部
+          \begin{enumerate}
+              \item 差分箇所検出
+              \item 差分箇所枠抽出
+          \end{enumerate}
+    \item HTML比較部
+          \begin{enumerate}
+              \item 差分ファイル生成
+              \item 差分ファイル解析
+              \item 影響箇所強調HTMLコード生成
+              \item 影響箇所枠抽出
+          \end{enumerate}
+    \item レイアウトの副作用箇所抽出部
     \item インターフェース表示部
 \end{itemize}
-以降、\toolName を構成する9つの処理部について説明する。
+% \begin{itemize}
+%     \item Webデータ取得部
+%     \item 画像比較部
+%           \begin{enumerate}
+%               \item 差分箇所検出
+%           \end{enumerate}
+%     \item HTML比較部
+%           \begin{enumerate}
+%               \item 差分ファイル生成
+%               \item 差分ファイル解析
+%               \item 影響箇所強調HTMLコード生成
+%           \end{enumerate}
+%     \item レイアウトの副作用箇所抽出部
+%     \item インターフェース表示部
+% \end{itemize}
+以降、\toolName を構成する5つの処理部について説明する。
 \par
 
-
-
 \section{Webデータ取得部}\label{sec:Web_data_get_section}
-Webデータ取得部は、WebページのURLを入力としてもらい、Webページの画像とHTMLコードの両方またはWebページの画像のみを取得する。
+Webデータ取得部は、WebページのURLを入力として受け取り、Webページの画像とHTMLコードを取得する。
+取得したWebページの画像は画像比較部（\ref{sec:Difference_extraction_section}節で後述）に出力し、取得したWebページのHTMLコードはHTML比較部（\ref{sec:Affected_area_extraction}節で後述）に出力する。
+なお、HTML比較部がWebデータ取得部にWebページのURLを与えて呼び出す場合においては、Webページの画像のみをHTML比較部に出力する。
 Webページの画像取得には、Selenium WebDriver(\ref{sec:Selenium_WebDriver}節を参照)を用いてWebページの画像を取得する。
-Seleniumスクリプトにより、\toolName の入力であるWebページのURLにアクセスし、Webページの画像を取得する。
-HTMLコード取得には、Pythonライブラリの一つであるrequestsモジュールを用いて、WebページのURLからHTMLコードを取得する。
+Selenium WebDriverを用いて取得したWebページの画像例を、図\ref{fig:4_get_images}に示す。
+\begin{figure}[tp]
+    \begin{center}
+        \includegraphics[width=1.0\columnwidth]{image/4_get_images.png}
+        \caption{Selenium WebDriverを用いて取得したWebページの画像例}
+        \label{fig:4_get_images}
+    \end{center}
+\end{figure}
+WebページのHTMLコード取得には、Pythonライブラリの一つであるrequestsモジュール（\ref{sec:requests}節を参照）を用いて、WebページのURLからWebページのHTMLコードを取得する。
+requestsモジュールを用いて取得したWebページのHTMLコード例を、ソースコード\ref{lst:html_example}に示す。
+\begin{lstlisting}[language=HTML, caption=requestsモジュールを用いて取得したWebページのHTMLコード例, label=lst:html_example]
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Single Content Web Page</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f0f0f0;
+            }
+    
+            header {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 10px 0;
+            }
+    
+            .container {
+                height: 300px auto;
+                width: 100%;
+                margin: 10px auto;
+                overflow: hidden;
+            }
+    
+            .main-content {
+                height: 300px;
+                background-color: #fff;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+    
+            footer {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 10px 0;
+                clear: both;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <header>
+            <h1>Single Content Web Page</h1>
+        </header>
+        <div class="container">
+            <div class="main-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.</p>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
+                    rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+                    explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                    consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
+                    dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora
+                    incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+            </div>
+        </div>
+        <footer>
+            <p>Footer Content</p>
+        </footer>
+    </body>
+    
+    </html>
+\end{lstlisting}
 
-
-\section{画像比較に基づく差分箇所抽出部}\label{sec:Difference_extraction_section}
-画像比較に基づく差分箇所抽出部は、Webページ情報取得部で取得したWebページの画像のみを用いて、画像比較を行う。
-画像比較には、PythonのOpenCvを用いて比較を行う。画像比較の手順を以下に示す。
+\section{差分箇所検出部}\label{sec:Difference_extraction_section}
+差分箇所検出部は、Webページ情報取得部からWebページの画像を受け取り、差分箇所を色付きの枠で囲んで強調表示した画像を生成する。
+PythonのOpenCV\cite{OpenCV}を用いた差分箇所検出の手順を以下に示す。
 \begin{enumerate}
     \item 高解像度画像生成処理
     \item 適応的二値化処理
@@ -52,7 +153,9 @@ HTMLコード取得には、Pythonライブラリの一つであるrequestsモ�
 \end{enumerate}
 
 \subsection{高解像度画像生成処理}\label{subsec:Generate_high_images}
-高解像度画像の生成は、元のWebページ画像をもとに高解像度の画像を生成する。高解像度の画像はのちの輪郭検出処理の精度を向上するために必要である。
+高解像度画像生成処理は、元のWebページ画像をもとに高解像度画像を生成する。高解像度画像は、輪郭検出処理（\ref{subsec:contour_detection_processing}で後述）の精度を向上するために必要である。
+具体的な処理手順を、以下に示す。
+
 元のWebページ画像はpng画像であり、png画像をsvgファイルに変換し、さらにsvgファイルをpdfファイルに変換した後、pdfファイルをpng画像に戻す処理を行うことで、高解像度のpng画像を生成することができる。
 まず、png画像をsvg画像に変換するには、Aspose.Wordsライブラリのaw.Document()とaw.DocumentBuilder()を使用して、png画像をドキュメントに挿入し、Aspose.WordsのImageSaveOptionsを使用して、画像をsvg形式で保存する。
 次に、svg画像からpdf画像に変換するには、svglibとreportlabライブラリを使用して、svgファイルをpdfファイルに変換する。
@@ -82,7 +185,7 @@ Webページ画像を二値化する流れを、以下に示す。
 
 
 
-\section{HTMLコードの変更に基づく影響箇所抽出部}\label{sec:Affected_area_extraction}
+\section{影響箇所検出部}\label{sec:Affected_area_extraction}
 HTMLコードの変更に基づく影響箇所抽出部は、Webページ情報取得部で取得した変更前後のWebページのHTMLコードを用いて影響箇所を特定する。
 概要としては、差分ファイルを生成し、差分ファイルから枠付け処理を行った変更前後のHTMLコードを生成した後、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページを表示し、Webページ情報取得部によってそのWebページの画像を取得する。
 元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。

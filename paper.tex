@@ -13,6 +13,13 @@
 \usepackage[dvipdfmx]{graphicx} % 当然dvipdfmなんて使ってないよね
 \usepackage[dvipdfmx]{color}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
 \usepackage{listings, packages/jlisting} % コードを埋め込むなら必須
+\lstset{
+	label={some_label}
+    backgroundcolor=\color{lightgray},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    showstringspaces=false
+}
 \usepackage{txfonts}            % フォントといえばやっぱりtxfonts、今はnewtxってのもあるらしい
 \usepackage{verbatim}           % コメントアウトしてくれる便利なプリアンブルが使える \begin{comment} ... \end{comment}
 \usepackage{url}
