@@ -1,22 +1,35 @@
 \chapter{研究の準備}\label{cha:Preparation}
 
 \section{視覚的回帰テスト}\label{sec:vrt}
-視覚的回帰テスト【DO:全角かっこ⇒半角かっこ】【TODO:参考文献のリンク張る】(visual regression testing)は、Webページの【TODO:視覚的要素⇒見た目】見た目が予期せず変更されていないことを確認するテスト手法である。
+視覚的回帰テスト (Visual regression testing)\cite{Visual regression testing}は、Webページのレイアウトが予期せず変更されていないことを確認するテスト手法である。
 視覚的回帰テストの基本的な手順は以下の通りである。
 \begin{enumerate}
     \setlength{\itemsep}{0pt}
           \setlength{\parsep}{0pt}
-    \item 【TODO:ベースライン画像の説明 or 別の表現】ベースライン画像と比較対象画像の作成
+    \item 基準画像と比較対象画像の作成
     \item 画像比較による差分検出
     \item 結果の評価
 \end{enumerate}
+
 \section{レイアウトの不具合}\label{sec:layout effect}
+レイアウトの不具合は、Webページの画面要素が適切にレイアウトされていないことである。
+レイアウトの不具合が発生すると、WebサイトやWebアプリの使いやすさを損ない、ユーザが必要な情報を見つけることが難しくなる。
+レイアウトの不具合が発生する主な原因は、画像やテキストの幅や高さを変えたり、他のHTML要素を包含しレイアウトを整理するHTML要素であるコンテナ内の高さを固定値にしたりすることに起因している。
+本研究では、レイアウトの不具合の発見支援を行う対象を、以下の画面要素とする。
+\begin{itemize}
+    \setlength{\itemsep}{0pt}
+          \setlength{\parsep}{0pt}
+    \item 画面要素の隠れ
+    \item 画面要素の重なり
+    \item 画面要素のはみ出し
+\end{itemize}
 
 \section{OpenCV}\label{sec:OpenCV}
+OpenCV (Open Source Computer Vision Library)は、画像や動画に関する処理機能をまとめた、コンピュータビジョン向けのオープンソースのライブラリである\cite{OpenCV}。
 
 \section{Selenium WebDriver}\label{sec:Selenium_WebDriver}
-Selenium WebDriver【TODO:参考文献のリンク張る】は、Seleniumプロジェクトの一部であり、Webブラウザを直接制御するためのAPIを提供する。
-Selenium WebDriver【DO:WebDriver⇒Selenium WebDriver】のAPIを用いてテストスクリプトを実行することで、指定したWebページにアクセスし、要素のクリックやページ遷移などのユーザ操作を自動で行う。
+Selenium WebDriver\cite{Selenium WebDriver}は、Seleniumプロジェクト\cite{Selenium}の一部であり、Webブラウザを直接制御するためのAPIを提供する。
+Selenium WebDriverのAPIを用いてテストスクリプトを実行することで、指定したWebページにアクセスし、要素のクリックやページ遷移などのユーザ操作を自動で行う。
 \section{requestsモジュール}\label{sec:requests}
 
 \section{difflibモジュール}\label{sec:difflib}
