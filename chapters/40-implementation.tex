@@ -165,24 +165,26 @@ PythonのOpenCV\cite{OpenCV}を用いた差分箇所検出の手順を以下に�
 % アンダーバー"_"は"\"でエスケープする
 
 \subsection{適応的二値化処理}\label{subsec:Adaptive_Binarisation}
-適応的二値化処理は、Webページ画像の二値化（白黒化）を行う。
-Webページ画像を二値化する流れを、以下に示す。
+適応的二値化処理は、Webページの画像の二値化（白黒化）を行う。
+Webページの画像を二値化する流れを、以下に示す。
 \begin{enumerate}
-    \item OpenCVのimread関数を用いて、Webページ画面画像をグレースケール画像に変換して読み込む。
+    \item OpenCVのimread関数を用いて、Webページの画像パスから画像を読み込む。
+    \item OpenCVのcvtColor関数を用いて、画像をグレースケール化する。
+    \item OpenCVのadaptiveThreshold関数を用いて、画像の二値化を行う。
 \end{enumerate}
 
 
 \subsection{差分検出処理}\label{subsec:difference_detection_process}
-
+OpenCVのsubtract関数を用いて、Webページの変更前画像で削除された箇所とWebページの変更後画像で追加された箇所を検出する。
 
 \subsection{膨張処理}\label{subsec:dilation}
-
+膨張処理をすることで、大体の大枠で差分を検出できるようにする。
 
 \subsection{輪郭検出処理}\label{subsec:contour_detection_processing}
-
+差分検出処理で検出した差分を枠で囲むような輪郭を検出する。画面要素はある程度他の画面要素と離れて独立しているため、大体で差分箇所の場所を示すことができる。画面要素単位で差分を検出するために膨張処理を行った。
 
 \subsection{バウンディングボックス描画処理}\label{subsec:Bounding box drawing process}
-
+バウンディングボックス描画処理では、元画像に輪郭検出処理で検出した枠を描画する。
 
 
 \section{影響箇所検出部}\label{sec:Affected_area_extraction}

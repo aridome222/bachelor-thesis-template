@@ -25,8 +25,28 @@ Webページの変更前画像と変更後画像を比較し差分を検出す�
     \item 画面要素のはみ出し
 \end{itemize}
 
-\section{OpenCV}\label{sec:OpenCV}
+\section{OpenCV}
+\label{sec:opencv}
 OpenCV (Open Source Computer Vision Library)は、画像や動画に関する処理機能をまとめた、コンピュータビジョン向けのオープンソースのライブラリである\cite{OpenCV}。
+本研究では、OpenCVに用意されている、imread関数、cvtColor関数、threshold関数、connectedComponentsWithStats関数の3つの関数を用いる。
+\paragraph{imread関数}
+imread関数は、画像ファイルの読み込みを行う関数である。
+第一引数には、画像ファイルのパスを指定する。
+また、第二引数には0を指定することで、画像ファイルをグレースケール画像に変換して読み込むことができる。
+\paragraph{cvtColor関数}
+cvtColor関数は、画像の色空間を変換する関数である。
+第一引数には、色空間変換を適用する画像を指定し、第二引数にはどの色空間へ変換するかを示すコードを指定する。
+% 例えば、BGR(青、緑、赤)からGRAY(グレースケール)、RGB(赤、緑、青)からHSV(色相、彩度、明度)など、様々な色空間への変換が可能である。
+本研究では、BGR(青、緑、赤)からGRAY(グレースケール)と、GRAY(グレースケール)からBGR(青、緑、赤)の色空間への変換に用いる。
+\paragraph{adaptiveThreshold関数}
+adaptiveThreshold関数は、画像の二値化を局所的な条件に応じて行う関数である。
+この関数は特に、画像内の異なる領域で異なる光の条件に適応するために使用される。
+第一引数には二値化を適用するグレースケール画像を指定し、第二引数にはピクセル値の最大値（通常255）を指定する。
+第三引数では、局所的な二値化方法を指定する。
+本研究では、局所的な二値化方法として、近傍領域の平均値に基づいて閾値を計算するcv2.ADAPTIVE\_THRESH\_MEAN\_Cを用いる。
+第四引数には二値化の方法を指定し、本研究では標準的な二値化方法であるcv2.THRESH\_BINARYを指定する。
+第五引数は近傍領域のサイズ、第六引数は計算された閾値から引かれる定数である。
+この関数は、画像内の異なる照明条件下でのオブジェクトの検出や画像のセグメンテーションに有効である。
 
 \section{Selenium WebDriver}\label{sec:Selenium_WebDriver}
 Selenium WebDriver\cite{Selenium WebDriver}は、Seleniumプロジェクト\cite{Selenium}の一部であり、Webブラウザを直接制御するためのAPIを提供する。
