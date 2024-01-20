@@ -53,7 +53,7 @@
 
 \section{Webデータ取得部}\label{sec:Web_data_get_section}
 Webデータ取得部は、WebページのURLを入力として受け取り、Webページの画像とHTMLコードを取得する。
-取得したWebページの画像は画像比較部（\ref{sec:Difference_extraction_section}節で後述）に出力し、取得したWebページのHTMLコードはHTML比較部（\ref{sec:Affected_area_extraction}節で後述）に出力する。
+取得したWebページの画像は画像比較部（\ref{subsec:Difference_extraction_section}節で後述）に出力し、取得したWebページのHTMLコードはHTML比較部（\ref{sec:Affected_area_extraction}節で後述）に出力する。
 なお、HTML比較部がWebデータ取得部にWebページのURLを与えて呼び出す場合においては、Webページの画像のみをHTML比較部に出力する。
 Webページの画像取得には、Selenium WebDriver(\ref{sec:Selenium_WebDriver}節を参照)を用いてWebページの画像を取得する。
 Selenium WebDriverを用いて取得したWebページの画像例を、図\ref{fig:4_get_images}に示す。
@@ -173,32 +173,58 @@ Webページの画像を二値化する流れを、以下に示す。
     \item OpenCVのadaptiveThreshold関数を用いて、画像の二値化を行う。
 \end{enumerate}
 
+\subsection{白黒反転処理}\label{subsec:reverse}
+白黒反転処理は、画像の各ピクセルのビットを反転させる関数である。
+これは、差分検出処理で、削除された箇所と追加された箇所を白ピクセルとして差分を検出するためである。
+また、その後の膨張処理や輪郭検出においても、白ピクセルを対象に処理が行われるためである。
 
 \subsection{差分検出処理}\label{subsec:difference_detection_process}
 OpenCVのsubtract関数を用いて、Webページの変更前画像で削除された箇所とWebページの変更後画像で追加された箇所を検出する。
 
 \subsection{膨張処理}\label{subsec:dilation}
 膨張処理をすることで、大体の大枠で差分を検出できるようにする。
+膨張処理を適用する回数を、本研究では6回とする。
 
 \subsection{輪郭検出処理}\label{subsec:contour_detection_processing}
-差分検出処理で検出した差分を枠で囲むような輪郭を検出する。画面要素はある程度他の画面要素と離れて独立しているため、大体で差分箇所の場所を示すことができる。画面要素単位で差分を検出するために膨張処理を行った。
+差分検出処理で検出した差分を枠で囲むような輪郭を検出する。
+画面要素はある程度他の画面要素と離れて独立しているため、大体で差分箇所の場所を示すことができる。
+画面要素単位で差分を検出するために膨張処理を行った。
 
 \subsection{バウンディングボックス描画処理}\label{subsec:Bounding box drawing process}
-バウンディングボックス描画処理では、元画像に輪郭検出処理で検出した枠を描画する。
+バウンディングボックス描画処理では、元画像と高解像度画像に輪郭検出処理で検出した枠を描画する。
 
 
-\section{影響箇所検出部}\label{sec:Affected_area_extraction}
-HTMLコードの変更に基づく影響箇所抽出部は、Webページ情報取得部で取得した変更前後のWebページのHTMLコードを用いて影響箇所を特定する。
-概要としては、差分ファイルを生成し、差分ファイルから枠付け処理を行った変更前後のHTMLコードを生成した後、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページを表示し、Webページ情報取得部によってそのWebページの画像を取得する。
-元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
-具体的には、まず、Pythonライブラリの一つであるdifflibモジュールを用いて、変更前後のHTMLコードから差分ファイルを生成する。
-生成した差分ファイルは、コードの追加行には"+", 削除行には"-", 変更前後のHTMLコードにどちらにも存在しない行には"?"が先頭に付き、"?"を除いた差分ファイルを解析対象とする。
-差分ファイルは、bodyタグ内とstyleタグ内を対象とする。
-もし、bodyタグ内で先頭に"+"や"-"があれば、コードの追加や削除、変更があったとして、その箇所に枠付け処理を行うCSSクラスを追加し、先頭の"+"か"-"を削除する。
-styleタグ内の場合は、CSSクラスのセレクタ名のみの変更やスタイルのみの変更、またはその両方の変更があったCSSクラスを対象として、そのCSSクラスに対して枠付けを行うスタイルを適用する。
-この場合においても、解析した行の先頭に"+", "-"があれば削除する。
-差分ファイルから枠付け処理を行った変更前後のHTMLコードを生成した後は、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページとして表示し、そのWebページの画像を取得する。
-そして、元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
+\section{HTML比較部}\label{sec:diff_html}
+
+\subsection{差分ファイル生成処理}\label{subsec:diff_file_generate}
+差分ファイル生成処理は、Webページの変更前HTMLコードと変更後HTMLコードを比較して、差分ファイルをテキストベースのファイル形式として生成する。
+差分ファイルを生成する処理を、以下に示す。
+\begin{enumerate}
+    \item HTMLコードが記述されている変更前HTMLファイルと変更後HTMLファイルをそれぞれHTMLデータとして読み込む。
+    \item Pythonの標準ライブラリの一部であるdifflibモジュールを使用して、2つのHTMLデータ間の差分を比較する。
+\end{enumerate}
+上記の処理手順により、変更された部分や追加・削除された部分を特定した差分ファイルを生成する。
+
+\subsection{差分ファイル解析処理}\label{subsec:diff_file_analyze}
+差分ファイル解析処理は、差分ファイル生成処理から差分ファイルを受け取り、差分ファイルからbody要素内の変更箇所とstyle要素内の変更箇所を見つける。
+
+\subsection{影響箇所強調HTMLコード生成処理}\label{subsec:modified_html_generate}
+影響箇所強調HTMLコード生成処理は、差分ファイル解析処理から変更箇所を受け取り、変更箇所に適切な色枠をつけるcssクラスを付与する。
+そして、加工したHTMLコードをWebページとして表示したものを、Webデータ取得部を用いて取得した加工したWebページの画像を取得する。
+
+% \section{影響箇所検出部}\label{sec:Affected_area_extraction}
+% HTMLコードの変更に基づく影響箇所抽出部は、Webページ情報取得部で取得した変更前後のWebページのHTMLコードを用いて影響箇所を特定する。
+% 概要としては、差分ファイルを生成し、差分ファイルから枠付け処理を行った変更前後のHTMLコードを生成した後、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページを表示し、Webページ情報取得部によってそのWebページの画像を取得する。
+% 元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
+% 具体的には、まず、Pythonライブラリの一つであるdifflibモジュールを用いて、変更前後のHTMLコードから差分ファイルを生成する。
+% 生成した差分ファイルは、コードの追加行には"+", 削除行には"-", 変更前後のHTMLコードにどちらにも存在しない行には"?"が先頭に付き、"?"を除いた差分ファイルを解析対象とする。
+% 差分ファイルは、bodyタグ内とstyleタグ内を対象とする。
+% もし、bodyタグ内で先頭に"+"や"-"があれば、コードの追加や削除、変更があったとして、その箇所に枠付け処理を行うCSSクラスを追加し、先頭の"+"か"-"を削除する。
+% styleタグ内の場合は、CSSクラスのセレクタ名のみの変更やスタイルのみの変更、またはその両方の変更があったCSSクラスを対象として、そのCSSクラスに対して枠付けを行うスタイルを適用する。
+% この場合においても、解析した行の先頭に"+", "-"があれば削除する。
+% 差分ファイルから枠付け処理を行った変更前後のHTMLコードを生成した後は、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページとして表示し、そのWebページの画像を取得する。
+% そして、元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
+
 
 \section{レイアウトの副作用箇所抽出部}\label{sec:Layout_subEffect_extraction_section}
 レイアウトの副作用箇所抽出部は、画像比較に基づく差分箇所とHTMLコードの変更に基づく影響箇所を用いて、レイアウトの副作用箇所を抽出する。
@@ -208,10 +234,12 @@ styleタグ内の場合は、CSSクラスのセレクタ名のみの変更やス
 
 
 \section{インターフェース表示部}\label{sec:Interface_Display_Section}
-インターフェース表示部は、\ref{sec:Web_data_get_section}節～\ref{sec:Layout_subEffect_extraction_section}節で取得・生成した画像（枠強調マスク画像を除く）を保管し、Webベースのユーザインターフェースを用いて表示する。
+インターフェース表示部は、
+\ref{sec:Web_data_get_section}節～\ref{sec:Layout_subEffect_extraction_section}節で取得・生成した画像（枠強調マスク画像を除く）を保管し、
+Webベースのユーザインターフェースを用いて表示する。
 MixVRTの実行コマンド初回実行時は、\ref{sec:Web_data_get_section}節で取得したWebページの画像を保管する。
 MixVRTの実行コマンド2回目以降実行時は、初回実行時に取得する画像に加えて、\ref{sec:Difference_extraction_section}節で取得した画像、
-\ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_subEffect_extraction_section}節で生成した画像を保管する。
+\ref{sec:diff_html}節で生成した画像、\ref{sec:Layout_subEffect_extraction_section}節で生成した画像を保管する。
 
 
 
