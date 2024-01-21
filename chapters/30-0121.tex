@@ -1,7 +1,7 @@
 \chapter{ \toolName}\label{cha:Function}
 \toolName (Mix Visual Regression Test)は、レイアウトの不具合の発見を支援する、視覚的回帰テスト支援ツールである。
 本章では、本研究で試作したツール\toolName について説明する。
-なお、「差分箇所」、「影響箇所」、「レイアウトの不具合箇所」を、以下に定義する。
+なお、「差分箇所」、「影響箇所」、「レイアウトの副作用箇所」を、以下に定義する。
 \paragraph{差分箇所}
 変更前後のWebページを比較して、
 変更前のWebページで削除された箇所と変更後のWebページで追加された箇所。
@@ -11,9 +11,7 @@ HTMLコードにおけるbody要素内の変更とstyle要素内の変更のど�
 または両方の影響を受けた画面要素箇所。
 \paragraph{レイアウトの副作用箇所}
 変更前後のWebページでHTMLコードの変更による影響を受けた画面要素によって、
-HTMLコードを変更していない画面要素にレイアウトの変更があった箇所。
-\paragraph{レイアウトの不具合箇所}
-レイアウトの副作用箇所に画面要素の隠れ、見切れ、重なりがあった箇所。
+HTMLコードを変更していない画面要素に見た目の変更があった箇所。
 \par
 
 \section{MixVRTの実行}\label{sec:MixVRT_execution}
@@ -24,15 +22,7 @@ HTMLコードを変更していない画面要素にレイアウトの変更が�
   $ python3 MixVRT.py URL
  \end{lstlisting}
 {\tt URL}には、テスト対象とするWebページのURLを指定する。なお、"https://"または"http://"から始まるURLとする。
-また、初回実行時のみにおいて、{\tt URL}には、視覚的回帰テストを行うための比較対象とするWebページのURLを指定する。
-\par
-\toolName の初回実行時は、比較対象となるWebページの画像とHTMLコードが存在せず視覚的回帰テストを行えないため、
-比較対象とするWebページのURLからWebページの画像とHTMLコードの取得のみを行い、処理を終了する。
-\toolName の2回目実行時は、テスト対象とするWebページのURLからWebページの画像とHTMLコードを取得し、
-比較対象とするWebページの画像とHTMLコードに対して視覚的回帰テストを行う。
-\toolName の3回目以降実行時は、実装の都合上、前回の視覚的回帰テストの結果に関わらず、
-前回実行時で取得したWebページの画像とHTMLコードを比較対象とし、
-テスト対象とするWebページのURLから取得したWebページの画像とHTMLコードを用いて視覚的回帰テストを行う。
+また、初回実行時のみにおいて、{\tt URL}には、視覚的回帰テストを行うための比較用画像とするWebページのURLを指定する。
 \par
 
 \section{MixVRTの事前準備}\label{sec:MixVRT_preparation}
@@ -43,7 +33,7 @@ HTMLコードを変更していない画面要素にレイアウトの変更が�
     \item 現時点のWebページの画像とHTMLコードを取得する
     \item HTMLコードの変更を行う
 \end{enumerate}
-なお、手順1は、\toolName の初回実行(\ref{sec:MixVRT_execution}節を参照)で、比較対象とするWebページのURLからWebページの画像とHTMLコードを取得し、
+なお、手順1は、\toolName の初回実行(\ref{sec:MixVRT_execution}節を参照)でWebページの比較用画像と比較用HTMLコードを取得し、
 手順2は、開発者が作成したHTMLコードに対して変更を行う。
 上記の手順を踏むことで、\toolName による視覚的回帰テストに必要な比較用画像と比較用HTMLコード、テスト対象とするWebページの準備が整う。
 \par
@@ -53,13 +43,14 @@ HTMLコードを変更していない画面要素にレイアウトの変更が�
 MixVRTの実行コマンド(\ref{sec:MixVRT_execution}節を参照)を使用することで視覚的回帰テストを行える。
 なお、次回以降の視覚的回帰テストは、HTMLコードを変更し、再度MixVRTの実行コマンドを使用することで前回のWebページの画像とHTMLコードに対して視覚的回帰テストを行う。
 \toolName は、テスト対象とするWebページのURLを入力として受け取り、
-URLからWebページの画像とHTMLコードを取得して比較用画像と比較用HTMLコードに対して視覚的回帰テストを行うことで、
+URLからWebページの画像とHTMLコードを取得し、
+画像処理やHTMLコード解析処理を実行することで、
 以下に示すPNG形式の画像を出力する。
 \begin{itemize}
     \item Webページの変更前画像と変更後画像
     \item 画像比較に基づく差分箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像
     \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像
-    \item レイアウトの不具合箇所を色付きの枠で強調表示した、Webページの変更前画像と変更後画像
+    \item レイアウトの副作用箇所を色付きの枠で強調表示した、Webページの変更前画像と変更後画像
 \end{itemize}
 \toolName が出力するPNG形式の画像は、Flask(\ref{sec:Flask}節を参照)を使用して構築したサーバ上で動作するローカルWebページで確認できる。
 なお、\toolName 初回実行時は比較対象となるWebページの画像が存在せず視覚的回帰テストを行えないため、Webページの変更前画像のみを確認できる。
@@ -69,7 +60,7 @@ URLからWebページの画像とHTMLコードを取得して比較用画像と�
 \toolName の外観を、図\ref{fig: Appearance}に示す。
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_Appearance2.png}
+        \includegraphics[width=1.0\columnwidth]{image/3_Appearance.png}
         \caption{\toolName の外観}
         \label{fig: Appearance}
     \end{center}
@@ -82,12 +73,14 @@ URLからWebページの画像とHTMLコードを取得して比較用画像と�
               \item オリジナル表示タブ
               \item 画像比較に基づく差分箇所表示タブ
               \item HTMLコードの変更に基づく影響箇所表示タブ
-              \item レイアウトの不具合箇所表示タブ
+              \item レイアウトの副作用箇所表示タブ
           \end{itemize}
     \item[②] タブコンテンツ
 \end{itemize}
 \par
 以降、各タブの外観と機能について説明する。
+
+
 
 \subsection{オリジナル表示タブ}\label{subsec:original_tab}
 オリジナル表示タブを押すと、Webページの変更前画像と変更後画像を並べて表示する。
@@ -96,11 +89,13 @@ URLからWebページの画像とHTMLコードを取得して比較用画像と�
 このタブでは、Webページの変更前後の画像を目視で確認できる。
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_original_tab2.png}
+        \includegraphics[width=1.0\columnwidth]{image/3_original_tab.png}
         \caption{オリジナル表示タブを押した際の\toolName の画面例}
         \label{fig: Appearance_original_tab}
     \end{center}
 \end{figure}
+
+
 
 \subsection{画像比較に基づく差分箇所表示タブ}\label{subsec:images_tab}
 画像比較に基づく差分箇所表示タブを押すと、画像比較に基づく差分箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
@@ -109,35 +104,50 @@ URLからWebページの画像とHTMLコードを取得して比較用画像と�
 このタブでは、変更前後のWebページでレイアウトの変更があった箇所を目視で確認できる。
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_images_tab2.png}
+        \includegraphics[width=1.0\columnwidth]{image/3_images_tab.png}
         \caption{画像比較に基づく差分箇所表示タブを押した際の\toolName の画面例}
         \label{fig: Appearance_images_tab}
     \end{center}
 \end{figure}
 
+
+
 \subsection{HTMLコードの変更に基づく影響箇所表示タブ}\label{subsec:html_tab}
 HTMLの変更に基づく影響箇所表示タブを押すと、HTMLの変更に基づく影響箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
 HTMLの変更に基づく影響箇所表示タブを押した際の画面例を、図\ref{fig: Appearance_html_tab}に示す。
 変更前のWebページのHTMLでの影響箇所は変更前画像上に赤枠で囲んで強調表示し、変更後のWebページのHTMLでの影響箇所は変更後画像上に緑枠で囲んで強調表示する。
-このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、開発者が意図して変更した、または意図せず変更してしまったHTMLコードによる影響箇所のみを目視で確認できる。
+このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、開発者が意図して変更した、または意図せず変更してしまったHTMLコードによる影響箇所を目視で確認できる。
 % このタブでは、変更前後のWebページで開発者が意図した、または意図しないHTMLコードの変更による影響箇所を目視で確認できる。
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_html_tab2.png}
+        \includegraphics[width=1.0\columnwidth]{image/3_html_tab.png}
         \caption{HTMLコードの変更に基づく影響箇所表示タブを押した際の\toolName の画面例}
         \label{fig: Appearance_html_tab}
     \end{center}
 \end{figure}
 
-\subsection{レイアウトの不具合箇所表示タブ}\label{subsec:subeffect_tab}
-レイアウトの不具合箇所表示タブを押すと、差分箇所と影響箇所の比較によって検出したレイアウトの不具合箇所を色付きの枠で強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
-レイアウトの不具合箇所表示タブを押した際の画面例を、図\ref{fig: Appearance_subEffect_tab}に示す。
-レイアウトの不具合箇所となる前のレイアウトの副作用箇所は変更前画像上に赤枠で囲んで強調表示し、レイアウトの不具合箇所は変更後画像上に緑枠で囲んで強調表示する。
-このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、レイアウトの不具合箇所のみを目視で確認できる。
+
+
+\subsection{レイアウトの副作用箇所表示タブ}\label{subsec:subeffect_tab}
+レイアウトの副作用箇所表示タブを押すと、差分箇所と影響箇所の比較によって出力したレイアウトの副作用箇所を色付きの枠で強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
+レイアウトの副作用箇所表示タブを押した際の画面例を、図\ref{fig: Appearance_subEffect_tab}に示す。
+変更前のWebページでのレイアウトの副作用箇所は変更前画像上に赤枠で囲んで強調表示し、変更後のwebページでのレイアウトの副作用箇所は変更後画像上に緑枠で囲んで強調表示する。
+このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、レイアウトの不具合を含む可能性のある箇所を目視で確認できる。
+\par
+【TODO: 3.4の存在意義を示す】
+\par
+【HTMLコードの変更において、レイアウトの副作用箇所を検出した場合に、比較用画像を更新せずレイアウトの副作用が発生したことを知らせる警告を出す】
+or
+【レイアウトの不具合のみを検出できるようにする】
+\par
+【実装したいこと：図\ref{fig: Appearance_subEffect_tab}の変更前画像上のある赤枠内の内容と変更後画像上のある緑枠内の内容がほぼ一致した場合に、それらの枠に関してはレイアウトの不具合を含まないレイアウトの副作用とみなして除外する処理】
+\par
+【実装によって実現できること： レイアウトの不具合箇所のみを目視で確認できる】
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_subEffect_tab2.png}
-        \caption{レイアウトの不具合箇所表示タブを押した際の\toolName の画面例}
+        \includegraphics[width=1.0\columnwidth]{image/3_subEffect_tab.png}
+        \caption{レイアウトの副作用箇所表示タブを押した際の\toolName の画面例}
         \label{fig: Appearance_subEffect_tab}
     \end{center}
 \end{figure}
+

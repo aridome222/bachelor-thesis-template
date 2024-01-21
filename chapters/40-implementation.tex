@@ -18,12 +18,12 @@
 本研究では、\toolName の試作にあたり、以下の5つの処理部を実装する。
 \begin{itemize}
     \item Webデータ取得部
-    \item 画像比較部
+    \item 差分箇所検出部
           \begin{enumerate}
               \item 差分箇所検出
               \item 差分箇所枠抽出
           \end{enumerate}
-    \item HTML比較部
+    \item 影響箇所検出部
           \begin{enumerate}
               \item 差分ファイル生成
               \item 差分ファイル解析
@@ -53,7 +53,7 @@
 
 \section{Webデータ取得部}\label{sec:Web_data_get_section}
 Webデータ取得部は、WebページのURLを入力として受け取り、Webページの画像とHTMLコードを取得する。
-取得したWebページの画像は画像比較部（\ref{subsec:Difference_extraction_section}節で後述）に出力し、取得したWebページのHTMLコードはHTML比較部（\ref{sec:Affected_area_extraction}節で後述）に出力する。
+取得したWebページの画像は差分箇所検出部(\ref{sec:Difference_extraction_section}節で後述)に出力し、取得したWebページのHTMLコードは影響箇所検出部（\ref{sec:Affected_area_extraction}節で後述）に出力する。
 なお、HTML比較部がWebデータ取得部にWebページのURLを与えて呼び出す場合においては、Webページの画像のみをHTML比較部に出力する。
 Webページの画像取得には、Selenium WebDriver(\ref{sec:Selenium_WebDriver}節を参照)を用いてWebページの画像を取得する。
 Selenium WebDriverを用いて取得したWebページの画像例を、図\ref{fig:4_get_images}に示す。
@@ -194,7 +194,7 @@ OpenCVのsubtract関数を用いて、Webページの変更前画像で削除さ
 バウンディングボックス描画処理では、元画像と高解像度画像に輪郭検出処理で検出した枠を描画する。
 
 
-\section{HTML比較部}\label{sec:diff_html}
+\section{影響箇所検出部}\label{sec:Affected_area_extraction}
 
 \subsection{差分ファイル生成処理}\label{subsec:diff_file_generate}
 差分ファイル生成処理は、Webページの変更前HTMLコードと変更後HTMLコードを比較して、差分ファイルをテキストベースのファイル形式として生成する。
@@ -226,7 +226,7 @@ OpenCVのsubtract関数を用いて、Webページの変更前画像で削除さ
 % そして、元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
 
 
-\section{レイアウトの副作用箇所抽出部}\label{sec:Layout_subEffect_extraction_section}
+\section{レイアウトの副作用箇所検出部}\label{sec:Layout_subEffect_extraction_section}
 レイアウトの副作用箇所抽出部は、画像比較に基づく差分箇所とHTMLコードの変更に基づく影響箇所を用いて、レイアウトの副作用箇所を抽出する。
 具体的には、差分箇所を囲む枠と影響箇所を囲む枠同士を比較する。比較の仕方は、枠の重なり度合を判定する。
 まず、枠が重なっているかどうかを判定する。次に、枠が重なっている場合に、重なり部分が小さい方の枠の面積の6割以上であれば枠が一致すると判定する。
@@ -239,7 +239,7 @@ OpenCVのsubtract関数を用いて、Webページの変更前画像で削除さ
 Webベースのユーザインターフェースを用いて表示する。
 MixVRTの実行コマンド初回実行時は、\ref{sec:Web_data_get_section}節で取得したWebページの画像を保管する。
 MixVRTの実行コマンド2回目以降実行時は、初回実行時に取得する画像に加えて、\ref{sec:Difference_extraction_section}節で取得した画像、
-\ref{sec:diff_html}節で生成した画像、\ref{sec:Layout_subEffect_extraction_section}節で生成した画像を保管する。
+\ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_subEffect_extraction_section}節で生成した画像を保管する。
 
 
 
