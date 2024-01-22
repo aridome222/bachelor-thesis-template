@@ -11,14 +11,34 @@
 \usepackage{packages/miyazaki-u-paper}   % 宮崎大学工学部の卒論の基本（片山先生作）を、僕がちょっと書き換えちゃった（テヘッ
 \usepackage{enumitem}           % enumerate？古い古い
 \usepackage[dvipdfmx]{graphicx} % 当然dvipdfmなんて使ってないよね
-\usepackage[dvipdfmx]{color}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
+% \usepackage[dvipdfmx]{color}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
+\usepackage[dvipdfmx]{xcolor}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
 \usepackage{listings, packages/jlisting} % コードを埋め込むなら必須
+% \lstset{
+% 	label={some_label}
+%     backgroundcolor=\color{lightgray},
+%     basicstyle=\ttfamily\small,
+%     breaklines=true,
+%     showstringspaces=false
+% }
 \lstset{
-	label={some_label}
+    language=HTML,
     backgroundcolor=\color{lightgray},
     basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{orange},
+    commentstyle=\color{green},
+    morecomment=[s][\color{green}]{<!}{>},
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
     breaklines=true,
-    showstringspaces=false
+    breakatwhitespace=true,
+    tabsize=4,
+    frame=single,
+    extendedchars=true,
+    xleftmargin=2em,
+    framexleftmargin=2em
 }
 \usepackage{txfonts}            % フォントといえばやっぱりtxfonts、今はnewtxってのもあるらしい
 \usepackage{verbatim}           % コメントアウトしてくれる便利なプリアンブルが使える \begin{comment} ... \end{comment}
@@ -92,6 +112,7 @@
     \bibitem{Python}Python: "Python 3.9.17"\\\url{https://www.python.org/downloads/release/python-3917/}\\アクセス日: 2023/02/01.
     \bibitem{Pillow}Pillow: "Pillow 10.2.0"\\\url{https://pypi.org/project/pillow/}\\アクセス日: 2023/02/01.
     \bibitem{Imageモジュール}Image Module: "Image Module"\\\url{https://pillow.readthedocs.io/en/stable/reference/Image.html}\\アクセス日: 2023/02/01.
+    \bibitem{膨張処理}マクセルフロンティア株式会社: "2値画像の膨張・収縮①"\\\url{https://www.frontier.maxell.co.jp/blog/posts/21.html}\\アクセス日: 2023/02/01.
     
     \bibitem{Selenium WebDriver}Selenium WebDriver: "WebDriver"\\\url{https://www.selenium.dev/ja/documentation/webdriver/}\\アクセス日: 2023/01/25.
     \bibitem{Selenium}Selenium: "Selenium"\\\url{https://www.selenium.dev/}\\アクセス日: 2023/01/25. 
