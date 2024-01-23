@@ -11,35 +11,8 @@
 \usepackage{packages/miyazaki-u-paper}   % 宮崎大学工学部の卒論の基本（片山先生作）を、僕がちょっと書き換えちゃった（テヘッ
 \usepackage{enumitem}           % enumerate？古い古い
 \usepackage[dvipdfmx]{graphicx} % 当然dvipdfmなんて使ってないよね
-% \usepackage[dvipdfmx]{color}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
-\usepackage[dvipdfmx]{xcolor}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
+\usepackage[dvipdfmx]{color}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
 \usepackage{listings, packages/jlisting} % コードを埋め込むなら必須
-% \lstset{
-% 	label={some_label}
-%     backgroundcolor=\color{lightgray},
-%     basicstyle=\ttfamily\small,
-%     breaklines=true,
-%     showstringspaces=false
-% }
-\lstset{
-    language=HTML,
-    backgroundcolor=\color{lightgray},
-    basicstyle=\ttfamily\small,
-    keywordstyle=\color{blue},
-    stringstyle=\color{orange},
-    commentstyle=\color{green},
-    morecomment=[s][\color{green}]{<!}{>},
-    showstringspaces=false,
-    numbers=left,
-    numberstyle=\tiny,
-    breaklines=true,
-    breakatwhitespace=true,
-    tabsize=4,
-    frame=single,
-    extendedchars=true,
-    xleftmargin=2em,
-    framexleftmargin=2em
-}
 \usepackage{txfonts}            % フォントといえばやっぱりtxfonts、今はnewtxってのもあるらしい
 \usepackage{verbatim}           % コメントアウトしてくれる便利なプリアンブルが使える \begin{comment} ... \end{comment}
 \usepackage{url}
@@ -52,6 +25,15 @@
 % \usepackage{latexsym}
 % \usepackage{bmpsize}
 % \usepackage{comment}
+
+
+%%% 自分で追加したパッケージ
+\usepackage[dvipdfmx]{xcolor}    % listingsを使うときにはこれも必須、dvipdfmxを変えちゃうとgraphicxのdvipdfmxも変わるよ
+\usepackage[dvipdfmx, hidelinks]{hyperref} % リンクを付けてくれる。
+\usepackage{pxjahyper}          % リンクを付けてくれる（日本語）
+
+%%%
+
 
 % \def\Underline{\setbox0\hbox\bgroup\let\\\endUnderline}
 % \def\endUnderline{\vphantom{y}\egroup\smash{\underline{\box0}}\\}
@@ -75,6 +57,32 @@
 \advisor{片山 徹郎 教授} % 修論では無視する
 \major{情報システム工学科}
 
+% \lstset{
+% 	label={some_label}
+%     backgroundcolor=\color{lightgray},
+%     basicstyle=\ttfamily\small,
+%     breaklines=true,
+%     showstringspaces=false
+% }
+\lstset{
+    language=HTML,
+    backgroundcolor=\color{white}, % 背景色を白に設定（またはこの行を完全に削除）
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{orange},
+    commentstyle=\color{green},
+    morecomment=[s][\color{green}]{<!}{>},
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    frame=single,
+    extendedchars=true,
+    xleftmargin=2em,
+    framexleftmargin=2em
+}
 
 \begin{document}
 \maketitle
