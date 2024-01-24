@@ -1,15 +1,15 @@
 \chapter{ \toolName の機能と外観}\label{cha:Function}
-\toolName (Mix Visual Regression Test)は、レイアウトの不具合の発見を支援する、視覚的回帰テスト支援ツールである。
+\toolName (Mix Visual Regression Test)は、レイアウトの不具合箇所の可視化を目的とした、視覚的回帰テストツールである。
 本章では、本研究で試作したツール\toolName の機能と外観について説明する。
-なお、「差分箇所」、「影響箇所」、「レイアウトの副作用箇所」、「レイアウトの不具合箇所」を、以下に定義する。
+なお、本研究で用いる「差分箇所」、「影響箇所」、「レイアウトの副作用箇所」、「レイアウトの不具合箇所」を、以下に定義する。
 \begin{itemize}
     \item 差分箇所:\\
-          変更前後のWebページを比較して、
+          変更前後のWebページの画像を比較して、
           変更前のWebページで削除された箇所と変更後のWebページで追加された箇所。
     \item 影響箇所:\\
           変更前後のWebページのHTMLコードを比較して、
           HTMLコードにおけるbody要素内の変更とstyle要素内の変更のどちらか、
-          または両方の影響を受けた画面要素箇所。
+          または両方の変更による影響を受けた画面要素。
     \item レイアウトの副作用箇所:\\
           変更前後のWebページでHTMLコードの変更による影響を受けた画面要素によって、
           HTMLコードを変更していない画面要素にレイアウトの変更があった箇所。
@@ -32,13 +32,13 @@
 \section{\toolName の機能}
 \subsection{実行コマンド}\label{subsec:MixVRT_execution}
 \toolName は、Python3.9.17\cite{Python}が動作するテキスト端末上で実行する。
-\toolName 実行時のコマンドライン引数によって、視覚的回帰テストを行う対象のWebページのURLを指定する。
+\toolName 実行時のコマンドライン引数によって、\toolName による視覚的回帰テストを行う対象のWebページのURLを指定する。
 \toolName の実行コマンドの書式は、以下である。
 \begin{lstlisting}[label=list:command,frame=none,numbers=none,basicstyle={\normalsize \ttfamily \color[gray]{.15}}]
   $ make test URL="WebページのURL"
  \end{lstlisting}
-{\tt URL}には、テスト対象とするWebページのURLを指定する。なお、"https://"または"http://"から始まるURLとする。
-また、初回実行時のみにおいて、{\tt URL}には、視覚的回帰テストを行うための比較対象とするWebページのURLを指定する。
+{\tt URL}には、テスト対象とするWebページのURLを指定する。なお、WebページのURLは、"https://"または"http://"から始まるURLとする。
+% また、初回実行時のみにおいて、{\tt URL}には、視覚的回帰テストを行うための比較対象とするWebページのURLを指定する。
 
 % \toolName の初回実行時は、比較対象となるWebページの画像とHTMLコードが存在せず視覚的回帰テストを行えないため、
 % 比較対象とするWebページのURLからWebページの画像とHTMLコードの取得のみを行い、処理を終了する。
@@ -51,20 +51,25 @@
 \subsection{事前準備}\label{subsec:MixVRT_preparation}
 開発者は\toolName による視覚的回帰テストを行うための事前準備を行う必要がある。
 事前準備は、\toolName の実行コマンド(\ref{subsec:MixVRT_execution}節を参照)を実行するだけである。
-\toolName の初回実行により、視覚的回帰テストを行うための比較用画像と比較用HTMLコードを\toolName に保存する。
+\toolName の初回実行により、\toolName による視覚的回帰テストを行うための比較用画像と比較用HTMLコードを\toolName に保存する。
 
 \subsection{入出力}\label{subsec:MixVRT_IO}
 開発者は、\toolName の事前準備(\ref{subsec:MixVRT_preparation}節を参照)を行った状態で、
-テスト対象とするWebページのURLを入力として\toolName の実行コマンド(\ref{subsec:MixVRT_execution}節を参照)を実行することで視覚的回帰テストを行える。
-\toolName の2回目以降実行によって取得したWebページのテスト対象画像とテスト対象HTMLコードを、比較用画像と比較用HTMLコードに対して視覚的回帰テストを行うことで、
-以下に示すPNG形式の画像を出力する。なお、比較用画像をWebページの変更前画像、テスト対象画像をWebページの変更後画像とする。
+テスト対象とするWebページのURLを入力として\toolName の実行コマンド(\ref{subsec:MixVRT_execution}節を参照)を実行することで、\toolName による視覚的回帰テストを行える。
+\toolName の2回目以降実行によって取得したWebページのテスト対象画像とテスト対象HTMLコードを、比較用画像と比較用HTMLコードに対して\toolName による視覚的回帰テストを行うことで、
+以下に示すPNG形式の画像を生成する。
+% なお、比較用画像をWebページの変更前画像、テスト対象画像をWebページの変更後画像とする。
 \begin{itemize}
     \item Webページの変更前画像と変更後画像
-    \item 画像比較に基づく差分箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像
-    \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像
-    \item レイアウトの不具合箇所を色付きの枠で強調表示した、Webページの変更前画像と変更後画像
+    \item 画像比較に基づく差分箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像
+    \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像
+    \item レイアウトの不具合箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像
 \end{itemize}
-\toolName が出力するPNG形式の画像は、Flask(\ref{sec:Flask}節を参照)を使用して構築したサーバ上で動作するローカルWebページで確認できる。
+\toolName は、生成したPNG形式の画像を、Flask(\ref{sec:Flask}節を参照)を使用して構築したローカルサーバ上で動作するWebページに出力し、表示する。
+開発者は、以下のローカルWebページのURLにアクセスすることで、\toolName が生成したPNG形式の画像を確認できる。
+\begin{lstlisting}[label=list:command3,frame=none,numbers=none,basicstyle={\normalsize \ttfamily \color[gray]{.15}}]
+    http://localhost:5000/MixVRT_diff
+   \end{lstlisting}
 なお、\toolName の初回実行時は、テスト対象画像とテスト対象HTMLコードが存在せず視覚的回帰テストを行えないため、Webページの変更前画像のみを確認できる。
 
 \subsection{比較用画像と比較用HTMLの更新}\label{subsec:MixVRT_evaluate}
@@ -74,7 +79,7 @@
     $ make save
 \end{lstlisting}
 
-\section{\toolName の外観}
+\section{\toolName の外観}\label{sec:MixVRT_Appearance}
 \toolName の外観を、図\ref{fig: Appearance}に示す。
 \begin{figure}[tp]
     \begin{center}

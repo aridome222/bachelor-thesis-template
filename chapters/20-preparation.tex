@@ -5,11 +5,11 @@
 Webページの変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
 視覚的回帰テストの基本的な手順は以下の通りである。
 \begin{enumerate}
-    \setlength{\itemsep}{0pt}
-          \setlength{\parsep}{0pt}
-    \item 変更前画像と変更後画像の作成
-    \item 画像比較による差分検出
-    \item 結果の評価
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item 変更前画像と変更後画像の作成
+      \item 画像比較による差分検出
+      \item 結果の評価
 \end{enumerate}
 
 \section{レイアウトの不具合}\label{sec:layout effect}
@@ -18,14 +18,14 @@ Webページの変更前画像と変更後画像を比較し差分を検出す�
 \par
 本研究では、以下の主な3つのレイアウトの不具合を検出する。
 \begin{itemize}
-    \setlength{\itemsep}{0pt}
-          \setlength{\parsep}{0pt}
-    \item 画面要素の隠れ:\\
-          Webページの画面要素がその画面要素を含むコンテナやビューポートの境界を超えてはみ出している状態。
-    \item 画面要素の見切れ:\\
-          Webページの画面要素の一部がコンテナやビューポートの境界によって切り取られ、完全には表示されない状態。
-    \item 画面要素の重なり:\\
-          Webページの複数の画面要素が重なりあっている状態。
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item 画面要素の隠れ:\\
+            Webページの画面要素がその画面要素を含むコンテナやビューポートの境界を超えてはみ出している状態。
+      \item 画面要素の見切れ:\\
+            Webページの画面要素の一部がコンテナやビューポートの境界によって切り取られ、完全には表示されない状態。
+      \item 画面要素の重なり:\\
+            Webページの複数の画面要素が重なりあっている状態。
 \end{itemize}
 % また、以下の画面要素に対して、レイアウトの不具合を検出する。
 % \begin{itemize}
@@ -59,17 +59,17 @@ adaptiveThreshold関数は、画像の各小領域(画像を複数の小さな�
 \par
 本研究において、adaptiveThreshold関数の引数に指定するパラメータを、以下に示す。
 \begin{itemize}
-    \setlength{\itemsep}{0pt}
-          \setlength{\parsep}{0pt}
-    \item 二値化の閾値を計算する方法:\\
-          近傍領域内のピクセル平均値(近傍領域内のピクセル合計値 $\div$ 近傍領域内のピクセル数)に基づいて閾値を計算するcv2.ADAPTIVE\_THRESH\_MEAN\_Cを用いる。
-    \item 二値化の方法:\\
-          二値化の閾値以下のピクセル値をピクセル最大値($255$)に変換し、
-          それ以外のピクセル値を$0$に変換する二値化方法であるcv2.THRESH\_BINARY\_INVを用いる。
-    \item 近傍領域のサイズ:\\
-          $11$(11 $\times$ 11ピクセルの正方形)に設定する。
-    \item 計算された二値化の閾値から引かれる定数:\\
-          $2$に設定する。
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item 二値化の閾値を計算する方法:\\
+            近傍領域内のピクセル平均値(近傍領域内のピクセル合計値 $\div$ 近傍領域内のピクセル数)に基づいて閾値を計算するcv2.ADAPTIVE\_THRESH\_MEAN\_Cを用いる。
+      \item 二値化の方法:\\
+            二値化の閾値以下のピクセル値をピクセル最大値($255$)に変換し、
+            それ以外のピクセル値を$0$に変換する二値化方法であるcv2.THRESH\_BINARY\_INVを用いる。
+      \item 近傍領域のサイズ:\\
+            $11$(11 $\times$ 11ピクセルの正方形)に設定する。
+      \item 計算された二値化の閾値から引かれる定数:\\
+            $2$に設定する。
 \end{itemize}
 \par
 また、本研究におけるadaptiveThreshold関数は、画像の一部が明るく、他の部分が暗い場合においても、全体として均一な白黒画像を生成するために用いる。
@@ -89,17 +89,17 @@ subtract関数の適用例として、
 \par
 二値化画像AとB間で対応するピクセル値の差を計算する処理を、以下に示す。
 \begin{itemize}
-    \setlength{\itemsep}{0pt}
-          \setlength{\parsep}{0pt}
-    \item 共通の白ピクセル(AとB両方で白):\\
-          二値化画像AとBの両方で白ピクセルの場合、subtract関数は$255$(Aの白ピクセル値)から$255$(Bの白ピクセル値)を引く。
-          差は$0$(黒ピクセル値)になり、共通の白ピクセルは黒ピクセルとなる。
-    \item Aにのみ存在する白ピクセル(Aは白、Bは黒):\\
-          画像Aは白ピクセルで、画像Bは黒ピクセル(ピクセル値が$0$)の場合、subtract関数は$255$(Aの白ピクセル値)から$0$(Bの黒ピクセル値)を引く。
-          差は$255$(白ピクセル値)になり、Aにのみ存在する白ピクセルはそのまま残る。
-    \item Bにのみ存在する白ピクセル(Aは黒、Bは白):\\
-          画像Aは黒ピクセルで、画像Bは白ピクセルの場合、subtract関数は$0$(Aの黒ピクセル値)から$255$(Bの白ピクセル値)を引く。
-          差は$-255$になるが、subtract関数は負の値を$0$(黒ピクセル値)として処理するため、Bにのみ存在する白ピクセルは黒ピクセルとなる。
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item 共通の白ピクセル(AとB両方で白):\\
+            二値化画像AとBの両方で白ピクセルの場合、subtract関数は$255$(Aの白ピクセル値)から$255$(Bの白ピクセル値)を引く。
+            差は$0$(黒ピクセル値)になり、共通の白ピクセルは黒ピクセルとなる。
+      \item Aにのみ存在する白ピクセル(Aは白、Bは黒):\\
+            画像Aは白ピクセルで、画像Bは黒ピクセル(ピクセル値が$0$)の場合、subtract関数は$255$(Aの白ピクセル値)から$0$(Bの黒ピクセル値)を引く。
+            差は$255$(白ピクセル値)になり、Aにのみ存在する白ピクセルはそのまま残る。
+      \item Bにのみ存在する白ピクセル(Aは黒、Bは白):\\
+            画像Aは黒ピクセルで、画像Bは白ピクセルの場合、subtract関数は$0$(Aの黒ピクセル値)から$255$(Bの白ピクセル値)を引く。
+            差は$-255$になるが、subtract関数は負の値を$0$(黒ピクセル値)として処理するため、Bにのみ存在する白ピクセルは黒ピクセルとなる。
 \end{itemize}
 上記の処理の結果、二値化画像Aにのみ存在する白ピクセル領域を抽出した差分画像を生成する。
 \par
@@ -115,12 +115,12 @@ dilate関数は、二値化画像内の白ピクセル領域を拡大する(膨�
 \par
 本研究において、adaptiveThreshold関数の引数に指定するパラメータを、以下に示す。
 \begin{itemize}
-    \setlength{\itemsep}{0pt}
-          \setlength{\parsep}{0pt}
-    \item カーネルのサイズと形状:\\
-          5 $\times$ 5ピクセルの正方形に設定する。
-    \item 膨張処理の適用回数:\\
-          $6$に設定する。
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item カーネルのサイズと形状:\\
+            5 $\times$ 5ピクセルの正方形に設定する。
+      \item 膨張処理の適用回数:\\
+            $6$に設定する。
 \end{itemize}
 \par
 また、本研究におけるdilate関数は、subtract関数で抽出した、削除された箇所と追加された箇所の形状とサイズを強調することで、
@@ -138,12 +138,12 @@ findContours関数は、画像から輪郭を検出し、輪郭リストを返�
 \par
 本研究において、findContours関数の引数に指定するパラメータを、以下に示す。
 \begin{itemize}
-    \setlength{\itemsep}{0pt}
-          \setlength{\parsep}{0pt}
-    \item 輪郭構造の取得方法:\\
-          画像内の一番外側の白の輪郭のみを取得するRETR\_EXTERNALを用いる。
-    \item 輪郭の形成方法:\\
-          端点のみで輪郭を形成するCHAIN\_APPROX\_SIMPLEを用いる。
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item 輪郭構造の取得方法:\\
+            画像内の一番外側の白の輪郭のみを取得するRETR\_EXTERNALを用いる。
+      \item 輪郭の形成方法:\\
+            端点のみで輪郭を形成するCHAIN\_APPROX\_SIMPLEを用いる。
 \end{itemize}
 \par
 また、本研究におけるfindContours関数は、
@@ -189,3 +189,28 @@ Selenium WebDriverのAPIを用いてテストスクリプトを実行するこ�
 \section{difflibモジュール}\label{sec:difflib}
 
 \section{Flask}\label{sec:Flask}
+Flask\cite{Flask}は、Pythonで構築されたWebフレームワークであり、WebサーバやWebアプリケーションの構築を容易にする。
+このフレームワークは、Werkzeug\cite{Werkzeug}とJinja2\cite{Jinja}に基づいている。
+WerkzeugはWebサーバとWebアプリケーション間のリクエストやレスポンスを処理するWSGIツールキットで、
+WSGI(Web Server Gateway Interface)\cite{WSGI}はWebサーバとWebアプリケーション間の接続規格である。
+Jinja2は、Pythonで使用されるテンプレートエンジンで、Webページの動的なレンダリングを可能にする。
+\par
+本研究では、Flaskを用いてローカルサーバを構築し、以下を実現する。
+\begin{itemize}
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item \toolName による視覚的回帰テストで生成した画像(\ref{subsec:MixVRT_IO}節で後述)の確認が効率的に行えるWebページを開発者に提供する。
+      \item HTML比較部(\ref{sec:Affected_area_extraction}節で後述)で生成した枠付きHTMLコードをレンダリングし、
+            Flaskを用いて定義した特定のURLへのアクセスを通じて、レンダリングを行った枠付きWebページを表示する。
+\end{itemize}
+なお、枠付きWebページを表示する目的は、Selenium WebDriverを用いた、枠付きWebページの画像取得を可能にするためである。
+
+\section{\toolName の環境構築}\label{sec:MixVRT_env_gen}
+\toolName の環境構築には、ローカルサーバ用、Python処理用、およびSeleniumのChrome用の、合計3つのDockerコンテナ\cite{Docker Container}を使用する。
+Docker Compose\cite{Docker Compose}を用いて、これらのコンテナを同時に起動する。
+ローカルサーバ用コンテナは、flaskを用いたローカルサーバを提供する。
+Python処理用コンテナは、Pythonを用いた画像処理やHTMLコード解析処理を行う。
+SeleniumのChrome用コンテナは、Webブラウザの自動操作を実行するためのChrome環境を提供する。
+なお、これらのコンテナに必要な設定と依存関係は、Dockerfileとdocker-compose.ymlに定義している。
+Dockerfileは、Dockerコンテナの構築に必要な指示を記述したファイルである。
+docker-compose.ymlは、複数のコンテナを管理するための設定ファイルである。
