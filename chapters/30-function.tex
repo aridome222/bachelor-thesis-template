@@ -32,7 +32,7 @@
 \section{\toolName の機能}
 \subsection{実行コマンド}\label{subsec:MixVRT_execution}
 \toolName は、Python3.9.17\cite{Python}が動作するテキスト端末上で実行する。
-\toolName 実行時のコマンドライン引数によって、\toolName による視覚的回帰テストを行う対象のWebページのURLを指定する。
+\toolName 実行時のコマンドライン引数によって、視覚的回帰テストを行う対象のWebページのURLを指定する。
 \toolName の実行コマンドの書式は、以下である。
 \begin{lstlisting}[label=list:command,frame=none,numbers=none,basicstyle={\normalsize \ttfamily \color[gray]{.15}}]
   $ make test URL="WebページのURL"
@@ -49,14 +49,20 @@
 % テスト対象とするWebページのURLから取得したWebページの画像とHTMLコードを用いて視覚的回帰テストを行う。
 % \par
 \subsection{事前準備}\label{subsec:MixVRT_preparation}
+% 開発者は、\toolName による視覚的回帰テストを行うために、以下の事前準備を行う。
+% \begin{itemize}
+%     \item \toolName の環境構築(\ref{sec:MixVRT_env_gen}節を参照):\\
+%           ローカルサーバが起動する。
+%     \item \toolName の実行コマンド(\ref{subsec:MixVRT_execution}節を参照)の実行:\\
+%           \toolName の初回実行により、視覚的回帰テストを行うための比較用画像と比較用HTMLコードを\toolName に保存する。
+% \end{itemize}
 開発者は\toolName による視覚的回帰テストを行うための事前準備を行う必要がある。
 事前準備は、\toolName の実行コマンド(\ref{subsec:MixVRT_execution}節を参照)を実行するだけである。
 \toolName の初回実行により、\toolName による視覚的回帰テストを行うための比較用画像と比較用HTMLコードを\toolName に保存する。
-
 \subsection{入出力}\label{subsec:MixVRT_IO}
 開発者は、\toolName の事前準備(\ref{subsec:MixVRT_preparation}節を参照)を行った状態で、
 テスト対象とするWebページのURLを入力として\toolName の実行コマンド(\ref{subsec:MixVRT_execution}節を参照)を実行することで、\toolName による視覚的回帰テストを行える。
-\toolName の2回目以降実行によって取得したWebページのテスト対象画像とテスト対象HTMLコードを、比較用画像と比較用HTMLコードに対して\toolName による視覚的回帰テストを行うことで、
+\toolName の2回目以降実行によって取得したWebページのテスト対象画像とテスト対象HTMLコードを、比較用画像と比較用HTMLコードに対して\toolName が視覚的回帰テストを行うことで、
 以下に示すPNG形式の画像を生成する。
 % なお、比較用画像をWebページの変更前画像、テスト対象画像をWebページの変更後画像とする。
 \begin{itemize}
@@ -65,16 +71,19 @@
     \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像
     \item レイアウトの不具合箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像
 \end{itemize}
-\toolName は、生成したPNG形式の画像を、Flask(\ref{sec:Flask}節を参照)を使用して構築したローカルサーバ上で動作するWebページに出力し、表示する。
-開発者は、以下のローカルWebページのURLにアクセスすることで、\toolName が生成したPNG形式の画像を確認できる。
+\toolName は、Flask(\ref{sec:Flask}節を参照)を用いて構築したローカルサーバ上で動作するWebページに、生成したPNG形式の画像を出力し、表示する。
+なお、ローカルサーバは、\toolName の環境構築(\ref{sec:MixVRT_env_gen}節を参照)の際に自動で起動するようになっている。
+\par
+開発者は、以下のローカルサーバ上のWebページのURLにアクセスすることで、\toolName が生成したPNG形式の画像を確認できる。
 \begin{lstlisting}[label=list:command3,frame=none,numbers=none,basicstyle={\normalsize \ttfamily \color[gray]{.15}}]
     http://localhost:5000/MixVRT_diff
    \end{lstlisting}
 なお、\toolName の初回実行時は、テスト対象画像とテスト対象HTMLコードが存在せず視覚的回帰テストを行えないため、Webページの変更前画像のみを確認できる。
 
-\subsection{比較用画像と比較用HTMLの更新}\label{subsec:MixVRT_evaluate}
+\subsection{比較用画像と比較用HTMLコードの更新}\label{subsec:MixVRT_evaluate}
 視覚的回帰テストで問題を見つけた場合、開発者はWebページを修正し、\toolName を用いて再度テストを実行して修正が正しいかを検証する。
-問題がなければ、開発者は下記の実行コマンドを実行することで、最新のテスト対象画像とテスト対象HTMLコードをそれぞれ比較用画像と比較用HTMLコードとして更新できる。
+問題がなければ、開発者は下記の実行コマンドを実行する。
+これにより、修正後のテスト再実行時に取得した、テスト対象画像とテスト対象HTMLコードを、それぞれ比較用画像と比較用HTMLコードとして更新できる。
 \begin{lstlisting}[label=list:command2,frame=none,numbers=none,basicstyle={\normalsize \ttfamily \color[gray]{.15}}]
     $ make save
 \end{lstlisting}
@@ -83,7 +92,7 @@
 \toolName の外観を、図\ref{fig: Appearance}に示す。
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/3_Appearance2.png}
+        \includegraphics[width=1.0\columnwidth]{image/3_Appearance3.png}
         \caption{\toolName の外観}
         \label{fig: Appearance}
     \end{center}
@@ -101,13 +110,15 @@
     \item[②] タブコンテンツ
 \end{itemize}
 \par
+\toolName の実行コマンド(\ref{list:command}節を参照)を1回も実行していない場合、
+図\ref{fig: Appearance}のように、オリジナル表示タブには、Webページの変更前画像と変更後画像を表示しない。
+他の各タブも同様である。
+\par
 以降、各タブの外観と機能について説明する。
 
 \subsection{オリジナル表示タブ}\label{subsec:original_tab}
 オリジナル表示タブを押すと、Webページの変更前画像と変更後画像を並べて表示する。
 オリジナル表示タブを押した際の\toolName の画面例を、図\ref{fig: Appearance_original_tab}に示す。
-なお、\toolName に一番最初にアクセスした時やリロードした時は、デフォルトでオリジナル表示タブを選択した状態になっている。
-このタブでは、Webページの変更前後の画像を目視で確認できる。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/3_original_tab2.png}
@@ -115,12 +126,12 @@
         \label{fig: Appearance_original_tab}
     \end{center}
 \end{figure}
+なお、\toolName に一番最初にアクセスした時やリロードした時は、デフォルトでオリジナル表示タブを選択した状態になっている。
+このタブでは、Webページの変更前後の画像を目視で確認できる。
 
 \subsection{画像比較に基づく差分箇所表示タブ}\label{subsec:images_tab}
-画像比較に基づく差分箇所表示タブを押すと、画像比較に基づく差分箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
+画像比較に基づく差分箇所表示タブを押すと、画像比較に基づく差分箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
 画像比較に基づく差分箇所表示タブを押した際の\toolName の画面例を、図\ref{fig: Appearance_images_tab}に示す。
-削除された箇所は変更前画像上に赤枠で囲んで強調表示し、追加された箇所は変更後画像上に緑枠で囲んで強調表示する。
-このタブでは、変更前後のWebページでレイアウトの変更があった箇所を目視で確認できる。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/3_images_tab2.png}
@@ -128,13 +139,12 @@
         \label{fig: Appearance_images_tab}
     \end{center}
 \end{figure}
+削除された箇所は変更前画像上に赤枠で囲むことで強調表示し、追加された箇所は変更後画像上に緑枠で囲むことで強調表示する。
+このタブでは、変更前後のWebページでレイアウトの変更があった箇所を目視で確認できる。
 
 \subsection{HTMLコードの変更に基づく影響箇所表示タブ}\label{subsec:html_tab}
-HTMLの変更に基づく影響箇所表示タブを押すと、HTMLの変更に基づく影響箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
-HTMLの変更に基づく影響箇所表示タブを押した際の画面例を、図\ref{fig: Appearance_html_tab}に示す。
-変更前のWebページのHTMLでの影響箇所は変更前画像上に赤枠で囲んで強調表示し、変更後のWebページのHTMLでの影響箇所は変更後画像上に緑枠で囲んで強調表示する。
-このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、開発者が意図して変更した、または意図せず変更してしまったHTMLコードによる影響箇所のみを目視で確認できる。
-% このタブでは、変更前後のWebページで開発者が意図した、または意図しないHTMLコードの変更による影響箇所を目視で確認できる。
+HTMLコードの変更に基づく影響箇所表示タブを押すと、HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
+HTMLコードの変更に基づく影響箇所表示タブを押した際の画面例を、図\ref{fig: Appearance_html_tab}に示す。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/3_html_tab2.png}
@@ -142,12 +152,13 @@ HTMLの変更に基づく影響箇所表示タブを押した際の画面例を�
         \label{fig: Appearance_html_tab}
     \end{center}
 \end{figure}
+変更前のWebページのHTMLでの影響箇所は変更前画像上に赤枠で囲むことで強調表示し、変更後のWebページのHTMLでの影響箇所は変更後画像上に緑枠で囲むことで強調表示する。
+このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、開発者が意図して変更した、または意図せず変更してしまったHTMLコードによる影響箇所のみを目視で確認できる。
+% このタブでは、変更前後のWebページで開発者が意図した、または意図しないHTMLコードの変更による影響箇所を目視で確認できる。
 
 \subsection{レイアウトの不具合箇所表示タブ}\label{subsec:subeffect_tab}
-レイアウトの不具合箇所表示タブを押すと、差分箇所と影響箇所の比較によって検出したレイアウトの不具合箇所を色付きの枠で強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
+レイアウトの不具合箇所表示タブを押すと、差分箇所と影響箇所の比較によって検出したレイアウトの不具合箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像を並べて表示する。
 レイアウトの不具合箇所表示タブを押した際の画面例を、図\ref{fig: Appearance_subEffect_tab}に示す。
-レイアウトの不具合箇所は変更前画像上に赤枠で囲んで強調表示し、レイアウトの不具合箇所は変更後画像上に緑枠で囲んで強調表示する。
-このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、レイアウトの不具合箇所のみを目視で確認できる。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/3_subEffect_tab2.png}
@@ -155,3 +166,34 @@ HTMLの変更に基づく影響箇所表示タブを押した際の画面例を�
         \label{fig: Appearance_subEffect_tab}
     \end{center}
 \end{figure}
+このタブでは、図\ref{fig: Appearance_images_tab}における差分箇所から、レイアウトの不具合箇所のみを目視で確認できる。
+図\ref{fig: Appearance_subEffect_tab}の例では、本研究で検出するレイアウトの不具合のうち、画面要素の見切れと画面要素の隠れの2つを見つけることができる。
+\par
+まず、図\ref{fig: Appearance_subEffect_tab}における画面要素の見切れを、図\ref{fig: out_of_element}に示す。
+\begin{figure}[tp]
+    \begin{center}
+        \includegraphics[width=1.0\columnwidth]{image/3_out_of_element2.png}
+        \caption{図\ref{fig: Appearance_subEffect_tab}における画面要素の見切れ}
+        \label{fig: out_of_element}
+    \end{center}
+\end{figure}
+図\ref{fig: out_of_element}内の青矢印で示した赤枠内と緑枠内のそれぞれのテキストを見比べると、
+赤枠内のテキストの上2行目までは緑枠内と同じであるが、赤枠内のテキストの下2行目は緑枠内には存在しない。
+また、図\ref{fig: Appearance_html_tab}を見てみると、赤枠内のテキストの下2行目はHTMLコードの変更による影響を受けていないと分かるため、
+削除されたわけではない。
+よって、Webページの変更後に、テキストの一部がコンテナの境界によって切り取られたことを目視で判断できる。
+\par
+次に、図\ref{fig: Appearance_subEffect_tab}における画面要素の隠れを、図\ref{fig: hidden_element}に示す。
+\begin{figure}[tp]
+    \begin{center}
+        \includegraphics[width=1.0\columnwidth]{image/3_hidden_element2.png}
+        \caption{図\ref{fig: Appearance_subEffect_tab}における画面要素の隠れ}
+        \label{fig: hidden_element}
+    \end{center}
+\end{figure}
+図\ref{fig: hidden_element}の変更前画像上の一番下にある赤枠内のテキストは、変更後画像上の緑枠内のテキストと一致しない。
+また、図\ref{fig: Appearance_html_tab}を見てみると、
+一番下の赤枠内のテキストはHTMLコードの変更による影響を受けていないと分かるため、
+削除されたわけではない。
+よって、図\ref{fig: hidden_element}の青矢印で示すように、
+一番下の赤枠内のテキストは、Webページの変更後にコンテナの境界を超えてはみ出した状態になっていると目視で判断できる。
