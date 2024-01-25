@@ -1,5 +1,5 @@
 \chapter{MixVRTの実装}\label{cha:Implementation}
-本章では、試作した\toolName の実装について説明する。
+本章では、\toolName の実装について説明する。
 \toolName のシステム構成(仮)を、図\ref{fig:System}に示す。
 \begin{figure}[tp]
     \begin{center}
@@ -15,13 +15,13 @@
 % "templates"フォルダにあるHTMLコードが"static/images"ディレクトリを参照できるようになっています。
 % この仕組みにより、ユーザーはローカルに立てられたFlaskサーバを通じて、
 % Webページ上で生成された画像を確認することができます。
-\toolName は、以下の5つの処理部から構成する。
+本研究では、\toolName の試作にあたり、以下の5つの処理部を実装する。
 \begin{itemize}
     \item 取得部
     \item 画像比較部
     \item HTML比較部
-    \item レイアウト副作用抽出部
-    \item レイアウト不具合抽出部
+    \item レイアウトの副作用抽出部
+    \item レイアウトの不具合抽出部
           % \item インターフェース表示部
 \end{itemize}
 % \begin{itemize}
@@ -36,7 +36,7 @@
 %               \item 差分コード解析
 %               \item 影響箇所強調HTMLコード生成
 %           \end{enumerate}
-%     \item レイアウト副作用箇所抽出部
+%     \item レイアウトの副作用箇所抽出部
 %     \item インターフェース表示部
 % \end{itemize}
 以降、\toolName を構成する5つの処理部について説明する。
@@ -45,7 +45,7 @@
 \section{取得部}\label{sec:Web_data_get_section}
 取得部は、WebページのURLを入力として受け取り、Webページの画像とHTMLコードを取得する。
 取得したWebページの画像は画像比較部(\ref{sec:Difference_extraction_section}節で後述)に出力し、取得したWebページのHTMLコードはHTML比較部(\ref{sec:Affected_area_extraction}節で後述)に出力する。
-なお、HTML比較部から取得部にWebページのURLを与えて呼び出す場合があり、その場合は、Webページの画像のみをHTML比較部に出力する。
+なお、HTML比較部が取得部にWebページのURLを与えて呼び出す場合においては、Webページの画像のみをHTML比較部に出力する。
 Webページの画像取得には、Selenium WebDriver(\ref{sec:Selenium_WebDriver}節を参照)を用いてWebページの画像を取得する。
 Selenium WebDriverを用いて取得したWebページの画像例を、図\ref{fig:4_get_images}に示す。
 \begin{figure}[tp]
@@ -55,13 +55,86 @@ Selenium WebDriverを用いて取得したWebページの画像例を、図\ref{
         \label{fig:4_get_images}
     \end{center}
 \end{figure}
-WebページのHTMLコード取得には、Pythonライブラリの1つであるrequestsモジュール(\ref{sec:requests}節を参照)を用いて、WebページのURLからWebページのHTMLコードを取得する。
+WebページのHTMLコード取得には、Pythonライブラリの一つであるrequestsモジュール(\ref{sec:requests}節を参照)を用いて、WebページのURLからWebページのHTMLコードを取得する。
+requestsモジュールを用いて取得したWebページのHTMLコード例を、ソースコード\ref{lst:html_example}に示す。
+\begin{lstlisting}[language=HTML, caption=requestsモジュールを用いて取得したWebページのHTMLコード例, label=lst:html_example]
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Single Content Web Page</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f0f0f0;
+            }
+    
+            header {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 10px 0;
+            }
+    
+            .container {
+                height: 300px auto;
+                width: 100%;
+                margin: 10px auto;
+                overflow: hidden;
+            }
+    
+            .main-content {
+                height: 300px;
+                background-color: #fff;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+    
+            footer {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 10px 0;
+                clear: both;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <header>
+            <h1>Single Content Web Page</h1>
+        </header>
+        <div class="container">
+            <div class="main-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.</p>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
+                    rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+                    explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                    consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
+                    dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora
+                    incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+            </div>
+        </div>
+        <footer>
+            <p>Footer Content</p>
+        </footer>
+    </body>
+    
+    </html>
+\end{lstlisting}
 
 \section{画像比較部}\label{sec:Difference_extraction_section}
-画像比較部は、取得部からWebページの変更前画像と変更後画像を受け取り、画像比較に基づく差分箇所を色付きの枠で囲むことで強調表示したWebページの変更前画像と変更後画像を生成する。
-また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、差分箇所を囲む色付きの枠のみを抽出した、「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」も生成する。
-なお、「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」に関しては、レイアウト副作用抽出部(\ref{sec:Layout_subEffect_extraction_section}節で後述)に処理画像として出力する。
-\par
+画像比較部は、取得部からWebページの変更前画像と変更後画像を受け取り、画像比較に基づく差分箇所を色付きの枠で囲んで強調表示したWebページの変更前画像と変更後画像を生成する。
+また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、差分箇所を囲む色付きの枠のみを抽出した、変更前画像と変更後画像も生成する。
+なお、差分箇所を囲む色付きの枠のみを抽出した、変更前画像と変更後画像に関しては、レイアウトの副作用抽出部に処理画像として出力する。
 画像比較部の処理の流れを、以下に示す。
 \begin{enumerate}
     \item 高解像度画像生成処理
@@ -75,68 +148,62 @@ WebページのHTMLコード取得には、Pythonライブラリの1つである
 
 \subsection{高解像度画像生成処理}\label{subsec:Generate_high_images}
 高解像度画像生成処理は、Webページの画像から高解像度画像を生成する。高解像度画像は、輪郭検出処理(\ref{subsec:contour_detection_processing}節で後述)の精度を向上するために必要である。
-\par
-高解像度画像を生成する流れを、以下に示す。なお、リサイズに使用するアルゴリズムには、LANCZOSフィルタ(\ref{sec:pillow}節を参照)を用いる。
+高解像度画像を生成する流れを、以下に示す。なお、リサイズに使用するアルゴリズムには、LANCZOSフィルタ(\ref{sec:pillow}を参照)を用いる。
 \begin{enumerate}
-    \item PillowのImage.open関数(\ref{sec:pillow}節を参照)を用いて、Webページの画像を読み込む。
-    \item 画像の幅と高さを取得する。
+    \item PillowのImage.open関数(\ref{sec:pillow}節を参照)を用いて、Webページの画像をImageオブジェクトとして読み込む。
     \item 画像の拡大率を設定する。本研究では、$2$とする。
-    \item 画像のサイズ変更時に使用するリサンプリングフィルタを設定する。本研究では、PillowのImage.LANCZOSフィルタ(\ref{sec:pillow}節を参照)を用いる。
-    \item Webページの画像を、画像の幅と高さにそれぞれ画像の拡大率を掛けた高解像度画像にリサイズする。
+    \item Imageオブジェクトから画像の幅と高さを取得する。
+    \item 画像の幅と高さにそれぞれ画像の拡大率を掛けた画像にリサイズする。
     \item リサイズした高解像度画像を保存する。
 \end{enumerate}
 
 \subsection{適応的二値化処理}\label{subsec:Adaptive_Binarisation}
 適応的二値化処理は、Webページの画像の二値化(白黒化)を行う。
-\par
 Webページの画像を二値化する流れを、以下に示す。
 \begin{enumerate}
-    \item OpenCVのimread関数(\ref{sec:opencv}節を参照)を用いて、Webページの画像パスから画像を読み込む。
-    \item OpenCVのcvtColor関数(\ref{sec:opencv}節を参照)を用いて、画像をグレースケール化する。
-    \item OpenCVのadaptiveThreshold関数(\ref{sec:opencv}節を参照)を用いて、画像の二値化を行う。
+    \item OpenCVのimread関数(\ref{sec:opencv}を参照)を用いて、Webページの画像パスから画像を読み込む。
+    \item OpenCVのcvtColor関数(\ref{sec:opencv}を参照)を用いて、画像をグレースケール化する。
+    \item OpenCVのadaptiveThreshold関数(\ref{sec:opencv}を参照)を用いて、画像の二値化を行う。
 \end{enumerate}
 
 \subsection{差分検出処理}\label{subsec:difference_detection_process}
 差分検出処理は、OpenCVのsubtract関数(\ref{sec:opencv}節を参照)を用いて、Webページの変更前画像と変更後画像の画像間で差分検出を行う。
-差分検出処理により、Webページの変更前画像から削除された箇所とWebページの変更後画像に追加された箇所である差分箇所を検出できる。
+差分検出処理により、Webページの変更前画像で削除された箇所とWebページの変更後画像で追加された箇所である差分箇所を検出できる。
 
 \subsection{膨張処理}\label{subsec:dilation}
 % (\ref{sec:dilation}節を参照)
 差分検出処理の後に膨張処理を適用することで、
 差分箇所の輪郭検出処理(\ref{subsec:contour_detection_processing}節で後述)を高める。
-\par
 差分検出で生成した画像に対して、膨張処理を適用する流れを、以下に示す。
 \begin{enumerate}
     \item 特定の形状とサイズを持つカーネルを設定する。本研究では、5x5ピクセルの正方形カーネルを採用する。
     \item 設定したカーネルを用いて、差分検出画像に膨張処理を適用する。適用後、画像内の差分箇所が拡大し、隣接する差分箇所が連結する。
-    \item 2.の膨張処理を複数回実行する。本研究では、膨張処理を6回繰り返すことで差分箇所を強調する。
+    \item 膨張処理を複数回実行する。本研究では、膨張処理を6回繰り返すことで差分箇所を強調する。
 \end{enumerate}
 
 \subsection{輪郭検出処理}\label{subsec:contour_detection_processing}
-輪郭検出処理は、OpenCVのfindContours関数(\ref{sec:opencv}節を参照)を用いて、膨張処理を適用した差分箇所の輪郭を検出する。
+輪郭検出処理は、OpenCVのfindContours関数(\ref{sec:opencv}節を参照)を用いて、膨張処理を適用した差分箇所を枠で囲む輪郭を検出する。
 輪郭検出処理により、Webページの画像上における画面要素単位の差分箇所の輪郭座標を取得できる。
 
 \subsection{枠描画処理}\label{subsec:Bounding box drawing process}
 枠描画処理は、Webページの変更前画像と変更後画像に対して、
-輪郭検出処理(\ref{subsec:contour_detection_processing}節を参照)で取得した輪郭座標を用いて、
-Webページの変更前画像から削除された箇所を赤枠で囲んだ画像と、Webページの変更後画像に追加された箇所を緑枠で囲んだ画像を生成する。
+輪郭検出処理(\ref{subsec:Bounding box drawing process}節を参照)で取得した輪郭座標を用いて、
+Webページの変更前画像で削除された箇所を赤枠で囲んだ画像と、Webページの変更後画像で追加された箇所を緑枠で囲んだ画像を生成する。
 また、Webページの変更前画像と変更後画像のそれぞれと同じサイズの黒画像に対しても、
 輪郭検出処理で取得した輪郭座標を用いて、
 差分箇所を囲む色付きの枠のみを抽出した、変更前画像と変更後画像を生成する。
-\par
 枠描画処理の流れを、以下に示す。
 \begin{enumerate}
-    \item cv2.boundingRect関数(\ref{sec:opencv}節を参照)を用いて、輪郭を囲む矩形の座標と幅、高さを取得する。
+    \item cv2.boundingRect関数(\ref{sec:opencv}節を参照)を用いて、輪郭を取り囲む矩形の座標と幅、高さを取得する。
     \item 取得した矩形情報を引数に指定したcv2.rectangle関数(\ref{sec:opencv}節を参照)を用いて、画像上に色付きの枠を描画する。
 \end{enumerate}
 
 
 \section{HTML比較部}\label{sec:Affected_area_extraction}
 HTML比較部は、取得部からWebページの変更前HTMLコードと変更後HTMLコードを受け取り、
-HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、Webページの変更前画像と変更後画像を生成する。
+HTMLコードの変更に基づく影響箇所を色付きの枠で囲んで強調表示した、Webページの変更前画像と変更後画像を生成する。
 また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、影響箇所を囲む色付きの枠のみを抽出した、変更前画像と変更後画像も生成する。
 なお、影響箇所を囲む色付きの枠のみを抽出した、変更前画像と変更後画像に関しては、レイアウトの副作用抽出部に処理画像として出力する。
-\par
 HTML比較部の処理の流れを、以下に示す。
 \begin{enumerate}
     \item 差分コード生成処理
@@ -148,8 +215,7 @@ HTML比較部の処理の流れを、以下に示す。
 
 \subsection{差分コード生成処理}\label{subsec:diff_file_generate}
 差分コード生成処理は、Webページの変更前HTMLコードと変更後HTMLコードを行ごとに比較して、差分コードをtxt形式として生成する。
-なお、生成した差分コードは、コードの追加行には"+", 削除行には"-", 変更前後のHTMLコードにどちらにも存在しない行には"?"が先頭に自動で付き、"?"を除いた差分コードを解析対象とする。
-\par
+なお、生成した差分コードは、コードの追加行には"+", 削除行には"-", 変更前後のHTMLコードにどちらにも存在しない行には"?"が先頭に付き、"?"を除いた差分コードを解析対象とする。
 差分コードを生成する処理を、以下に示す。
 \begin{enumerate}
     \item 変更前HTMLコードと変更後HTMLコードをそれぞれHTMLデータとして読み込む。
@@ -157,38 +223,39 @@ HTML比較部の処理の流れを、以下に示す。
     \item 差分コードをtxt形式で保存する
 \end{enumerate}
 
+
+
 \subsection{差分コード解析処理}\label{subsec:diff_file_analyze}
 差分コード解析処理は、差分コード生成処理から差分コードを受け取り、差分コードからbody要素内の変更箇所とstyle要素内の変更箇所を見つける。
 
-\subsection{枠付きHTMLコード生成処理}\label{subsec:modified_html_generate}
-枠付きHTMLコード生成処理は、差分コード解析処理から変更箇所を受け取り、変更箇所に色付きの枠をつけるcssクラスを追加したHTMLコードを生成する。
-なお、変更箇所に色付きの枠をつけるcssクラスを追加したHTMLコードを、枠付きHTMLコードと定義する。
+\subsection{枠付けHTMLコード生成処理}\label{subsec:modified_html_generate}
+枠付けHTMLコード生成処理は、差分コード解析処理から変更箇所を受け取り、変更箇所に色付きの枠をつけるcssクラスを追加したHTMLコードを生成する。
+なお、変更箇所に色付きの枠をつけるcssクラスを追加したHTMLコードを、枠付けHTMLコードと定義する。
 
 \subsection{枠抽出処理}\label{subsec:frame_extraction}
-枠抽出処理は、Webページの変更前画像と枠付きを行ったWebページの変更前画像を比較し、赤枠のみを抽出した画像を生成する。
-また、Webページの変更後画像と枠付きを行ったWebページの変更後画像を比較し、緑枠のみを抽出した画像を生成する。
+枠抽出処理は、Webページの変更前画像と枠付けを行ったWebページの変更前画像を比較し、赤枠のみを抽出した画像を生成する。
+また、Webページの変更後画像と枠付けを行ったWebページの変更後画像を比較し、緑枠のみを抽出した画像を生成する。
 生成した画像は、レイアウトの副作用抽出部に出力する。
-\par
 枠抽出処理の流れを、以下に示す。
 \begin{enumerate}
-    \item 枠付きHTMLコードをローカルサーバ上でWebページとして公開する
-    \item 取得部を用いて、枠付きHTMLをもとにしたWebページの画像を取得する
-    \item Webページの変更前画像と枠付きを行ったWebページの変更前画像を比較し、赤枠のみを抽出した変更前画像を生成する
-    \item Webページの変更後画像と枠付きを行ったWebページの変更後画像を比較し、緑枠のみを抽出した画像を生成する
+    \item 枠付けHTMLコードをローカルサーバ上でWebページとして公開する
+    \item 取得部を用いて、枠付けHTMLをもとにしたWebページの画像を取得する
+    \item Webページの変更前画像と枠付けを行ったWebページの変更前画像を比較し、赤枠のみを抽出した変更前画像を生成する
+    \item Webページの変更後画像と枠付けを行ったWebページの変更後画像を比較し、緑枠のみを抽出した画像を生成する
 \end{enumerate}
 
 % \section{影響箇所検出部}\label{sec:Affected_area_extraction}
 % HTMLコードの変更に基づく影響箇所抽出部は、Webページ情報取得部で取得した変更前後のWebページのHTMLコードを用いて影響箇所を特定する。
-% 概要としては、差分コードを生成し、差分コードから枠付き処理を行った変更前後のHTMLコードを生成した後、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページを表示し、Webページ情報取得部によってそのWebページの画像を取得する。
-% 元のWebページ画像と枠付き処理をしたWebページ画像を比較して枠のみを抽出する。
+% 概要としては、差分コードを生成し、差分コードから枠付け処理を行った変更前後のHTMLコードを生成した後、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページを表示し、Webページ情報取得部によってそのWebページの画像を取得する。
+% 元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
 % 具体的には、まず、Pythonライブラリの一つであるdifflibモジュールを用いて、変更前後のHTMLコードから差分コードを生成する。
 % 生成した差分コードは、コードの追加行には"+", 削除行には"-", 変更前後のHTMLコードにどちらにも存在しない行には"?"が先頭に付き、"?"を除いた差分コードを解析対象とする。
 % 差分コードは、bodyタグ内とstyleタグ内を対象とする。
-% もし、bodyタグ内で先頭に"+"や"-"があれば、コードの追加や削除、変更があったとして、その箇所に枠付き処理を行うCSSクラスを追加し、先頭の"+"か"-"を削除する。
-% styleタグ内の場合は、CSSクラスのセレクタ名のみの変更やスタイルのみの変更、またはその両方の変更があったCSSクラスを対象として、そのCSSクラスに対して枠付きを行うスタイルを適用する。
+% もし、bodyタグ内で先頭に"+"や"-"があれば、コードの追加や削除、変更があったとして、その箇所に枠付け処理を行うCSSクラスを追加し、先頭の"+"か"-"を削除する。
+% styleタグ内の場合は、CSSクラスのセレクタ名のみの変更やスタイルのみの変更、またはその両方の変更があったCSSクラスを対象として、そのCSSクラスに対して枠付けを行うスタイルを適用する。
 % この場合においても、解析した行の先頭に"+", "-"があれば削除する。
-% 差分コードから枠付き処理を行った変更前後のHTMLコードを生成した後は、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページとして表示し、そのWebページの画像を取得する。
-% そして、元のWebページ画像と枠付き処理をしたWebページ画像を比較して枠のみを抽出する。
+% 差分コードから枠付け処理を行った変更前後のHTMLコードを生成した後は、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページとして表示し、そのWebページの画像を取得する。
+% そして、元のWebページ画像と枠付け処理をしたWebページ画像を比較して枠のみを抽出する。
 \section{レイアウトの副作用検出部}\label{sec:Layout_subEffect_extraction_section}
 レイアウトの副作用抽出部は、画像比較に基づく差分箇所とHTMLコードの変更に基づく影響箇所を用いて、レイアウトの副作用箇所を抽出する。
 具体的には、差分箇所を囲む枠と影響箇所を囲む枠同士を比較する。比較の仕方は、枠の重なり度合を判定する。
@@ -198,7 +265,7 @@ HTML比較部の処理の流れを、以下に示す。
 \section{レイアウトの不具合検出部}\label{sec:Layout_bug_extraction_section}
 レイアウトの不具合抽出部は、レイアウトの副作用抽出部から抽出したレイアウトの副作用箇所から、レイアウトの不具合箇所を抽出する。
 具体的には、\ref{sec:Layout_subEffect_extraction_section}節で抽出したレイアウトの副作用箇所を囲んだ各赤枠内の領域と、レイアウトの副作用箇所を囲んだ各緑枠内の領域を比較する。
-その後、赤枠内の領域と緑枠内の領域をabsdiff関数(\ref{sec:Layout_subEffect_extraction_section}節を参照)で絶対差分を計算して類似度を求める。
+具体的には、赤枠内の領域と緑枠内の領域をabsdiff関数(\ref{sec:Layout_subEffect_extraction_section}節を参照)で絶対差分を計算して類似度を求める。
 類似度が9割を超えれば、レイアウトの不具合は無いと判定し、比較した赤枠と緑枠を除外する。
 上記の処理によって、類似度が9割未満であった赤枠と緑枠を抽出することができ、それらはレイアウトの不具合として、Webページの変更前画像と変更後画像をする。
 
