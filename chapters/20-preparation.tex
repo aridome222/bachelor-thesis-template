@@ -1,5 +1,18 @@
 \chapter{研究の準備}\label{cha:Preparation}
 本章では、\toolName を実装する際に必要な前提知識について説明する。
+
+\section{テスト対象とするWebページ}\label{sec:target_images}
+本研究では、\toolName のテスト対象とするWebページは、以下の条件をすべて満たすものとする。
+\begin{itemize}
+      \setlength{\itemsep}{0pt}
+            \setlength{\parsep}{0pt}
+      \item 変更前画像と変更後画像の画像サイズが同じである
+      \item 白地の背景である
+      \item 赤枠や緑枠を含まない
+      \item アニメーションを含まない
+      \item 【他にあれば今後追記する】
+\end{itemize}
+
 \section{視覚的回帰テスト}\label{sec:vrt}
 視覚的回帰テスト (Visual Regression Testing)\cite{Visual regression testing}は、
 Webページの変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
@@ -7,10 +20,26 @@ Webページの変更前画像と変更後画像を比較し差分を検出す�
 \begin{enumerate}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
-      \item 変更前画像と変更後画像の作成
-      \item 画像比較による差分検出
-      \item 結果の評価
+      \item 変更前画像の作成:\\
+            テスト対象とするWebページの現在の画面をスクリーンショットする。
+      \item 変更の適用:\\
+            テスト対象とするWebページに、画面要素の追加や削除、既存の画面要素のスタイル変更などを適用する。
+      \item 変更後画像の作成:\\
+            変更を適用したWebページの画面をスクリーンショットする。
+      \item 画像比較:\\
+            変更前画像と変更後画像を比較し、差分を検出する。
+            % 一部の視覚的回帰テストツール\cite{}は、2つの画像をピクセル単位で比較し、差分を強調表示する。
+      \item 結果の評価:\\
+            比較結果を確認し、差分が意図したレイアウトの変更であるかを判断する。
+            意図しないレイアウトの変更が発生していた場合、修正を行い、再度テストを行う。
 \end{enumerate}
+% \begin{enumerate}
+%       \setlength{\itemsep}{0pt}
+%             \setlength{\parsep}{0pt}
+%       \item 変更前画像と変更後画像の作成
+%       \item 画像比較による差分検出
+%       \item 結果の評価
+% \end{enumerate}
 
 \section{レイアウトの不具合}\label{sec:layout effect}
 レイアウトの不具合は、Webページの画面要素(テキストやボタン、画像など)が適切にレイアウトされていないことである。
@@ -36,18 +65,6 @@ Webページの変更前画像と変更後画像を比較し差分を検出す�
 %     \item ヘッダー
 %     \item フッター
 % \end{itemize}
-
-\section{テスト対象とするWebページ}\label{sec:target_images}
-本研究では、\toolName のテスト対象とするWebページは、以下の条件をすべて満たすものとする。
-\begin{itemize}
-      \setlength{\itemsep}{0pt}
-            \setlength{\parsep}{0pt}
-      \item 変更前画像と変更後画像の画像サイズが同じである
-      \item 白地の背景である
-      \item 赤枠や緑枠を含まない
-      \item アニメーションを含まない
-      \item 【他にあれば今後追記する】
-\end{itemize}
 
 \section{OpenCV}\label{sec:opencv}
 OpenCV (Open Source Computer Vision Library)\cite{OpenCV}は、画像や動画に関する処理機能をまとめた、コンピュータビジョン向けのオープンソースのライブラリである。
