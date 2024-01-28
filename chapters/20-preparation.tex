@@ -1,12 +1,13 @@
 \chapter{研究の準備}\label{cha:Preparation}
 本章では、\toolName を実装する際に必要な前提知識について説明する。
 
-\section{テスト対象とするWebページ}\label{sec:target_images}
-本研究では、\toolName のテスト対象とするWebページは、以下の条件をすべて満たすものとする。
+\section{入力対象とするWebページ}\label{sec:target_images}
+本研究では、\toolName の入力対象とするWebページは、以下の条件をすべて満たすものとする。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
-      \item 変更前画像と変更後画像の画像サイズが同じである
+      \item 比較対象とするWebページとテスト対象とするWebページの画面サイズが同じである
+      \item 比較対象とするWebページとテスト対象とするWebページが著しく異なることがない
       \item 白地の背景である
       \item 赤枠や緑枠を含まない
       \item アニメーションを含まない
@@ -14,44 +15,39 @@
 \end{itemize}
 
 \section{視覚的回帰テスト}\label{sec:vrt}
-視覚的回帰テスト (Visual Regression Testing)\cite{Visual regression testing}は、
-Webページの変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
-視覚的回帰テストの基本的な手順は以下の通りである。
+視覚的回帰テスト (Visual Regression Testing)\cite{VisualRegressionTesting}は、
+比較画像とテスト画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
+なお、本研究では、比較対象とするWebページの画像を「比較画像」、テスト対象とするWebページの画像を「テスト画像」と定義する。
+\par
+視覚的回帰テストの基本的な手順は、以下の通りである。
 \begin{enumerate}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
-      \item 変更前画像の作成:\\
-            テスト対象とするWebページの現在の画面をスクリーンショットする。
+      \item 比較画像の取得:\\
+            比較対象とするWebページの画面をスクリーンショットする。
       \item 変更の適用:\\
-            テスト対象とするWebページに、画面要素の追加や削除、既存の画面要素のスタイル変更などを適用する。
-      \item 変更後画像の作成:\\
+            比較対象とするWebページに、画面要素(テキストやボタン、画像など)の追加や削除、既存の画面要素のスタイル変更などを適用する。
+      \item テスト画像の取得:\\
             変更を適用したWebページの画面をスクリーンショットする。
       \item 画像比較:\\
-            変更前画像と変更後画像を比較し、差分を検出する。
+            比較画像とテスト画像を比較し、差分を検出する。
             % 一部の視覚的回帰テストツール\cite{}は、2つの画像をピクセル単位で比較し、差分を強調表示する。
       \item 結果の評価:\\
-            比較結果を確認し、差分が意図したレイアウトの変更であるかを判断する。
+            差分検出の結果を確認し、差分が意図したレイアウトの変更であるかを判定する。
             意図しないレイアウトの変更が発生していた場合、修正を行い、再度テストを行う。
 \end{enumerate}
-% \begin{enumerate}
-%       \setlength{\itemsep}{0pt}
-%             \setlength{\parsep}{0pt}
-%       \item 変更前画像と変更後画像の作成
-%       \item 画像比較による差分検出
-%       \item 結果の評価
-% \end{enumerate}
 
 \section{レイアウトの不具合}\label{sec:layout effect}
-レイアウトの不具合は、Webページの画面要素(テキストやボタン、画像など)が適切にレイアウトされていないことである。
+レイアウトの不具合とは、Webページの画面要素が適切にレイアウトされていないことである\cite{LayoutFailureDetection}。
 \par
-本研究では、以下の主な3つのレイアウトの不具合を検出する。
+本研究では、以下の3つのレイアウトの不具合を検出する。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
       \item 画面要素の隠れ:\\
             Webページの画面要素がその画面要素を含むコンテナやビューポートの境界を超えてはみ出している状態。
       \item 画面要素の見切れ:\\
-            Webページの画面要素の一部がコンテナやビューポートの境界によって切り取られ、完全には表示されない状態。
+            Webページの画面要素の一部がコンテナやビューポートの境界によって切り取られ、完全には表示されていない状態。
       \item 画面要素の重なり:\\
             Webページの複数の画面要素が重なりあっている状態。
 \end{itemize}
@@ -65,19 +61,26 @@ Webページの変更前画像と変更後画像を比較し差分を検出す�
 %     \item ヘッダー
 %     \item フッター
 % \end{itemize}
-
 \section{OpenCV}\label{sec:opencv}
 OpenCV (Open Source Computer Vision Library)\cite{OpenCV}は、画像や動画に関する処理機能をまとめた、コンピュータビジョン向けのオープンソースのライブラリである。
 \par
 本研究では、OpenCVに用意されている、imread関数、cvtColor関数、adaptiveThreshold関数、subtract関数、findContours関数、boundingRect関数、rectangle関数、absdiff関数の8つの関数を用いる。
+
 \paragraph{imread関数}
 imread関数は、画像ファイルの読み込みを行う関数である。
 第一引数に、画像ファイルのパスを指定する。
+読み込まれた画像データは、OpenCVで広く使われるデータ形式となる。
+これにより、OpenCVに用意されている関数を用いて、画像処理を適用できる。
+\par
+本研究では、グレースケール化や二値化処理などの画像処理を適用するために、
+この関数を使用してWebページの画像や\toolName が生成する画像を読み込む。
 \paragraph{cvtColor関数}
 cvtColor関数は、画像の色空間を変換する関数である。
-第一引数には、色空間の変換を適用する画像を指定し、第二引数には、どの色空間へ変換するかを示すコード(例: cv2.COLOR\_BGR2GRAY, cv2.COLOR\_GRAY2BGR)を指定する。
+第一引数には、色空間の変換を適用する画像を指定し、第二引数には、どの色空間へ変換するかを示すコード\cite{ColorCode}を指定する。
 \par
-本研究では、BGR(青、緑、赤)からGRAY(グレースケール)と、GRAY(グレースケール)からBGR(青、緑、赤)の色空間への変換に用いる。
+本研究では、画像処理の高速化と精度向上のために、
+BGR(青、緑、赤)からGRAY(グレースケール)の色空間への変換を行う。
+また、画像処理の適用によって削除箇所や追加箇所を検出した際、色で識別可能にするために、GRAY(グレースケール)からBGR(青、緑、赤)の色空間への変換を行う。
 \paragraph{adaptiveThreshold関数}
 adaptiveThreshold関数は、画像を複数の小さな区画に切り分けた各々の部分ごとに異なる二値化の閾値を用いて画像の二値化を行う関数である。
 第一引数には、二値化を適用するグレースケール画像を指定し、第二引数には、二値化後のピクセルにおける明度の最大値(通常$255$)を指定する。
@@ -85,37 +88,35 @@ adaptiveThreshold関数は、画像を複数の小さな区画に切り分けた
 第五引数には、近傍領域のサイズを指定し、
 第六引数には計算された二値化の閾値から引かれる定数を指定する。
 \par
-本研究において、adaptiveThreshold関数の第三引数から第六引数に関しては、以下の固有の値を設定する。
+本研究におけるadaptiveThreshold関数は、画像の一部が明るく、他の部分が暗い場合においても、全体として均一な二値化画像を生成するために用いる。
+\par
+また、本研究において、adaptiveThreshold関数の第三引数から第六引数に関しては、以下の固有の値を設定する。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
       \item 二値化の閾値を計算する方法:\\
-            近傍領域内のピクセル平均値(近傍領域内のピクセル合計値 $\div$ 近傍領域内のピクセル数)に基づいて閾値を計算するcv2.ADAPTIVE\_THRESH\_MEAN\_Cに設定する。
+            近傍領域内のピクセル平均値(近傍領域内のピクセル合計値 $\div$ 近傍領域内のピクセル数)に基づいて閾値を計算するcv2.ADAPTIVE\_THRESH\_MEAN\_C\cite{AdaptiveThreshold}に設定する。
       \item 二値化の方法:\\
             二値化の閾値以下のピクセル値をピクセルの明度の最大値に変換し、
-            それ以外のピクセル値を$0$に変換する二値化方法であるcv2.THRESH\_BINARY\_INVに設定する。
+            それ以外のピクセル値を$0$に変換する二値化方法であるcv2.THRESH\_BINARY\_INV\cite{Threshold}に設定する。
       \item 近傍領域のサイズ:\\
             $11$に設定する。
       \item 計算された二値化の閾値から引かれる定数:\\
             $2$に設定する。
 \end{itemize}
-\par
-また、本研究におけるadaptiveThreshold関数は、画像の一部が明るく、他の部分が暗い場合においても、全体として均一な二値化画像を生成するために用いる。
 % \paragraph{bitwise\_not関数}
 % bitwise\_not関数は、画像の各ピクセル値のビットを反転する関数である。
 % ビット反転の例として、黒ピクセル（$0$のピクセル値）は白ピクセルに（ピクセル値が$255$に）、白ピクセル（$255$のピクセル値）は黒ピクセルに（ピクセル値が$0$に）反転する。
 % 第一引数にビット反転を行う画像を指定する。
-\par
 \paragraph{subtract関数}
 subtract関数は、2つの画像間の対応するピクセル値を比較し、差分画像を返す関数である。
-第一引数には、比較の基準となる画像を指定する。この画像の各ピクセル値から、第二引数で指定する画像の対応するピクセル値を引く。
+第一引数には、比較の基準となる画像を指定する。
 第二引数には、第一引数の画像と比較する画像を指定する。この画像の各ピクセル値が、第一引数で指定する画像の対応するピクセル値から引かれる。
-例として、二値化画像AとBはそれぞれ白ピクセルに特徴がある画像とし、
-subtract関数の第一引数に二値化画像Aを、第二引数に二値化画像Bをそれぞれ指定すると、二値化画像Aにのみ存在する白ピクセルを抽出した差分画像を生成する。
-
 % (例: 二値化前の画像AとBが元々Webページの画像であり、Webページ内のテキストやボタンなどの画面要素が二値化後の画像で白ピクセル、それ以外の背景などが黒ピクセル領域となっている画像)
+例として、二値化画像AとBはそれぞれ白ピクセルに特徴がある画像とし、
+subtract関数の第一引数に二値化画像Aを、
+第二引数に二値化画像Bをそれぞれ指定した場合のsubtract関数のピクセル値の比較処理を、以下に示す。
 \par
-二値化画像AとB間で対応するピクセル値の比較処理を、以下に示す。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
@@ -132,10 +133,10 @@ subtract関数の第一引数に二値化画像Aを、第二引数に二値化�
             二値化画像AとBの両方で黒ピクセルの場合、subtract関数は$0$(Aの黒ピクセル値)から$0$(Bの黒ピクセル値)を引く。
             差は$0$(黒ピクセル値)になり、共通の黒ピクセルはそのまま黒ピクセルとなる。
 \end{itemize}
-上記の処理の結果、二値化画像Aにのみ存在する白ピクセルを抽出した差分画像を生成する。
+上記の処理の結果、二値化画像Aのみに存在する白ピクセルを抽出した差分画像が生成できる。
 \par
 本研究では、二値化処理を行った、Webページの変更前画像と変更後画像をそれぞれ交互に1回ずつsubtract関数の第一引数と第二引数に指定し実行することで、
-変更前画像から削除された箇所を抽出した差分画像と、変更後画像に追加された箇所を抽出した差分画像を生成する。
+変更前画像から削除された箇所を抽出した差分画像と、変更後画像に追加された箇所を抽出した差分画像の2つの差分画像を生成する。
 \paragraph{dilate関数}
 dilate関数は、二値化画像内の白ピクセルを拡大する(膨張処理を行う)関数であり、ノイズ除去やオブジェクトの形状とサイズの強調に役立つ。
 カーネルと呼ばれる特定の形状とサイズの小さなフィルタを使用し、フィルタを画像上でスライドし各ピクセルに対して、
@@ -154,7 +155,7 @@ dilate関数は、二値化画像内の白ピクセルを拡大する(膨張処�
             $6$に設定する。
 \end{itemize}
 \par
-また、本研究におけるdilate関数は、subtract関数で抽出した、削除された箇所と追加された箇所の形状とサイズを強調することで、
+本研究におけるdilate関数は、subtract関数で生成した差分画像内の、削除された箇所または追加された箇所の形状とサイズを強調することで、
 影響箇所(\ref{cha:Function}章で後述)を枠で囲む粒度と同等の粒度で、後述するrectangle関数が差分箇所(\ref{cha:Function}章で後述)である
 削除された箇所と追加された箇所を枠で囲むことを目的としている。
 % この目的の結果、差分箇所と影響箇所の比較の際に、レイアウトの副作用箇所(\ref{cha:Function}章で後述)の検出精度を高めることができる。
@@ -172,9 +173,9 @@ findContours関数は、画像から輪郭を検出し、検出した各輪郭�
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
       \item 輪郭構造の取得方法:\\
-            画像内の一番外側の白の輪郭のみを取得するRETR\_EXTERNALを用いる。
+            画像内の一番外側の白の輪郭のみを取得するRETR\_EXTERNAL\cite{RetrExternal}を用いる。
       \item 輪郭の形成方法:\\
-            端点のみで輪郭を形成するCHAIN\_APPROX\_SIMPLEを用いる。
+            端点のみで輪郭を形成するCHAIN\_APPROX\_SIMPLE\cite{ChainApproxSimple}を用いる。
 \end{itemize}
 \par
 % また、本研究におけるfindContours関数は、後述するboundingRect関数で
@@ -187,48 +188,53 @@ boundingRect関数は、輪郭データにもとに、その輪郭を完全に�
 \par
 本研究におけるboundingRect関数は、矩形の左上の点のx座標とy座標、さらに矩形の幅と高さを取得するために用いる。
 これにより、輪郭を取り囲む矩形の位置とサイズを取得できる。
+なお、画像の座標系は、画像の左上隅画素を原点 (0,0) とし、右方向をX軸の正の向き、下方向をY軸の正の向きと定義する。
 \paragraph{rectangle関数}
 rectangle関数は、画像に矩形を描画する関数である。
 第一引数に描画先の画像、第二引数に矩形の左上の点の座標、第三引数に矩形の右下の点の座標、
 第四引数に矩形の色、第五引数に矩形の線の太さを指定する。
 \par
-本研究におけるrectangle関数は、画像上に指定された位置と大きさの矩形を指定された色で描画し、特定の領域を視覚的に強調するために用いる。
+本研究におけるrectangle関数は、画像上に、指定した位置と大きさの矩形を指定した色で描画し、特定の領域を視覚的に強調するために用いる。
 \paragraph{absdiff関数}
 absdiff関数は、2つの配列または画像間の絶対値の差を計算する関数である。
-第一引数に、第一の入力配列または画像を指定する。この配列または画像のデータ型は、第二の入力配列または画像と一致している必要がある。
-第二引数に、第二の入力配列または画像を指定する。この配列または画像は、第一の入力配列または画像と同じサイズとデータ型である必要がある。
+第一引数に、１つ目の入力配列または画像を指定する。
+第二引数に、２つ目の入力配列または画像を指定する。この入力配列または画像は、１つ目の入力配列または画像と同じサイズにし、同じデータ型にする必要がある。
 \par
 本研究におけるabsdiff関数は、入力された2つの配列または画像の各ピクセル値の絶対差を計算し、その結果を出力配列または画像として返す。
-具体的には、absdiff(src1, src2)は、src1とsrc2の各ピクセルについて$|src1 - src2|$の計算を行い、その結果を新しい画像として出力する。
 
 \section{Pillow}\label{sec:pillow}
 Pillow\cite{Pillow}は、Python\cite{Python}の画像処理ライブラリの1つで、画像の読み込み、処理、保存などの機能を提供する。
 本研究では、Pillowに用意されている、Image.open関数とリサンプリングフィルタであるImage.LANCZOSを用いる。
 \paragraph{Image.open関数}
-Image.open関数は、指定したパスの画像ファイルを開き、PillowライブラリによるImageクラスのインスタンスを生成して返す。
-このImageクラスのインスタンスでは、画像のサイズ変更、回転、色調整など、様々な画像処理操作が可能である。
+Image.open関数\cite{ImageModule}は、指定したパスの画像ファイルを開き、PillowライブラリによるImageクラスのインスタンスを生成して返す。
+このImageクラスのインスタンスに対して、画像のサイズ変更、回転、色調整など、様々な画像処理操作が可能である。
 \paragraph{Image.LANCZOS}
 Image.LANCZOSは、画像のサイズ変更時に使用されるリサンプリングフィルタの1つである\cite{LANCZOS}。
 LANCZOSフィルタは、画像を拡大する際に細部やエッジを維持できるため、高解像度画像の生成処理に適している。
+\par
+本研究におけるImage.open関数とImage.LANCZOSは、画像比較部の高解像度画像生成処理(\ref{subsec:Generate_high_images}節を参照)の際に、
+比較画像とテスト画像から、高解像度比較画像と高解像度テスト画像を生成するために用いる。
 
 \section{NumPy}\label{sec:numpy}
 NumPy\cite{NumPy}は、Pythonにおいて数値計算を効率的に行うための拡張モジュールである。
 効率的な数値計算を行うための型付きの多次元配列のサポートをPythonに加えるとともに、それらを操作するための大規模な高水準の数学関数ライブラリを提供する。
+\par
 本研究では、NumPyに用意されている、np.zeros関数を用いる。
 \paragraph{np.zeros関数}
-np.zeros関数は、$0$で初期化した画像(黒画像)を作成するために用いる。
-第一引数に、生成される配列の形状を指定する。
+np.zeros関数\cite{np.zeros}は、$0$で初期化した画像(黒画像)を生成するために用いる。
+第一引数に、生成する配列の形状を指定する。
 第二引数に、配列のデータ型を指定する。
+なお、配列の形状とは、生成する配列の次元数と各次元数における要素数のことである。
 
 \section{Selenium WebDriver}\label{sec:Selenium_WebDriver}
-Selenium WebDriver\cite{Selenium WebDriver}は、Seleniumプロジェクト\cite{Selenium}の一部であり、Webブラウザを直接制御するためのAPIを提供する。
+Selenium WebDriver\cite{SeleniumWebDriver}は、Seleniumプロジェクト\cite{Selenium}の一部であり、Webブラウザを直接制御するためのAPIを提供する。
 Selenium WebDriverのAPIを用いてテストスクリプトを実行することで、指定したWebページにアクセスし、要素のクリックやページ遷移などのユーザ操作を自動で行う。
 
 \section{requests}\label{sec:requests}
 
 \section{BeautifulSoup}\label{sec:beautifulsoup}
-BeautifulSoup\cite{BeautifulSoup}は、PythonでHTMLデータを解析するためのライブラリである。
-このライブラリを利用することで、HTMLデータの解析や変更、情報の抽出を容易に行うことができる。
+BeautifulSoup\cite{BeautifulSoup}は、HTMLやXMLファイルからデータを取り出すためのPythonライブラリである。
+このライブラリを利用することで、タグの検索や属性の取得、テキストの抽出などを容易に行うことができる。
 \par
 本研究では、BeautifulSoupに用意されている、find\_all関数とget\_text関数を用いる。
 \paragraph{BeautifulSoupの初期化}
@@ -236,7 +242,7 @@ BeautifulSoupに用意されている関数を用いるには、まず、Beautif
 BeautifulSoupオブジェクトとは、HTMLデータを解析し、操作可能な形式に変換したデータ構造である。
 このオブジェクトの初期化には、解析するHTMLデータと使用するパーサーを指定する。
 \par
-本研究では、使用するパーサーに、HTMLデータを解析するパーサーである"html.parser"を用いる。
+本研究では、使用するパーサーに、HTMLデータを解析するパーサーである"html.parser"\cite{BeautifulSoup}を用いる。
 \paragraph{find\_all関数}
 find\_all関数は、指定したタグに一致するすべての要素を検索し、それらをリストとして返す。
 \paragraph{get\_text関数}
@@ -251,10 +257,12 @@ difflib\cite{difflib}は、Pythonでテキストデータ間の差分を検出�
 Differクラスは、2つのテキスト間の差分を行単位で計算し、詳細な差分情報を生成するためのクラスである。
 このクラスは、テキストの各行を個別に比較し、追加、削除、変更された行を特定する。
 \paragraph{compare関数}
-compare関数は、Differクラスのインスタンスを使用して、2つのテキストシーケンス間の差分を計算する。
-この関数は、2つのシーケンスを引数として受け取り、差分結果を行単位で返す。
+compare関数は、Differクラスのインスタンスを使用して、2つの文字列リスト間の差分を計算する。
+この関数は、2つの文字列リストを引数として受け取り、差分結果を行単位で返す。
 差分結果には、追加された行が'+ '記号で、削除された行が'- ' 記号で、変更のない行がスペースでマークされる。
-また、'? ' 記号を用いて、変更があった行についての詳細な差異を示すが、本研究では、'? '記号があった行については、解析対象としない。
+また、'? ' 記号を用いて、変更があった行についての詳細な差異を示す。
+\par
+本研究では、'? '記号がある行については、解析の対象とはせず、その他の行を解析対象とする。
 % \begin{itemize}
 %       \setlength{\itemsep}{0pt}
 %             \setlength{\parsep}{0pt}
@@ -275,13 +283,12 @@ compare関数は、Differクラスのインスタンスを使用して、2つの
 %   </header>
 % \end{lstlisting}
 
-
 \section{Flask}\label{sec:Flask}
-Flask\cite{Flask}は、Pythonで構築されたWebフレームワークであり、WebサーバやWebアプリケーションの構築ができる。
+Flask\cite{Flask}は、Pythonで構築されたWebフレームワークであり、WebサーバやWebアプリケーションを構築できる。
 このフレームワークは、Werkzeug\cite{Werkzeug}とJinja2\cite{Jinja}に基づいている。
-WerkzeugはWebサーバとWebアプリケーション間のリクエストやレスポンスを処理するWSGIツールキットで、
-WSGI(Web Server Gateway Interface)\cite{WSGI}はWebサーバとWebアプリケーション間の接続規格である。
-Jinja2は、Pythonで使用されるテンプレートエンジンで、Webページの動的なレンダリングを可能にする。
+Werkzeugは、WebサーバとWebアプリケーション間のリクエストやレスポンスを処理するWSGI(Web Server Gateway Interface)ツールキットである。
+なお、WSGI\cite{WSGI}とは、WebサーバとWebアプリケーション間の接続規格である。
+Jinja2は、Pythonで使用されるテンプレートエンジン\cite{TemplateEngine}で、Webページの動的なレンダリングを可能にする。
 \par
 本研究では、Flaskを用いてローカルサーバを構築し、以下を実現する。
 \begin{itemize}
@@ -291,14 +298,16 @@ Jinja2は、Pythonで使用されるテンプレートエンジンで、Webペ�
       \item HTML比較部(\ref{sec:Affected_area_extraction}節で後述)で生成した枠付きHTMLコードをレンダリングし、
             Flaskを用いて定義した特定のURLへのアクセスを通じて、レンダリングを行った枠付きWebページを表示する。
 \end{itemize}
-なお、枠付きWebページを表示する目的は、Selenium WebDriverを用いた、枠付きWebページの画像取得を可能にするためである。
+なお、枠付きWebページを表示する目的は、Selenium WebDriverを用いて、枠付きWebページの画像を取得するためである。
 
 \section{\toolName の環境構築}\label{sec:MixVRT_env_gen}
-\toolName の環境構築には、ローカルサーバ用、Python処理用、およびSeleniumのGoogle Chrome用の、合計3つのDockerコンテナ\cite{Docker Container}を使用する。
-Docker Compose\cite{Docker Compose}を用いて、開発者はこれらのコンテナを同時に起動する。
+\toolName の環境構築には、Dockerコンテナ\cite{DockerContainer}を使用する。
+具体的には、ローカルサーバ用、Python処理用、およびSeleniumのGoogle Chrome用の、3つのDockerコンテナ\cite{DockerContainer}を使用する。
+Docker Compose\cite{DockerCompose}を用いて、開発者はこれらのコンテナを同時に起動する。
+\par
 ローカルサーバ用コンテナは、flaskを用いたローカルサーバを提供する。
 Python処理用コンテナは、Pythonを用いた画像処理やHTMLコード解析処理を行う。
 SeleniumのGoogle Chrome用コンテナは、Webブラウザの自動操作を実行するためのGoogle Chrome環境を提供する。
-なお、これらのコンテナに必要な設定と依存関係は、Dockerfileとdocker-compose.ymlに定義している。
+なお、これらのコンテナに必要な設定と依存関係は、Dockerfileとdocker-compose.ymlに定義する。
 Dockerfileは、Dockerコンテナの構築に必要な指示を記述したファイルである。
 docker-compose.ymlは、複数のコンテナを管理するための設定ファイルである。
