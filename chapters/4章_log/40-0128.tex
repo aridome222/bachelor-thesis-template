@@ -521,7 +521,7 @@ style要素内の末尾にCSSクラスの定義を追記する。
 \par
 枠抽出処理の流れを、以下に示す。
 \begin{enumerate}
-    \item 枠付きHTMLコードをローカルサーバ上(\ref{sec:Flask}節を参照)でWebページとして公開する
+    \item 枠付きHTMLコードをローカルサーバ上でWebページとして公開する
     \item 取得部を用いて、枠付きHTMLコードをもとにしたWebページの画像を取得する
     \item Webページの変更前画像と枠付きを行ったWebページの変更前画像を比較し、赤枠のみを抽出した変更前画像を生成する
     \item Webページの変更後画像と枠付きを行ったWebページの変更後画像を比較し、緑枠のみを抽出した変更後画像を生成する
@@ -539,78 +539,44 @@ style要素内の末尾にCSSクラスの定義を追記する。
 % この場合においても、解析した行の先頭に"+", "-"があれば削除する。
 % 差分コードから枠付き処理を行った変更前後のHTMLコードを生成した後は、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページとして表示し、そのWebページの画像を取得する。
 % そして、元のWebページ画像と枠付き処理をしたWebページ画像を比較して枠のみを抽出する。
-\section{副作用抽出部}\label{sec:Layout_subEffect_extraction_section}
-副作用抽出部は、データ管理部のdiff\_dirディレクトリから「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」、「影響箇所赤枠強調マスク画像」と「影響箇所緑枠強調マスク画像」を受け取り、
-これらの画像から、レイアウトの副作用箇所を抽出した、変更前画像と変更後画像を生成する。
-生成した画像は、データ管理部のdiff\_dirディレクトリに出力する。
-副作用抽出部の処理の流れを、以下に示す。
-\begin{enumerate}
-    \item 「差分箇所赤枠強調マスク画像」と「影響箇所赤枠強調マスク画像」をcv2.imread関数で読み込む。
-    \item cvtColor関数でグレースケール化する。
-    \item threshold関数で二値化を行う。
-    \item 二値化した「差分箇所赤枠強調マスク画像」に対して、cv2.findContours関数で輪郭リストcontours\_img\_bfを取得する。
-    \item 二値化した「影響箇所赤枠強調マスク画像」に対して、cv2.findContours関数で輪郭リストcontours\_html\_bfを取得する。
-    \item contours\_img\_bfの各輪郭要素の数だけループして、以下の処理を行う。
-          \begin{enumerate}
-              \item contours\_html\_bfの各輪郭要素の数だけループして、以下の処理を行う。
-                    \begin{enumerate}
-                        \item  contours\_img\_bfとcontours\_html\_bfのそれぞれの輪郭要素のバウンディングボックスを取得する。
-                        \item バウンディングボックスが重なっているか判定する
-                              \begin{enumerate}
-                                  \item  重なっている場合は、重なり部分のバウンディングボックスの面積を計算する。
-                                        小さい方のバウンディングボックスの面積を計算する。
-                                        重なり部分のバウンディングボックスの面積が、小さい方のバウンディングボックスの面積の6割を超えれば、
-                                        大きい方のバウンディングボックスと小さい方のバウンディングボックスが重なっていると判定し、Trueを返す。そうでなければ、Falseを返す。
-                                  \item 重なっていない場合は、Falseを返す。
-                              \end{enumerate}
-                    \end{enumerate}
-              \item matchの値がTrueなら、ループ処理から抜ける。
-          \end{enumerate}
-    \item matchの値がTrueなら、contours\_img\_bfの輪郭要素をunique\_contours\_bfに格納する。
-    \item 「差分箇所緑枠強調マスク画像」上の各緑枠と「影響箇所赤枠強調マスク画像」上の各緑枠を比較する。
-\end{enumerate}
-% レイアウトの副作用抽出部は、画像比較に基づく差分箇所とHTMLコードの変更に基づく影響箇所を用いて、レイアウトの副作用箇所を抽出する。
-% 具体的には、差分箇所を囲む枠と影響箇所を囲む枠同士を比較する。比較の仕方は、枠の重なり度合を判定する。
-% まず、枠が重なっているかどうかを判定する。次に、枠が重なっている場合に、重なり部分が小さい方の枠の面積の6割以上であれば枠が一致すると判定する。
-% 最終的に、一致しない枠のみを抽出し、一致しない赤枠をWebページの変更前画像に、一致しない緑枠をWebページの変更後画像に描画し、保存する。
-% 「」と「」を、図\ref{fig: subeffect_name}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/4_subeffect_name.png}
-        \caption{レイアウト副作用箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像}
-        \label{fig: subeffect_name}
-    \end{center}
-\end{figure}
-\par
+\section{レイアウトの副作用検出部}\label{sec:Layout_subEffect_extraction_section}
+レイアウトの副作用抽出部は、画像比較に基づく差分箇所とHTMLコードの変更に基づく影響箇所を用いて、レイアウトの副作用箇所を抽出する。
+具体的には、差分箇所を囲む枠と影響箇所を囲む枠同士を比較する。比較の仕方は、枠の重なり度合を判定する。
+まず、枠が重なっているかどうかを判定する。次に、枠が重なっている場合に、重なり部分が小さい方の枠の面積の6割以上であれば枠が一致すると判定する。
+最終的に、一致しない枠のみを抽出し、一致しない赤枠をWebページの変更前画像に、一致しない緑枠をWebページの変更後画像に描画し、保存する。
 
-\section{不具合抽出部}\label{sec:Layout_bug_extraction_section}
-レイアウト不具合抽出部は、データ管理部のdiff\_dirディレクトリから～画像を受け取り、
-副作用抽出部から抽出したレイアウトの副作用箇所から、レイアウトの不具合箇所を抽出する。
+\section{レイアウトの不具合検出部}\label{sec:Layout_bug_extraction_section}
+レイアウトの不具合抽出部は、レイアウトの副作用抽出部から抽出したレイアウトの副作用箇所から、レイアウトの不具合箇所を抽出する。
 具体的には、\ref{sec:Layout_subEffect_extraction_section}節で抽出したレイアウトの副作用箇所を囲んだ各赤枠内の領域と、レイアウトの副作用箇所を囲んだ各緑枠内の領域を比較する。
-その後、赤枠内の領域と緑枠内の領域をabsdiff関数(\ref{sec:opencv}節を参照)で絶対差分を計算して類似度を求める。
+その後、赤枠内の領域と緑枠内の領域をabsdiff関数(\ref{sec:Layout_subEffect_extraction_section}節を参照)で絶対差分を計算して類似度を求める。
 類似度が9割を超えれば、レイアウトの不具合は無いと判定し、比較した赤枠と緑枠を除外する。
-上記の処理によって、類似度が9割未満であった赤枠と緑枠を抽出することができ、それらはレイアウトの不具合として、Webページの変更前画像と変更後画像に描画する。
-\begin{enumerate}
-    \item 「差分箇所赤枠強調マスク画像」と「影響箇所赤枠強調マスク画像」をcv2.imread関数で読み込む。
-    \item cvtColor関数でグレースケール化する。
-    \item threshold関数で二値化を行う。
-    \item 二値化した「差分箇所赤枠強調マスク画像」に対して、cv2.findContours関数で輪郭リストcontours\_img\_bfを取得する。
-    \item 二値化した「影響箇所赤枠強調マスク画像」に対して、cv2.findContours関数で輪郭リストcontours\_html\_bfを取得する。
-    \item contours\_img\_bfの各輪郭要素の数だけループして、以下の処理を行う。
-          \begin{enumerate}
-              \item contours\_html\_bfの各輪郭要素の数だけループして、以下の処理を行う。
-                    \begin{enumerate}
-                        \item 領域間の類似度を計算する。
-                    \end{enumerate}
-          \end{enumerate}
-    \item 
-    \item 「差分箇所緑枠強調マスク画像」上の各緑枠と「影響箇所赤枠強調マスク画像」上の各緑枠を比較する。
-\end{enumerate}
+上記の処理によって、類似度が9割未満であった赤枠と緑枠を抽出することができ、それらはレイアウトの不具合として、Webページの変更前画像と変更後画像をする。
+
 
 \section{表示部}\label{sec:Interface_Display_Section}
-表示部は、データ管理部のdiff\_dirディレクトリ内にある
-\ref{sec:Web_data_get_section}節～\ref{sec:Layout_bug_extraction_section}節で取得・生成した画像(枠強調マスク画像を除く)を受け取り、
+表示部は、
+\ref{sec:Web_data_get_section}節～\ref{sec:Layout_subEffect_extraction_section}節で取得・生成した画像(枠強調マスク画像を除く)を保管し、
 Webベースのinterfaceユーザを用いて表示する。
-MixVRTの実行コマンド初回実行時は、\ref{sec:Web_data_get_section}節で取得したWebページの画像を表示する。
+MixVRTの実行コマンド初回実行時は、\ref{sec:Web_data_get_section}節で取得したWebページの画像を保管する。
 MixVRTの実行コマンド2回目以降実行時は、初回実行時に取得する画像に加えて、\ref{sec:Difference_extraction_section}節で取得した画像、
-\ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_bug_extraction_section}節で生成した画像を表示する。
+\ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_subEffect_extraction_section}節で生成した画像を保管する。
+
+
+
+% \section{画像とHTMLコード取得部}\label{sec:area_detection_part}
+
+% \subsection{Seleniumによる画像取得}\label{subsec:rect_detection}
+
+% \subsection{requestsによるHTMLコード取得}\label{subsec:underline_detection}
+
+
+% \section{差分抽出部}\label{sec:OCR_part}
+
+% \subsection{画像比較による差分抽出}\label{subsec:char_extraction}
+
+% \subsection{HTMLの変更による影響箇所抽出}\label{subsec:bbox_coords_obtainment}
+
+% \subsection{画像とHTMLコードに基づくレイアウトの副作用抽出}\label{subsec:bbox_obtainment}
+
+
+% \section{差分表示部}\label{sec:label_link_part}

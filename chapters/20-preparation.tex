@@ -211,13 +211,70 @@ Image.open関数は、指定したパスの画像ファイルを開き、Pillow�
 Image.LANCZOSは、画像のサイズ変更時に使用されるリサンプリングフィルタの1つである\cite{LANCZOS}。
 LANCZOSフィルタは、画像を拡大する際に細部やエッジを維持できるため、高解像度画像の生成処理に適している。
 
+\section{NumPy}\label{sec:numpy}
+NumPy\cite{NumPy}は、Pythonにおいて数値計算を効率的に行うための拡張モジュールである。
+効率的な数値計算を行うための型付きの多次元配列のサポートをPythonに加えるとともに、それらを操作するための大規模な高水準の数学関数ライブラリを提供する。
+本研究では、NumPyに用意されている、np.zeros関数を用いる。
+\paragraph{np.zeros関数}
+np.zeros関数は、$0$で初期化した画像(黒画像)を作成するために用いる。
+第一引数に、生成される配列の形状を指定する。
+第二引数に、配列のデータ型を指定する。
+
 \section{Selenium WebDriver}\label{sec:Selenium_WebDriver}
 Selenium WebDriver\cite{Selenium WebDriver}は、Seleniumプロジェクト\cite{Selenium}の一部であり、Webブラウザを直接制御するためのAPIを提供する。
 Selenium WebDriverのAPIを用いてテストスクリプトを実行することで、指定したWebページにアクセスし、要素のクリックやページ遷移などのユーザ操作を自動で行う。
 
-\section{requestsモジュール}\label{sec:requests}
+\section{requests}\label{sec:requests}
 
-\section{difflibモジュール}\label{sec:difflib}
+\section{BeautifulSoup}\label{sec:beautifulsoup}
+BeautifulSoup\cite{BeautifulSoup}は、PythonでHTMLデータを解析するためのライブラリである。
+このライブラリを利用することで、HTMLデータの解析や変更、情報の抽出を容易に行うことができる。
+\par
+本研究では、BeautifulSoupに用意されている、find\_all関数とget\_text関数を用いる。
+\paragraph{BeautifulSoupの初期化}
+BeautifulSoupに用意されている関数を用いるには、まず、BeautifulSoupオブジェクトを初期化する必要がある。
+BeautifulSoupオブジェクトとは、HTMLデータを解析し、操作可能な形式に変換したデータ構造である。
+このオブジェクトの初期化には、解析するHTMLデータと使用するパーサーを指定する。
+\par
+本研究では、使用するパーサーに、HTMLデータを解析するパーサーである"html.parser"を用いる。
+\paragraph{find\_all関数}
+find\_all関数は、指定したタグに一致するすべての要素を検索し、それらをリストとして返す。
+\paragraph{get\_text関数}
+get\_text関数は、指定したタグのテキスト内容を返す。
+
+\section{difflib}\label{sec:difflib}
+difflib\cite{difflib}は、Pythonでテキストデータ間の差分を検出し、処理するための標準モジュールである。
+このモジュールは、異なるテキストデータ間の差分を識別し、それらの違いを詳細に比較する機能を提供する。
+\par
+本研究では、difflibに用意されている、Differクラスとcompare関数を用いる。
+\paragraph{Differクラス}
+Differクラスは、2つのテキスト間の差分を行単位で計算し、詳細な差分情報を生成するためのクラスである。
+このクラスは、テキストの各行を個別に比較し、追加、削除、変更された行を特定する。
+\paragraph{compare関数}
+compare関数は、Differクラスのインスタンスを使用して、2つのテキストシーケンス間の差分を計算する。
+この関数は、2つのシーケンスを引数として受け取り、差分結果を行単位で返す。
+差分結果には、追加された行が'+ '記号で、削除された行が'- ' 記号で、変更のない行がスペースでマークされる。
+また、'? ' 記号を用いて、変更があった行についての詳細な差異を示すが、本研究では、'? '記号があった行については、解析対象としない。
+% \begin{itemize}
+%       \setlength{\itemsep}{0pt}
+%             \setlength{\parsep}{0pt}
+%       \item "- ":\\
+%             行はシーケンス1にのみ存在する。
+%       \item "+ ":\\
+%             行はシーケンス2にのみ存在する。
+%       \item "? ":\\
+%             行は入力シーケンスのどちらにも存在しない(どの文字がどのように変更したかという差分の詳細)。
+% \end{itemize}
+% 差分コードの例を、ソースコード\ref{lst:diff_html_?}に示す。
+% \begin{lstlisting}[language=HTML, caption=差分コードの例, label=lst:diff_html_?]
+%   <header>
+% -     <h1>Single Content Web Page</h1>
+% +         <h1>Single Content Web Page with layout bug</h1>
+% ?                                    ++++++++++++++++
+
+%   </header>
+% \end{lstlisting}
+
 
 \section{Flask}\label{sec:Flask}
 Flask\cite{Flask}は、Pythonで構築されたWebフレームワークであり、WebサーバやWebアプリケーションの構築ができる。

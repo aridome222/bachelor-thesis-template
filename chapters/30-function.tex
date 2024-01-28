@@ -33,16 +33,17 @@
 \section{\toolName の機能}
 \toolName は、\ref{sec:target_images}節で述べたWebページのURLを入力とする。
 出力は、\ref{subsec:MixVRT_IO}節で後述する8つのPNG形式の画像を閲覧できるWebページである。
-\toolName を使用する際の流れを、以下に示す。
+\par
+開発者が\toolName を使用する際の流れを、以下に示す。
 \begin{enumerate}
-    \item 「\$ make test URL="WebページのURL"」で初期設定
-    \item Webページの変更
-    \item 「\$ make test URL="WebページのURL"」で視覚的回帰テスト実行
-    \item 「http://localhost:5000/MixVRT\_diff」にアクセスし閲覧
-    \item 視覚的回帰テストの評価
+    \item 「\$ make test URL="WebページのURL"」で事前準備を行う。
+    \item Webページの変更を行う。
+    \item 「\$ make test URL="WebページのURL"」で視覚的回帰テストを実行する。
+    \item 「http://localhost:5000/MixVRT\_diff」にアクセスし、テスト結果を確認する。
+    \item テスト結果を評価する
           \begin{itemize}
-              \item 問題なし:「\$ make save」
-              \item 問題あり: Webページを修正し、3に戻る
+              \item 問題なし:「\$ make save」で比較用画像と比較用HTMLコードを更新する。
+              \item 問題あり: Webページを修正し、3に戻る。
           \end{itemize}
 \end{enumerate}
 以降、\toolName の機能について説明する。
