@@ -16,21 +16,21 @@
 
 \section{視覚的回帰テスト}\label{sec:vrt}
 視覚的回帰テスト (Visual Regression Testing)\cite{VisualRegressionTesting}は、
-比較画像とテスト画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
-なお、本研究では、比較対象とするWebページの画像を「比較画像」、テスト対象とするWebページの画像を「テスト画像」と定義する。
+変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
+% なお、本研究では、比較対象とするWebページの画像を「比較画像」、テスト対象とするWebページの画像を「テスト画像」と定義する。
 \par
 視覚的回帰テストの基本的な手順は、以下の通りである。
 \begin{enumerate}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
-      \item 比較画像の取得:\\
-            比較対象とするWebページの画面をスクリーンショットする。
+      \item 変更前画像の取得:\\
+            比較対象とするWebページの画面をスクリーンショットする。このスクリーンショットした画像を、変更前画像とする。
       \item 変更の適用:\\
             比較対象とするWebページに、画面要素(テキストやボタン、画像など)の追加や削除、既存の画面要素のスタイル変更などを適用する。
-      \item テスト画像の取得:\\
-            変更を適用したWebページの画面をスクリーンショットする。
+      \item 変更後画像の取得:\\
+            変更を適用したWebページの画面をスクリーンショットする。このスクリーンショットした画像を、変更後画像とする。
       \item 画像比較:\\
-            比較画像とテスト画像を比較し、差分を検出する。
+            変更前画像と変更後画像を比較し、差分を検出する。
             % 一部の視覚的回帰テストツール\cite{}は、2つの画像をピクセル単位で比較し、差分を強調表示する。
       \item 結果の評価:\\
             差分検出の結果を確認し、差分が意図したレイアウトの変更であるかを判定する。
@@ -311,3 +311,28 @@ SeleniumのGoogle Chrome用コンテナは、Webブラウザの自動操作を�
 なお、これらのコンテナに必要な設定と依存関係は、Dockerfileとdocker-compose.ymlに定義する。
 Dockerfileは、Dockerコンテナの構築に必要な指示を記述したファイルである。
 docker-compose.ymlは、複数のコンテナを管理するための設定ファイルである。
+
+\section{\texorpdfstring{$<$p$>$タグ内のテキストの整形}{pタグ内のテキストの整形}}\label{sec:text_change}
+取得したHTMLコード内の$<$p$>$タグ内のテキストを整形する。
+整形する目的は、変更前後のHTMLコードを行単位で比較した際に、
+$<$p$>$タグ内のテキストのように複数行にわたって書かれる可能性がある画面要素を、
+変更箇所として検出するためである。
+body要素内の変更箇所検出は、変更前後のHTMLコードを行単位で比較し、変更があるかどうかを判定する。
+しかし、$<$p$>$タグ内の複数行にわたるテキストがあり、そのテキスト中の一部が変更されていた場合に、
+その行中に開始タグが無いと枠を囲むCSSクラスを追加することができない。
+そのため、複数行にわたってテキストが書かれる可能性の高い$<$p$>$タグのみを対象に、
+1行で収まるように$<$p$>$タグ内のテキストを整形する。
+具体例として、$<$p$>$タグ内のテキストの整形前と整形後の例を、以下のソースコード\ref{lst:text_bf}とソースコード\ref{lst:text_af}に示す。
+\begin{figure}[tp]
+      \begin{lstlisting}[language=HTML, caption=$<$p$>$タグ内のテキストの整形前の例, label=lst:text_bf]
+<p>A week consists of seven days. 
+    It begins with Monday, marking the start of a new week. 
+    Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[tp]
+      \begin{lstlisting}[language=HTML, caption=$<$p$>$タグ内のテキストの整形後の例, label=lst:text_af]
+<p>A week consists of seven days. It begins with Monday, marking the start of a new week. Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
+\end{lstlisting}
+\end{figure}
