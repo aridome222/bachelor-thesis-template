@@ -16,7 +16,7 @@
 
 \section{視覚的回帰テスト}\label{sec:vrt}
 視覚的回帰テスト (Visual Regression Testing)\cite{VisualRegressionTesting}は、
-変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
+Webページの変更前画像と変更後画像を比較し差分を検出することで、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。\\
 % なお、本研究では、比較対象とするWebページの画像を「比較画像」、テスト対象とするWebページの画像を「テスト画像」と定義する。
 \par
 視覚的回帰テストの基本的な手順は、以下の通りである。
@@ -64,7 +64,7 @@
 \section{OpenCV}\label{sec:opencv}
 OpenCV (Open Source Computer Vision Library)\cite{OpenCV}は、画像や動画に関する処理機能をまとめた、コンピュータビジョン向けのオープンソースのライブラリである。
 \par
-本研究では、OpenCVに用意されている、imread関数、cvtColor関数、adaptiveThreshold関数、subtract関数、findContours関数、boundingRect関数、rectangle関数、absdiff関数の8つの関数を用いる。
+本研究では、OpenCVに用意されている、imread関数、cvtColor関数、threshold関数、adaptiveThreshold関数、subtract関数、findContours関数、boundingRect関数、rectangle関数、absdiff関数の9つの関数を用いる。
 
 \paragraph{imread関数}
 imread関数は、画像ファイルの読み込みを行う関数である。
@@ -81,6 +81,12 @@ cvtColor関数は、画像の色空間を変換する関数である。
 本研究では、画像処理の高速化と精度向上のために、
 BGR(青、緑、赤)からGRAY(グレースケール)の色空間への変換を行う。
 また、画像処理の適用によって削除箇所や追加箇所を検出した際、色で識別可能にするために、GRAY(グレースケール)からBGR(青、緑、赤)の色空間への変換を行う。
+\paragraph{threshold関数}
+threshold関数は、画像を二値化する関数である。
+第一引数には、グレースケール画像を指定し、第二引数には、二値化する際の閾値を指定する。
+第三引数には、ピクセル値の最大値を指定し、第四引数には、二値化する際の手法を指定する。
+\par
+本研究では、二値化する際の手法として、cv2.THRESH\_BINARY\_INV\cite{Threshold}を指定する。
 \paragraph{adaptiveThreshold関数}
 adaptiveThreshold関数は、画像を複数の小さな区画に切り分けた各々の部分ごとに異なる二値化の閾値を用いて画像の二値化を行う関数である。
 第一引数には、二値化を適用するグレースケール画像を指定し、第二引数には、二値化後のピクセルにおける明度の最大値(通常$255$)を指定する。
@@ -332,7 +338,166 @@ body要素内の変更箇所検出は、変更前後のHTMLコードを行単位
 \end{figure}
 
 \begin{figure}[tp]
-      \begin{lstlisting}[language=HTML, caption=$<$p$>$タグ内のテキストの整形後の例, label=lst:text_af]
+      \begin{lstlisting}[language=Python, caption=$<$p$>$タグ内のテキストの整形後の例, label=lst:text_af]
 <p>A week consists of seven days. It begins with Monday, marking the start of a new week. Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
 \end{lstlisting}
 \end{figure}
+
+
+% \section{色枠をつけるCSSクラス}
+% 本研究では、枠付きHTMLコード生成処理(\ref{subsec:modified_html_generate}節を参照)において、影響箇所(\ref{cha:Function})に色枠をつけるためのCSSクラスを6種類作成した。
+% 作成した6種類のCSSクラス名を、以下に示す。
+% \begin{itemize}
+%       \setlength{\itemsep}{0pt}
+%             \setlength{\parsep}{0pt}
+%       \item UNIQUE\_CLASS\_BEFORE\_CSS:\\
+%             body要素内での削除、または変更があった画面要素を赤枠で囲むCSSクラス。
+%       \item UNIQUE\_CLASS\_AFTER\_CSS:\\
+%             body要素内での追加、または変更があった画面要素を緑枠で囲むCSSクラス。
+%       \item IMAGE\_WRAPPER\_CLASS\_BEFORE\_CSS:\\
+%             body要素内での削除、または、CSSの変更があった画像を赤枠で囲むCSSクラス
+%       \item IMAGE\_WRAPPER\_CLASS\_AFTER\_CSS:\\
+%             body要素内での追加、または、CSSの変更があった画像を緑枠で囲むCSSクラス
+% \end{itemize}
+% まず、body要素内で変更があった画面要素を色枠で囲むCSSクラスを、以下のソースコード\ref{lst:css_body}に示す。
+% \begin{lstlisting}[language=HTML, caption=body要素内で変更があった画面要素を色枠で囲むCSSクラス, label=lst:css_body]
+% UNIQUE_CLASS_BEFORE_CSS = """
+% .uniqueClass {
+%       position: relative;
+% }
+
+% .uniqueClass::before {
+%       content: '';
+%       position: absolute;
+%       top: 0;
+%       left: 0;
+%       right: 0;
+%       bottom: 0;
+%       border: 5px solid rgb(255, 0, 0);
+%       z-index: 1;
+% }
+% """
+
+% UNIQUE_CLASS_AFTER_CSS = """
+% .uniqueClass {
+%       position: relative;
+% }
+
+% .uniqueClass::before {
+%       content: '';
+%       position: absolute;
+%       top: 0;
+%       left: 0;
+%       right: 0;
+%       bottom: 0;
+%       border: 5px solid rgb(0, 255, 0);
+%       z-index: 1;
+% }
+% """
+% \end{lstlisting}
+
+% \begin{lstlisting}[language=HTML, caption=body要素内で変更があった画面要素を色枠で囲むCSSクラス, label=lst:css_img]
+% IMAGE_WRAPPER_CLASS_BEFORE_CSS = """
+% .image-wrapper {
+%       position: relative;
+%       display: inline-block; /* 画像の大きさに合わせてサイズを調整 */
+% }
+
+% .image-wrapper::before {
+%       content: '';
+%       position: absolute;
+%       top: 0;
+%       left: 0;
+%       right: 0;
+%       bottom: 0;
+%       border: 3px solid rgb(255, 0, 0); /* 枠線のスタイル */
+%       z-index: 1;
+% }
+
+% .image-wrapper img {
+%       width: 100%;
+%       height: auto;
+%       display: block; /* 余白を除去 */
+% }
+% """
+
+% IMAGE_WRAPPER_CLASS_AFTER_CSS = """
+% .image-wrapper {
+%       position: relative;
+%       display: inline-block; /* 画像の大きさに合わせてサイズを調整 */
+% }
+
+% .image-wrapper::before {
+%       content: '';
+%       position: absolute;
+%       top: 0;
+%       left: 0;
+%       right: 0;
+%       bottom: 0;
+%       border: 3px solid rgb(0, 255, 0); /* 枠線のスタイル */
+%       z-index: 1;
+% }
+
+% .image-wrapper img {
+%       width: 100%;
+%       height: auto;
+%       display: block; /* 余白を除去 */
+% }
+% """
+% \end{lstlisting}
+
+% \begin{lstlisting}[language=HTML, caption=body要素内で変更があった画面要素を色枠で囲むCSSクラス, label=lst:css_style]
+% css_selector = f"""
+% {grouped_selectors} {{
+%       position: relative;
+% }}
+
+% {', '.join(f'{selector}::before' for selector in selectors)} {{
+%       content: '';
+%       position: absolute;
+%       top: 0;
+%       left: 0;
+%       right: 0;
+%       bottom: 0;
+%       border: 3px solid rgb(255, 0, 0);
+%       z-index: 1;
+% }}
+
+% {', '.join(f'{selector}::after' for selector in selectors)} {{
+%       content: '';
+%       position: absolute;
+%       top: 5px;
+%       left: 5px;
+%       color: rgb(255, 0, 0);
+%       font-size: 12px;
+%       z-index: 1;
+% }}
+% """
+
+% css_selector = f"""
+% {grouped_selectors} {{
+%       position: relative;
+% }}
+
+% {', '.join(f'{selector}::before' for selector in selectors)} {{
+%       content: '';
+%       position: absolute;
+%       top: 0;
+%       left: 0;
+%       right: 0;
+%       bottom: 0;
+%       border: 3px solid rgb(0, 255, 0);
+%       z-index: 1;
+% }}
+
+% {', '.join(f'{selector}::after' for selector in selectors)} {{
+%       content: '';
+%       position: absolute;
+%       top: 5px;
+%       left: 5px;
+%       color: rgb(0, 255, 0);
+%       font-size: 12px;
+%       z-index: 1;
+% }}
+% """
+%       \end{lstlisting}
