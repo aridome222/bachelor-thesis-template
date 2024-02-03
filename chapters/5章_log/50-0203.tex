@@ -1,75 +1,51 @@
 \chapter{適用例}\label{cha:Indication}
-本章では、今回試作した\toolName を用いて、画像比較に基づく差分箇所からレイアウトの副作用箇所を可視化できることを確認する。
-\toolName のUIは、以下に示す4つのタブを持つタブメニューと、各タブに対応するタブコンテンツからなる。
-\begin{itemize}
-    \item[①] タブメニュー
-          \begin{itemize}
-              \item オリジナル表示タブ
-              \item 画像比較に基づく差分箇所表示タブ
-              \item HTMLコードの変更に基づく影響箇所表示タブ
-              \item レイアウトの副作用箇所表示タブ
-          \end{itemize}
-    \item[②] タブコンテンツ
-\end{itemize}
+本章では、今回試作した\toolName を用いて、レイアウトの不具合箇所を可視化できることを確認する。
 \par
-\toolName がレイアウトの副作用を可視化できることを確認するために、以下のWebページを用意する。
+本研究では、以下の3つのレイアウトの不具合箇所を可視化する。
 \begin{itemize}
     \setlength{\itemsep}{0pt}
           \setlength{\parsep}{0pt}
-    \item テスト対象とするWebページ\label{item: ex1_bf}
-    \item 1.のWebページに対して、画面要素の追加による、Webページ\label{item: ex1_af}
+    \item 画面要素の隠れ:\\
+          Webページの画面要素がその画面要素を含むコンテナやビューポートの境界を超えてはみ出している状態。
+    \item 画面要素の見切れ:\\
+          Webページの画面要素の一部がコンテナやビューポートの境界によって切り取られ、完全には表示されていない状態。
+    \item 画面要素の重なり:\\
+          Webページの複数の画面要素が重なりあっている状態。
 \end{itemize}
-テスト対象とするWebページを図\ref{fig:bf_original}に、
-図\ref{fig:bf_original}のWebページにレイアウトの副作用が発生する変更を埋め込んだWebページを図\ref{fig:af_original}に、
-それぞれ示す。
-以降、上記の2つのWebページを適用例に用いて、画面要素の追加によるレイアウトの副作用を可視化できることを確認する。
-
-\begin{figure}[htbp]
-    \centering
-    % 画像ファイル名とサイズを指定
-    \includegraphics[width=0.5\textwidth]{image/5/original_png/bf_original.png}
-    \caption{適用例とするテスト画面}
-    \label{fig:bf_original}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    % 画像ファイル名とサイズを指定
-    \includegraphics[width=0.5\textwidth]{image/5/original_png/af_original.png}
-    \caption{適用例とするテスト画面}
-    \label{fig:af_original}
-\end{figure}
-
-\section{画面要素の追加によるレイアウトの副作用}\label{sec:result_area_detection}
-適用例を用いて、\toolName が、画面要素の追加によるレイアウトの副作用を可視化できることを確認する。
-\toolName を用いて、以下の3つの操作を行う。
+\par
+以降、3つのレイアウトの不具合箇所を可視化できることを、それぞれ確認する。
+% 適用例として用いるWebページの画像として、
+% 画面要素の隠れを埋め込んだWebページの変更前画像と変更後画像を図\ref{fig: ex1_original}に、
+% 画面要素の見切れを埋め込んだWebページの変更前画像と変更後画像を図\ref{fig: ex4_original}に、
+% 画面要素の重なりを埋め込んだWebページの変更前画像と変更後画像を図\ref{fig: ex3_original}に、
+% それぞれ示す。
+\section{画面要素の隠れの可視化}\label{sec:result_area_detection}
+\toolName が画面要素の隠れを可視化できることを確認するために、以下のWebページを用意する。
+\begin{itemize}
+    \setlength{\itemsep}{0pt}
+          \setlength{\parsep}{0pt}
+    \item 画面要素の隠れが発生していないWebページ\label{item: ex1_bf}
+    \item 1.のWebページに対して画面要素の追加や変更を行った結果、
+          画面要素の隠れが発生したWebページ\label{item: ex1_af}
+\end{itemize}
+また、\toolName を用いて、以下の3つの操作を行う。
 \begin{enumerate}[label=操作\arabic*., leftmargin=1.8cm]
-    \item 図\ref{fig:bf_original}のWebページのURLを入力として、コマンドライン上で\toolName の実行コマンド(\ref{subsec:MixVRT_preparation}を参照)を実行する。
-    \item 図\ref{fig:af_original}のWebページのURLを入力として、コマンドライン上で\toolName の実行コマンドを実行する。
-    \item Webブラウザ上で「http://localhost:5000/MixVRT\_diff」にアクセスする。
+    \item 画面要素の隠れが発生していないWebページのURLを入力として、コマンドライン上で\toolName の実行コマンド(\ref{subsec:MixVRT_preparation}を参照)を実行する。
+    \item 画面要素の隠れが発生したWebページのURLを入力として、コマンドライン上で\toolName の実行コマンドを実行する。
+    \item Webブラウザ上で「http://localhost:5000/MixVRT\_diff」にアクセスし、\toolName による視覚的回帰テストの結果を確認する。
 \end{enumerate}
 \par
-上記の操作を行うことで、
-適用例に対して視覚的回帰テストを行った\toolName の各表示タブを確認することができる。
-図\ref{fig: ex1_html}に、適用例に対するオリジナル表示タブを示す。
-オリジナル表示タブは
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/original_png/original.png}
-        \caption{オリジナル表示タブで変更前画像として表示する画像}
-        \label{fig: bf_original}
-    \end{center}
-\end{figure}
-
+上記の操作により、
+\toolName の各表示タブにおける、
+画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を確認できる。
 \par
-レイアウトの副作用
 まず、レイアウトの不具合が発生していないかを確認するために、レイアウトの不具合箇所表示タブを確認する。
 レイアウトの不具合箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を、
 図\ref{fig: ex1_subeffect}に示す。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/5/ex1_subeffect.png}
-        \caption{オリジナル表示タブで変更後画像として表示する画像}
+        \caption{レイアウトの不具合箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像}
         \label{fig: ex1_subeffect}
     \end{center}
 \end{figure}
