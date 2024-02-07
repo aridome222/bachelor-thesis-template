@@ -1,0 +1,99 @@
+\chapter{考察}\label{cha:Discussion}
+本研究では、HTMLコードに基づかないレイアウトの不具合箇所可視化を目的とした、視覚的回帰テストツール\toolName を試作した。
+本章では、試作した\toolName を使用する場合と、一般的な画像ペースの視覚的回帰テストで生成する差分画像を使用する場合とで、
+レイアウトの不具合箇所を目視で見つけるのにかかった作業時間と発見率をそれぞれ比較し、
+\toolName の有用性を評価する。
+次に、\toolName と関連研究を比較する。
+最後に、\toolName の問題点とその解決策について述べる。
+
+
+
+\section{\toolName の有用性に関する評価}\label{sec:evalue_usefulness}
+本研究で試作した\toolName の有用性を評価するために、以下に示す2つの評価を行った。
+\begin{itemize}
+    \item レイアウトの不具合箇所の発見時間に関する評価
+    \item レイアウトの不具合箇所の発見率に関する評価
+\end{itemize}
+以降、2つの評価結果について、それぞれ説明する。
+
+
+\subsection{レイアウトの不具合箇所の発見時間に関する評価}\label{subsec:evalue_required_time}
+レイアウトの不具合箇所の発見時間に関する評価を行うために、
+
+\toolName を使用した場合と、一般的な画像ペースの視覚的回帰テストで生成する差分画像を目視で確認する場合とで、
+レイアウトの不具合箇所の発見にかかる作業時間を比較した。
+\toolName を使用した場合の作業時間は、\toolName の実行完了後からレイアウトの不具合箇所を見つけるまでにかかった時間を測った。
+一般的な画像ペースの視覚的回帰テストで生成する差分画像を使用する場合は、
+実験に用いたWebページの差分画像を見てからレイアウトの不具合箇所を見つけるまでにかかった時間を測った。
+
+\begin{equation}\label{equ:reduction_rate}
+    削減率(\%) = \frac{A - B}{A} \times 100
+\end{equation}
+
+今回は、4人の被験者に、
+
+実験の結果、\toolName を使用した場合と差分画像を使用した場合とで、
+レイアウトの不具合箇所の発見にかかる作業時間を90％削減できた。
+
+\begin{table}[t]
+    \caption{既存のASLAで用いたテストデータにおけるクラスごとの適合率と再現率}
+    \label{tab:precision_recall_ocr}
+    \centering
+    \begin{tabular}{rc|ccc|ccc}
+        \hline
+                                      &     & \multicolumn{3}{c}{適合率} & \multicolumn{3}{c}{再現率}                                  \\
+        \hline
+                                      & IoU & テキスト                   & 画像                       & 表  & テキスト & 画像  & 表    \\
+        \hline \hline
+        \multirow{3}{*}{既存のASLA}   & 0.6 & 0.938                      & 1.0                        & 0.9 & 0.795    & 1.0   & 0.818 \\
+                                      & 0.8 & 0.768                      & 0.846                      & 0.4 & 0.651    & 0.846 & 0.455 \\
+                                      & 0.9 & 0.348                      & 0.154                      & 0.2 & 0.295    & 0.154 & 0.182 \\
+        \hline
+        \multirow{3}{*}{拡張後のASLA} & 0.6 & 0.920                      & 0.929                      & 0.9 & 0.970    & 1.0   & 1.0   \\
+                                      & 0.8 & 0.906                      & 0.929                      & 0.9 & 0.955    & 1.0   & 1.0   \\
+                                      & 0.9 & 0.877                      & 0.929                      & 0.9 & 0.924    & 1.0   & 1.0   \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[tp]
+\centering
+\label{tab:experiment_result}
+\begin{tabular}{cc}
+\begin{minipage}[c]{0.5\hsize}
+    \centering
+    \begin{tabular}{c|r}
+        被験者  & \multicolumn{1}{c}{時間} \\ \hline \hline
+        被験者A & 16m 16s                  \\ \hline
+        被験者B & 13m 40s                  \\ \hline
+        被験者C & 11m 54s                  \\ \hline
+        被験者D & 12m 45s                  \\ \hline
+    \end{tabular}
+\end{minipage} &
+\begin{minipage}[c]{0.5\hsize}
+    \centering
+    \begin{tabular}{c|r}
+                        & \multicolumn{1}{c}{時間} \\ \hline \hline
+        被験者4人の平均 & 1h 01m 38s               \\ \hline
+        \toolName       & 16s
+    \end{tabular}
+\end{minipage}
+\end {tabular}
+\end{table}
+
+
+\subsection{レイアウトの不具合箇所の発見率に関する評価}\label{subsec:evalue_accuracy}
+レイアウトの不具合箇所の発見率に関する評価を行うために、
+\toolName を使用した場合と、人手の場合で、レイアウトの不具合箇所の発見率を比較した。
+
+不具合を見つけるまでにかかった時間をを、以下に示す。
+
+
+
+
+\section{関連研究}\label{sec:relation_research}
+
+
+
+\section{\toolName の問題点とその解決策}\label{sec:AWSEL_problems}

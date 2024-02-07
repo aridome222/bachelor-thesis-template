@@ -1,36 +1,34 @@
 \chapter{研究の準備}\label{cha:Preparation}
-本章では、\toolName を試作する際に必要な前提知識について説明する。
+本章では、\toolName を実装する際に必要な前提知識について説明する。
 
 \section{画面要素}\label{sec: display_element}
-本論文では、WebページやWebアプリのユーザインターフェースを構成するビジュアルコンポーネントを、
-画面要素\cite{Element}と呼ぶ。
+画面要素\cite{Element}とは、WebページやWebアプリのユーザインターフェースを
+構成するビジュアルコンポーネントを指す。
 \par
-画面要素として、本研究で扱うHTMLタグの例を、表\ref{tb: HTML_tag}に示す。
+本研究では、画面要素として扱うHTMLタグを、以下に示す。
 \begin{table}[tp]
-      \caption{Webページの画面要素として扱うHTMLタグの例}
+      \caption{Webページの画面要素として扱うHTMLタグ}
       \label{tb: HTML_tag}
       \centering
       \begin{tabular}{c|l}
             \hline
-            HTMLタグ                     & \multicolumn{1}{c}{説明}    \\
+            HTMLタグ                     & \multicolumn{1}{c}{説明}  \\
             \hline \hline
-            $<$div$>$                    & \begin{tabular}{l}セッションやレイアウトのブロックを形成するコンテナ用のタグ。\end{tabular}   \\ \hline
-            $<$h1$>～<$h6$>$             & \begin{tabular}{l}見出しタグ。$<$h1$>$が最も重要な見出しを表し、\\$<$h6$>$へと重要度が下がっていく。\end{tabular}   \\ \hline
-            $<$p$>$                      & \begin{tabular}{l}テキストの段落を定義するタグ\end{tabular}   \\ \hline
-            $<$a$>$                      & \begin{tabular}{l}ハイパーリンク。他のページや同ページ内の別のセクションへの\\リンクを提供する。\end{tabular}   \\ \hline
-            $<$img$>$                    & \begin{tabular}{l}画像をWebページに埋め込む用のタグ\end{tabular}。 \\ \hline
-            $<$ul$>$, $<$ol$>$, $<$li$>$ & \begin{tabular}{l}箇条書きリストを定義するタグ\end{tabular}。 \\ \hline
-            $<$form$>$                   & \begin{tabular}{l}ユーザからの入力を受け取るためのフォーム\end{tabular}。 \\ \hline
-            $<$input$>$                  & \begin{tabular}{l}ユーザからのデータ入力を受け取るための入力フィールド\end{tabular}。 \\ \hline
-            $<$button$>$                 & \begin{tabular}{l}ユーザがクリックできるボタン\end{tabular}。 \\ \hline
+            $<$div$>$                    & \begin{tabular}{l}セッションやレイアウトのブロックを形成するコンテナ用のタグ\end{tabular} \\ \hline
+            $<$h1$>～<$h6$>$             & \begin{tabular}{l}見出しタグ。$<$h1$>$が最も重要な見出しを表し、\\$<$h6$>$へと重要度が下がっていく。\end{tabular} \\ \hline
+            $<$p$>$                      & \begin{tabular}{l}テキストの段落を定義するタグ\end{tabular} \\ \hline
+            $<$a$>$                      & \begin{tabular}{l}ハイパーリンク。他のページや同ページ内の別のセクションへの\\リンクを提供する。\end{tabular} \\ \hline
+            $<$img$>$                    & \begin{tabular}{l}画像をWebページに埋め込む用のタグ\end{tabular} \\ \hline
+            $<$ul$>$, $<$ol$>$, $<$li$>$ & \begin{tabular}{l}箇条書きリストを定義するタグ\end{tabular} \\ \hline
+            $<$form$>$                   & \begin{tabular}{l}ユーザからの入力を受け取るためのフォーム\end{tabular} \\ \hline
+            $<$input$>$                  & \begin{tabular}{l}ユーザからのデータ入力を受け取るための入力フィールド\end{tabular} \\ \hline
+            $<$button$>$                 & \begin{tabular}{l}ユーザがクリックできるボタン\end{tabular} \\ \hline
       \end{tabular}
 \end{table}
 
 \section{画像比較に基づく視覚的回帰テスト}\label{sec:vrt}
-Webページの視覚的回帰テスト (Visual Regression Testing)\cite{VisualRegressionTesting}は、
-Webページに新しく要素や機能を追加した際に、
-開発者の意図しないレイアウトの変更が発生していないことを確認するテスト手法である。
-その中でも、画像比較に基づく視覚的回帰テストは、Webページの変更前画像と変更後画像を比較し、差分を検出することで、視覚的回帰テストを行う。
+視覚的回帰テスト (Visual Regression Testing)\cite{VisualRegressionTesting}は、意図しないレイアウトの変更が発生していないことを確認するテスト手法である。
+その中でも、画像比較に基づく視覚的回帰テストは、Webページの変更前画像と変更後画像を比較し差分を検出することで、視覚的回帰テストを行う。
 % なお、本研究では、比較対象とするWebページの画像を「比較画像」、テスト対象とするWebページの画像を「テスト画像」と定義する。
 \par
 画像比較に基づく視覚的回帰テストの基本的な手順は、以下の通りである。
@@ -47,8 +45,8 @@ Webページに新しく要素や機能を追加した際に、
             変更前画像と変更後画像を比較し、差分を検出する。
             % 一部の視覚的回帰テストツール\cite{}は、2つの画像をピクセル単位で比較し、差分を強調表示する。
       \item 結果の評価:\\
-            差分検出の結果を確認し、検出した差分が意図したレイアウトの変更であるかどうかを判定する。
-            意図しないレイアウトの変更が発生していた場合、Webページの修正を行い、再度テストを行う。
+            差分検出の結果を確認し、検出した差分が意図したレイアウトの変更であるかを判定する。
+            意図しないレイアウトの変更が発生していた場合、修正を行い、再度テストを行う。
 \end{enumerate}
 
 \section{レイアウトの不具合箇所}\label{sec:layout effect}
@@ -57,54 +55,36 @@ Webページに新しく要素や機能を追加した際に、
 \begin{itemize}
       \item 差分箇所:\\
             Webページの変更前画像と変更後画像を比較して、
-            変更前のWebページから削除された画面要素と、変更後のWebページに追加された画面要素。
-      \item 変更箇所:\\
+            変更前のWebページから削除された画面要素と変更後のWebページに追加された画面要素。
+      \item 影響箇所:\\
             変更前後のWebページのHTMLコードを比較して、
             HTMLコードにおけるbody要素内の変更とstyle要素内の変更のどちらか、
             または両方の変更が適用された画面要素。
-      \item レイアウトの不具合箇所:\\
-            Webページの変更前画像と変更後画像で、変更箇所の影響によって、
+      \item レイアウトの副作用箇所:\\
+            Webページの変更前画像と変更後画像で、影響箇所によって、
             HTMLコードを変更していない画面要素にレイアウトの変更があった画面要素。
+      \item レイアウトの不具合箇所:\\
+            レイアウトの副作用箇所のうち、画面要素のはみ出し、見切れ、重なりがあった画面要素。
 \end{itemize}
 \par
-レイアウトの不具合箇所には、開発者の意図した通りに配置されない画面要素や、意図しないで隠れてしまう画面要素が存在する。
-例えば、レイアウトの不具合箇所によって、以下のような状態が起こりうる。
+本研究では、以下の3つのレイアウトの不具合箇所を見つける。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
       \item 画面要素のはみ出し:\\
-            Webページの画面要素が、ブラウザの表示画面外や、$<$div$>$タグ(表\ref{tb: HTML_tag}を参照)で
-            構成されるコンテナ外に一部または完全にはみ出している。                 
+            Webページの画面要素が、ブラウザの表示画面外や、$<$div$>$タグ(表\ref{tb: HTML_tag}を参照)で構成されるコンテナ外に完全にはみ出している状態。
+            画面上では、はみ出している画面要素を視認できないため、WebページのHTMLコードを見る必要がある。            
+      \item 画面要素の見切れ:\\
+            Webページの画面要素が、ブラウザの表示画面外や、$<$div$>$タグで構成されるコンテナ外に一部はみ出している状態。
+            画面上では、見切れている画面要素を視認できるが、表示画面やコンテナ外にはみだした画面要素は視認できないため、WebページのHTMLコードを見る必要がある。
       \item 画面要素の重なり:\\
-            Webページの画面要素が、他の固定された画面要素の上に重なり合っている。
+            Webページの画面要素が、他の固定された画面要素の上に重なり合っている状態。
+            画面上では、重なり合っている画面要素を視認できる。
 \end{itemize}
 \par
-上記のような、はみ出している画面要素は視認できないこともあるため、WebページのHTMLコードを見て確認し、修正する必要がある。
-また、レイアウトの不具合箇所は、元々HTMLコード内に存在した不適切な実装が、新しく追加や変更した他の画面要素の影響で表面化する場合がある。
-そのため、Webページに変更を適用した開発者が発見しづらいという特徴がある。
-\par
-レイアウトの不具合箇所が存在する場合、「HTMLコードの差分とレイアウトの差分における不整合」が存在する。
-そのため、レイアウトの不具合箇所を確認することで、整合性の確認ができる。
-
-% レイアウトの不具合箇所の定義とそれに関する定義を、以下に示す。
-% \begin{itemize}
-%       \item 差分箇所:\\
-%             Webページの変更前画像と変更後画像を比較して、
-%             変更前のWebページから削除された画面要素と変更後のWebページに追加された画面要素。
-%       \item 変更箇所:\\
-%             変更前後のWebページのHTMLコードを比較して、
-%             HTMLコードにおけるbody要素内の変更とstyle要素内の変更のどちらか、
-%             または両方の変更が適用された画面要素。
-%       \item レイアウトの副作用箇所:\\
-%             Webページの変更前画像と変更後画像で、変更箇所によって、
-%             HTMLコードを変更していない画面要素にレイアウトの変更があった画面要素。
-%       \item レイアウトの不具合箇所:\\
-%             レイアウトの副作用箇所のうち、画面要素のはみ出し、見切れ、重なりがあった画面要素。
-% \end{itemize}
-
 % 本研究では、画面要素の隠れ、見切れ、重なりの3つのレイアウトの不具合箇所を、以下の方法で検出する。
 % \begin{enumerate}
-%       \item 差分箇所から変更箇所を取り除くことで、レイアウトの副作用箇所を抽出する
+%       \item 差分箇所から影響箇所を取り除くことで、レイアウトの副作用箇所を抽出する
 %       \item レイアウトの副作用箇所から、変更前後で画面要素の見た目が変わっていない画面要素を取り除くことで、
 %             レイアウトの不具合箇所を抽出する
 % \end{enumerate}
@@ -151,8 +131,7 @@ Webページに新しく要素や機能を追加した際に、
 OpenCV (Open Source Computer Vision Library)\cite{OpenCV}は、画像や動画に関する処理機能をまとめた、コンピュータビジョン向けのオープンソースのライブラリである。
 \par
 本研究では、OpenCVに用意されている、imread関数、cvtColor関数、threshold関数、adaptiveThreshold関数、
-subtract関数、dilate関数、findContours関数、boundingRect関数、rectangle関数、absdiff関数の10個の関数を用いる。
-各関数について、以下で説明する。
+subtract関数、dilate関数、findContours関数、boundingRect関数、rectangle関数、absdiff関数の10つの関数を用いる。
 
 \paragraph{imread関数}
 imread関数は、画像ファイルの読み込みを行う関数である。
@@ -170,24 +149,24 @@ cvtColor関数は、画像の色空間を変換する関数である。
 \par
 本研究では、画像処理の高速化と精度向上のために、
 BGR(青、緑、赤)からGRAY(グレースケール)への色空間の変換を行う。
-また、画像処理の適用で削除された画面要素や追加された画面要素を検出した際、色で識別可能にするために、GRAY(グレースケール)からBGR(青、緑、赤)への色空間の変換を行う。
+また、画像処理の適用によって削除された画面要素や追加された画面要素を検出した際、色で識別可能にするために、GRAY(グレースケール)からBGR(青、緑、赤)への色空間の変換を行う。
 \paragraph{threshold関数}
 threshold関数は、画像を二値化する関数である。
 第一引数には、グレースケール画像を指定し、第二引数には、二値化する際の閾値を指定する。
 第三引数には、ピクセル値の最大値を指定し、第四引数には、二値化の方法を指定する。
 \par
-本研究では、二値化の方法として、閾値以下のピクセル値をピクセルの明度の最大値($255$)に変換し、
+本研究では、二値化の方法として、二値化の閾値以下のピクセル値をピクセルの明度の最大値に変換し、
 それ以外のピクセル値を$0$に変換する二値化方法であるcv2.THRESH\_BINARY\_INV\cite{Threshold}を設定する。
 \paragraph{adaptiveThreshold関数}
 adaptiveThreshold関数は、画像を複数の小さな区画に切り分けた各々の部分に異なる閾値を用いて画像の二値化を行う関数である。
-第一引数には、二値化を適用するグレースケール画像を指定し、第二引数には、二値化後のピクセルにおける明度の最大値を指定する。
+第一引数には、二値化を適用するグレースケール画像を指定し、第二引数には、二値化後のピクセルにおける明度の最大値($255$)を指定する。
 第三引数には、二値化の閾値を計算する方法を指定し、第四引数には、二値化の方法を指定する。
 第五引数には、近傍領域のサイズを指定し、
 第六引数には計算された二値化の閾値から引かれる定数を指定する。
 \par
 本研究におけるadaptiveThreshold関数は、画像の一部が明るく、他の部分が暗い場合においても、均一な二値化画像を生成するために用いる。
 \par
-また、本研究において、adaptiveThreshold関数の第三引数から第六引数に関しては、以下の値を設定する。
+また、本研究において、adaptiveThreshold関数の第三引数から第六引数に関しては、以下の固有の値を設定する。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
@@ -207,11 +186,11 @@ adaptiveThreshold関数は、画像を複数の小さな区画に切り分けた
 \paragraph{subtract関数}
 subtract関数は、2つの画像間の対応するピクセル値を比較し、差分画像を返す関数である。
 第一引数には、比較の基準となる画像を指定する。
-第二引数には、第一引数の画像と比較する画像を指定する。第二引数で指定した画像の各ピクセル値が、第一引数で指定する画像の対応するピクセル値から引かれる。
+第二引数には、第一引数の画像と比較する画像を指定する。この画像の各ピクセル値が、第一引数で指定する画像の対応するピクセル値から引かれる。
 % (例: 二値化前の画像AとBが元々Webページの画像であり、Webページ内のテキストやボタンなどの画面要素が二値化後の画像で白ピクセル、それ以外の背景などが黒ピクセル領域となっている画像)
 例として、二値化画像AとBはそれぞれ白ピクセルに特徴がある画像とし、
 subtract関数の第一引数に二値化画像Aを、
-第二引数に二値化画像Bを、それぞれ指定した場合のsubtract関数のピクセル値の比較処理を、以下に示す。
+第二引数に二値化画像Bをそれぞれ指定した場合のsubtract関数のピクセル値の比較処理を、以下に示す。
 \par
 \begin{itemize}
       \setlength{\itemsep}{0pt}
@@ -231,17 +210,17 @@ subtract関数の第一引数に二値化画像Aを、
 \end{itemize}
 上記の処理の結果、二値化画像Aのみに存在する白ピクセルを抽出した差分画像が生成できる。
 \par
-本研究では、二値化処理を行ったWebページの変更前画像と変更後画像のそれぞれに対して、交互に1回ずつsubtract関数の第一引数と第二引数に指定し実行することで、
+本研究では、二値化処理を行った、Webページの変更前画像と変更後画像をそれぞれ交互に1回ずつsubtract関数の第一引数と第二引数に指定し実行することで、
 変更前画像から削除された画面要素を抽出した差分画像と、変更後画像に追加された画面要素を抽出した差分画像の2つの差分画像を生成する。
 \paragraph{dilate関数}
 dilate関数は、二値化画像内の白ピクセルに対して膨張処理を行う関数であり、ノイズ除去や、オブジェクトの形状とサイズの強調に役立つ。
-膨張処理は、カーネルと呼ばれる特定のサイズと形状の小さなフィルタを使用する。このフィルタを画像上でスライドし、各ピクセルに対して
+膨張処理は、カーネルと呼ばれる特定の形状とサイズの小さなフィルタを使用する。このフィルタを画像上でスライドし、各ピクセルに対して
 フィルタ内の最大値を割り当てていくことで、白ピクセルを拡大する。
 第一引数に、膨張処理を行う画像を指定する。
 第二引数に、カーネルのサイズと形状を指定する。
 第三引数に、膨張処理の適用回数を指定する。
 \par
-本研究において、dilate関数の第二引数と第三引数に関しては、以下の値を設定する。
+本研究において、dilate関数の第二引数と第三引数に関しては、以下の固有の値を設定する。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
@@ -253,26 +232,26 @@ dilate関数は、二値化画像内の白ピクセルに対して膨張処理�
 \par
 本研究におけるdilate関数は、subtract関数で生成した差分画像内の、
 削除された画面要素または追加された画面要素の形状とサイズを強調する。
-それにより、変更箇所と同等の粒度で、
+それにより、影響箇所(\ref{subsec:html_tab}節で後述)と同等の粒度で、
 後述するrectangle関数が、削除された画面要素と追加された画面要素を枠で囲むことを目的としている。
-% この目的の結果、差分箇所と変更箇所の比較の際に、レイアウトの副作用箇所(\ref{cha:Function}章で後述)の検出精度を高めることができる。
-% 差分箇所(\ref{cha:Function}章で後述)を枠で囲む粒度を、変更箇所(\ref{cha:Function}章で後述)を枠で囲む粒度に近づけることができるため、
+% この目的の結果、差分箇所と影響箇所の比較の際に、レイアウトの副作用箇所(\ref{cha:Function}章で後述)の検出精度を高めることができる。
+% 差分箇所(\ref{cha:Function}章で後述)を枠で囲む粒度を、影響箇所(\ref{cha:Function}章で後述)を枠で囲む粒度に近づけることができるため、
 % レイアウトの不具合箇所の検出に役立つ。
-% 本研究では、差分箇所を枠で囲む粒度を、変更箇所を枠で囲む粒度と合わせるために用いる。
+% 本研究では、差分箇所を枠で囲む粒度を、影響箇所を枠で囲む粒度と合わせるために用いる。
 \paragraph{findContours関数}
 findContours関数は、画像から輪郭を検出し、検出した各輪郭の輪郭データを格納する輪郭リストを返す。
 第一引数に輪郭抽出の対象画像(通常は二値化画像)を指定する。
-第二引数に輪郭構造の取得方法を指定する。
+第二引数に輪郭の取得方法を指定する。
 第三引数に、輪郭の形成方法を指定する。
 \par
-本研究において、findContours関数の第二引数と第三引数に関しては、以下の値を設定する。
+本研究において、findContours関数の第二引数と第三引数に関しては、以下の固有の値を設定する。
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
       \item 輪郭構造の取得方法:\\
-            画像内の一番外側の白の輪郭のみを取得するRETR\_EXTERNAL\cite{RetrExternal}に設定する。
+            画像内の一番外側の白の輪郭のみを取得するRETR\_EXTERNAL\cite{RetrExternal}を用いる。
       \item 輪郭の形成方法:\\
-            端点のみで輪郭を形成するCHAIN\_APPROX\_SIMPLE\cite{ChainApproxSimple}に設定する。
+            端点のみで輪郭を形成するCHAIN\_APPROX\_SIMPLE\cite{ChainApproxSimple}を用いる。
 \end{itemize}
 \par
 % また、本研究におけるfindContours関数は、後述するboundingRect関数で
@@ -304,7 +283,7 @@ absdiff関数は、2つの配列または画像間における絶対値の差を
 Pillow\cite{Pillow}は、プログラミング言語Python\cite{Python}の画像処理ライブラリの1つで、画像の読み込み、画像処理操作、保存などの機能を提供する。
 \par
 本研究では、Pillowに用意されている、Image.open関数\cite{ImageModule}とリサンプリングフィルタであるImage.LANCZOS\cite{LANCZOS}を用いる。
-なお、本研究におけるImage.open関数とImage.LANCZOSは、画像比較部の高解像度画像生成処理(\ref{subsec:Generate_high_images}節で後述)の際に、
+なお、本研究におけるImage.open関数とImage.LANCZOSは、画像比較部の高解像度画像生成処理(\ref{subsec:Generate_high_images}節を参照)の際に、
 変更前画像と変更後画像から、変更前高解像度画像と変更後高解像度画像を生成するために用いる。
 \paragraph{Image.open関数}
 Image.open関数は、指定したパスの画像ファイルを開き、PillowライブラリにおけるImageクラスのインスタンスを生成して返す。
@@ -318,23 +297,20 @@ LANCZOSフィルタは、画像を拡大する際に細部やエッジを維持�
 NumPy\cite{NumPy}は、Pythonにおいて数値計算を効率的に行うためのパッケージである。
 効率的な数値計算を行うための型付き多次元配列のサポートをPythonに加えるとともに、それらを操作するための大規模な高水準の数学関数ライブラリを提供する。
 \par
-本研究では、NumPyに用意されている、numpy.zeros関数\cite{np.zeros}を用いる。
-\paragraph{numpy.zeros関数}
-numpy.zeros関数は、指定した形状とデータ型を持つ、すべての要素が$0$の新しい配列を生成する関数である。
+本研究では、NumPyに用意されている、np.zeros関数\cite{np.zeros}を用いる。
+\paragraph{np.zeros関数}
+np.zeros関数は、指定した形状とデータ型を持つ、すべての要素が$0$の新しい配列を生成する関数である。
 第一引数に、生成する配列の形状を指定する。
 第二引数に、配列のデータ型を指定する。
 なお、配列の形状とは、生成する配列の次元数と各次元数における要素数のことである。
 \par
-本研究におけるnumpy.zeros関数は、$0$で初期化した画像(黒画像)を生成するために用いる。
+本研究におけるnp.zeros関数は、$0$で初期化した画像(黒画像)を生成するために用いる。
 
 \section{Selenium WebDriver}\label{sec:Selenium_WebDriver}
 Selenium WebDriver\cite{SeleniumWebDriver}は、Seleniumプロジェクト\cite{Selenium}の一部であり、Webブラウザを直接制御するためのAPIを提供する。
 Selenium WebDriverのAPIを用いてテストスクリプトを実行することで、指定したWebページにアクセスし、要素のクリックやページ遷移などのユーザ操作を自動で行う。
 
 \section{requests}\label{sec:requests}
-requests\cite{Requests}は、PythonでHTTPリクエストを扱うためのライブラリである。
-Webサイトへのアクセス、データ送受信、セッション管理、クッキー操作、SSL認証を可能にする。
-開発者がHTTPを簡単に扱えるように、HTTP/1.1\cite{HTTP}規格に基づき設計されている。
 
 \section{BeautifulSoup}\label{sec:beautifulsoup}
 BeautifulSoup\cite{BeautifulSoup}は、HTMLやXMLファイルからデータを取り出すためのPythonライブラリである。
@@ -348,14 +324,12 @@ BeautifulSoupオブジェクトとは、HTMLデータを解析し、操作可能
 \par
 本研究では、使用するパーサーに、HTMLデータを解析するパーサーである“html.parser”\cite{BeautifulSoup}を用いる。
 \paragraph{find\_all関数}
-find\_all関数は、引数で指定したタグに一致するすべての要素を検索し、それらをリストとして返す。
-リストには、HTMLやXMLファイルにおける検索された要素の行番号を格納する。
+find\_all関数は、指定したタグに一致するすべての要素を検索し、それらをリストとして返す。
 \paragraph{get\_text関数}
-get\_text関数は、引数で指定したタグのテキスト内容を返す。
+get\_text関数は、指定したタグのテキスト内容を返す。
 
 \section{difflib}\label{sec:difflib}
-difflib\cite{difflib}は、Pythonで文字列を要素として格納するリスト間の差分を検出し、処理するための標準モジュールである。
-本節では、文字列を要素として格納したリストを、文字列リストと呼ぶ。
+difflib\cite{difflib}は、Pythonで文字列リスト間の差分を検出し、処理するための標準モジュールである。
 % このモジュールは、異なるテキストデータ間の差分を識別し、それらの違いを詳細に比較する機能を提供する。
 \par
 本研究では、difflibに用意されているDifferクラスのメソッドを用いる。
@@ -363,7 +337,7 @@ difflib\cite{difflib}は、Pythonで文字列を要素として格納するリ�
 Differクラスは、2つの文字列リスト間の差分を行単位で計算し、詳細な差分情報を生成するためのクラスである。
 このクラスは、文字列リストの各行を個別に比較し、追加、削除、変更された行を特定する。
 \paragraph{compareメソッド}
-compareメソッドは、Differクラスのインスタンスを使用して、2つの文字列リスト間の差分を計算する。
+Differクラスのインスタンスを使用して、2つの文字列リスト間の差分を計算するメソッドは、“compare”である。
 このメソッドは、2つの文字列リストを引数として受け取り、差分結果を行単位で返す。
 差分結果には、追加された行が“+”記号で、削除された行が“-”記号で、変更のない行がスペースでマークされる。
 また、“?”記号を用いて、変更があった行についての詳細な差分を示す。
@@ -390,7 +364,7 @@ compareメソッドは、Differクラスのインスタンスを使用して、2
 % \end{lstlisting}
 
 \section{Flask}\label{sec:Flask}
-Flask\cite{Flask}は、プログラミング言語PythonでWebサーバやWebアプリを構築する際に用いられるWebフレームワークである。
+Flask\cite{Flask}は、Pythonで構築されたWebフレームワークであり、WebサーバやWebアプリケーションを構築できる。
 このフレームワークは、Werkzeug\cite{Werkzeug}とJinja2\cite{Jinja}に基づいている。
 Werkzeugは、WebサーバとWebアプリケーション間のリクエストやレスポンスを処理するWSGI(Web Server Gateway Interface)ツールキットである。
 なお、WSGI\cite{WSGI}とは、WebサーバとWebアプリケーション間の接続規格である。
@@ -400,9 +374,9 @@ Jinja2は、Pythonで使用されるテンプレートエンジン\cite{Template
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
-      \item \toolName が生成した画像(\ref{subsec:MixVRT_IO}節で後述)を閲覧できるWebページを開発者に提供する。
+      \item \toolName による生成した画像(\ref{subsec:MixVRT_IO}節で後述)の確認を効率的に行えるWebページを開発者に提供する。
       \item HTML比較部(\ref{sec:Affected_area_extraction}節で後述)で生成した枠付きHTMLコードをレンダリングし、
-            Flaskを用いて立てたローカルサーバのURLへのアクセスを通じて、レンダリングを行った枠付きWebページを表示する。
+            Flaskを用いて定義したURLへのアクセスを通じて、レンダリングを行った枠付きWebページを表示する。
 \end{itemize}
 なお、枠付きWebページを表示する目的は、Selenium WebDriverを用いて、
 枠付きHTMLコードによるWebページの画像を取得するためである。
@@ -419,30 +393,30 @@ SeleniumのGoogle Chrome用コンテナは、Webブラウザの自動操作を�
 Dockerfileは、Dockerコンテナの構築に必要な指示を記述したファイルである。
 docker-compose.ymlは、複数のコンテナを管理するための設定ファイルである。
 
-% \section{\texorpdfstring{$<$p$>$タグ内のテキストの整形}{pタグ内のテキストの整形}}\label{sec:text_change}
-% \ref{subsec:diff_file_generate}節で取得したHTMLコード内の$<$p$>$タグ内のテキストを整形する。
-% 整形する目的は、変更前後のHTMLコードを行単位で比較した際に、
-% $<$p$>$タグ内のテキストのように複数行にわたって書かれる可能性がある画面要素を、
-% 変更箇所として検出するためである。
-% body要素内の変更箇所検出は、変更前後のHTMLコードを行単位で比較し、変更があるかどうかを判定する。
-% しかし、$<$p$>$タグ内の複数行にわたるテキストがあり、そのテキスト中の一部が変更されていた場合に、
-% その行中に開始タグが無いと枠を囲むCSSクラスを追加することができない。
-% そのため、複数行にわたってテキストが書かれる可能性の高い$<$p$>$タグのみを対象に、
-% 1行で収まるように$<$p$>$タグ内のテキストを整形する。
-% 具体例として、$<$p$>$タグ内のテキストの整形前と整形後の例を、以下のソースコード\ref{lst:text_bf}とソースコード\ref{lst:text_af}に示す。
-% \begin{figure}[tp]
-%       \begin{lstlisting}[language=HTML, caption=$<$p$>$タグ内のテキストの整形前の例, label=lst:text_bf]
-% <p>A week consists of seven days. 
-%     It begins with Monday, marking the start of a new week. 
-%     Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
-% \end{lstlisting}
-% \end{figure}
+\section{\texorpdfstring{$<$p$>$タグ内のテキストの整形}{pタグ内のテキストの整形}}\label{sec:text_change}
+\ref{subsec:diff_file_generate}節で取得したHTMLコード内の$<$p$>$タグ内のテキストを整形する。
+整形する目的は、変更前後のHTMLコードを行単位で比較した際に、
+$<$p$>$タグ内のテキストのように複数行にわたって書かれる可能性がある画面要素を、
+変更箇所として検出するためである。
+body要素内の変更箇所検出は、変更前後のHTMLコードを行単位で比較し、変更があるかどうかを判定する。
+しかし、$<$p$>$タグ内の複数行にわたるテキストがあり、そのテキスト中の一部が変更されていた場合に、
+その行中に開始タグが無いと枠を囲むCSSクラスを追加することができない。
+そのため、複数行にわたってテキストが書かれる可能性の高い$<$p$>$タグのみを対象に、
+1行で収まるように$<$p$>$タグ内のテキストを整形する。
+具体例として、$<$p$>$タグ内のテキストの整形前と整形後の例を、以下のソースコード\ref{lst:text_bf}とソースコード\ref{lst:text_af}に示す。
+\begin{figure}[tp]
+      \begin{lstlisting}[language=HTML, caption=$<$p$>$タグ内のテキストの整形前の例, label=lst:text_bf]
+<p>A week consists of seven days. 
+    It begins with Monday, marking the start of a new week. 
+    Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
+\end{lstlisting}
+\end{figure}
 
-% \begin{figure}[tp]
-%       \begin{lstlisting}[language=Python, caption=$<$p$>$タグ内のテキストの整形後の例, label=lst:text_af]
-% <p>A week consists of seven days. It begins with Monday, marking the start of a new week. Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
-% \end{lstlisting}
-% \end{figure}
+\begin{figure}[tp]
+      \begin{lstlisting}[language=Python, caption=$<$p$>$タグ内のテキストの整形後の例, label=lst:text_af]
+<p>A week consists of seven days. It begins with Monday, marking the start of a new week. Tuesday follows, leading to Wednesday, which is the middle of the week. </p>
+\end{lstlisting}
+\end{figure}
 
 
 \section{入力対象とするWebページ}\label{sec:target_images}
@@ -450,16 +424,17 @@ docker-compose.ymlは、複数のコンテナを管理するための設定フ�
 \begin{itemize}
       \setlength{\itemsep}{0pt}
             \setlength{\parsep}{0pt}
-      \item テスト対象とするWebページの画面サイズが常に同じである
+      \item 比較対象とするWebページとテスト対象とするWebページの画面サイズが同じである
       \item 白地の背景である
       \item 赤枠と緑枠を含まない
       \item アニメーションを含まない
       \item WebページのURLは、“https://”または“http://”から始まるURLである
+      \item 【他にあれば今後追記する】
 \end{itemize}
 
 
 % \section{色枠をつけるCSSクラス}
-% 本研究では、枠付きHTMLコード生成処理(\ref{subsec:modified_html_generate}節を参照)において、変更箇所(\ref{cha:Function})に色枠をつけるためのCSSクラスを6種類作成した。
+% 本研究では、枠付きHTMLコード生成処理(\ref{subsec:modified_html_generate}節を参照)において、影響箇所(\ref{cha:Function})に色枠をつけるためのCSSクラスを6種類作成した。
 % 作成した6種類のCSSクラス名を、以下に示す。
 % \begin{itemize}
 %       \setlength{\itemsep}{0pt}

@@ -1,34 +1,34 @@
 \chapter{適用例}\label{cha:Indication}
-本章では、今回試作した\toolName を用いて、画像比較に基づく差分箇所からレイアウトの副作用箇所を可視化できることを確認する。
-\toolName のUIは、以下に示す4つのタブを持つタブメニューと、各タブに対応するタブコンテンツからなる。
+本章では、適用例を用いて、今回試作した\toolName が正しく動作することを確認する。
+\toolName が変更前のWebページのURLと、変更後のWebページのURLを入力として、
+以下に示す8つのPNG形式の画像を生成する。
 \begin{itemize}
-    \item[①] タブメニュー
-          \begin{itemize}
-              \item オリジナル表示タブ
-              \item 画像比較に基づく差分箇所表示タブ
-              \item HTMLコードの変更に基づく影響箇所表示タブ
-              \item レイアウトの副作用箇所表示タブ
-          \end{itemize}
-    \item[②] タブコンテンツ
+    \item Webページの変更前画像
+    \item Webページの変更後画像
+    \item 画像比較に基づく差分箇所を、色付きの枠で囲むことで強調表示した、Webページの変更前画像
+    \item 画像比較に基づく差分箇所を、色付きの枠で囲むことで強調表示した、Webページの変更後画像
+    \item HTMLコードの変更に基づく変更箇所を、色付きの枠で囲むことで強調表示した、Webページの変更前画像
+    \item HTMLコードの変更に基づく変更箇所を、色付きの枠で囲むことで強調表示した、Webページの変更後画像
+    \item レイアウトの不具合箇所を、色付きの枠で囲むことで強調表示した、Webページの変更前画像
+    \item レイアウトの不具合箇所を、色付きの枠で囲むことで強調表示した、Webページの変更後画像
 \end{itemize}
-\par
-\toolName がレイアウトの副作用を可視化できることを確認するために、以下のWebページを用意する。
+今回の検証を行うために、以下のWebページを用意する。
 \begin{itemize}
     \setlength{\itemsep}{0pt}
           \setlength{\parsep}{0pt}
-    \item テスト対象とするWebページ\label{item: ex1_bf}
-    \item 1.のWebページに対して、画面要素の追加による、Webページ\label{item: ex1_af}
+    \item テスト対象とするWebページA\label{item: ex1_bf}
+    \item AのWebページに対して、レイアウトの不具合が発生する変更を埋め込んだWebページB\label{item: ex1_af}
 \end{itemize}
-テスト対象とするWebページを図\ref{fig:bf_original}に、
-図\ref{fig:bf_original}のWebページにレイアウトの副作用が発生する変更を埋め込んだWebページを図\ref{fig:af_original}に、
+テスト対象とするWebページAを図\ref{fig:bf_original}に、
+図\ref{fig:bf_original}のWebページAにレイアウトの不具合箇所が発生する変更を埋め込んだWebページBを図\ref{fig:af_original}に、
 それぞれ示す。
-以降、上記の2つのWebページを適用例に用いて、画面要素の追加によるレイアウトの副作用を可視化できることを確認する。
+% 以降、上記の2つのWebページを適用例に用いて、レイアウトの不具合箇所を可視化できることを確認する。
 
 \begin{figure}[htbp]
     \centering
     % 画像ファイル名とサイズを指定
     \includegraphics[width=0.5\textwidth]{image/5/original_png/bf_original.png}
-    \caption{適用例とするテスト画面}
+    \caption{テスト対象とするWebページA}
     \label{fig:bf_original}
 \end{figure}
 
@@ -36,150 +36,142 @@
     \centering
     % 画像ファイル名とサイズを指定
     \includegraphics[width=0.5\textwidth]{image/5/original_png/af_original.png}
-    \caption{適用例とするテスト画面}
+    \caption{図\ref{fig:bf_original}のWebページAにレイアウトの不具合が発生する変更を埋め込んだWebページB}
     \label{fig:af_original}
 \end{figure}
-
-\section{画面要素の追加によるレイアウトの副作用}\label{sec:result_area_detection}
-適用例を用いて、\toolName が、画面要素の追加によるレイアウトの副作用を可視化できることを確認する。
-\toolName を用いて、以下の3つの操作を行う。
-\begin{enumerate}[label=操作\arabic*., leftmargin=1.8cm]
-    \item 図\ref{fig:bf_original}のWebページのURLを入力として、コマンドライン上で\toolName の実行コマンド(\ref{subsec:MixVRT_preparation}を参照)を実行する。
-    \item 図\ref{fig:af_original}のWebページのURLを入力として、コマンドライン上で\toolName の実行コマンドを実行する。
-    \item Webブラウザ上で「http://localhost:5000/MixVRT\_diff」にアクセスする。
-\end{enumerate}
-\par
-上記の操作を行うことで、
+上記のWebページを使用することで、
 適用例に対して視覚的回帰テストを行った\toolName の各表示タブを確認することができる。
-図\ref{fig: ex1_html}に、適用例に対するオリジナル表示タブを示す。
-オリジナル表示タブは
+
+以降の節では、適用例を用いて、\toolName が持つ以下のそれぞれの機能について、確認する。
+% 画像比較に基づく差分箇所表示、HTMLコードの変更に基づく変更箇所表示、レイアウトの不具合箇所表示
+% のそれぞれの
+% 画像比較に基づく差分箇所からHTMLコードに基づかないレイアウトの不具合箇所を
+% 可視化できることを確認する。
+% \toolName のUIは、以下に示す4つのタブを持つタブメニューと、各タブに対応するタブコンテンツからなる。
+% \begin{itemize}
+%     \item[①] タブメニュー
+%           \begin{itemize}
+%               \item オリジナル表示タブ
+%               \item 画像比較に基づく差分箇所表示タブ
+%               \item HTMLコードの変更に基づく変更箇所表示タブ
+%               \item レイアウトの不具合箇所表示タブ
+%           \end{itemize}
+%     \item[②] タブコンテンツ
+% \end{itemize}
+% \par
+% \toolName を用いて、HTMLコードに基づかないレイアウトの不具合箇所を可視化できるかどうかを確認するために、以下の4つのパターンについて確認する。
+% \begin{itemize}
+%     \item  画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に削除されている
+%     \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に削除されていない
+%     \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に追加されている
+%     \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に追加されていない
+% \end{itemize}
+% \par
+
+\section{画像比較に基づく差分箇所表示の確認}
+適用例を用いて、画像比較に基づく差分箇所表示が、正しく行われていることを確認する。
+図\ref{fig:bf_original}と図\ref{fig:af_original}の適用例における画像の比較に基づく差分箇所表示を、図\ref{fig: 5_app2}に示す。
+図\ref{fig: 5_app2}より、画像比較に基づく差分箇所表示が、正しく行われていることを確認できる。
+
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/original_png/original.png}
-        \caption{オリジナル表示タブで変更前画像として表示する画像}
-        \label{fig: bf_original}
+        \includegraphics[width=1.0\columnwidth]{image/5/5_app2.png}
+        \caption{図\ref{fig:bf_original}と図\ref{fig:af_original}における画像比較に基づく差分箇所表示}
+        \label{fig: 5_app2}
     \end{center}
 \end{figure}
 
+
+
+\section{HTMLコードの変更に基づく変更箇所表示の確認}
+適用例を用いて、HTMLコードの比較に基づく変更箇所表示が、正しく行われていることを確認する。
+図\ref{fig:bf_original}と図\ref{fig:af_original}の適用例における変更箇所表示を、図\ref{fig: 5_app1}に示す。
+図\ref{fig: 5_app1}より、HTMLコードの比較に基づく変更箇所表示が、正しく行われていることを確認できる。
+\begin{figure}[tp]
+    \begin{center}
+        \includegraphics[width=1.0\columnwidth]{image/5/5_app1.png}
+        \caption{図\ref{fig:bf_original}と図\ref{fig:af_original}の適用例における変更箇所表示}
+        \label{fig: 5_app1}
+    \end{center}
+\end{figure}
+
+
+\section{レイアウトの不具合箇所表示の確認}
+適用例を用いて、レイアウトの不具合箇所表示が、正しく行われていることを確認する。
+図\ref{fig:bf_original}と図\ref{fig:af_original}の適用例におけるレイアウトの不具合箇所表示を、図\ref{fig: 5_app3}に示す。
+HTMLコードに基づかないレイアウトの不具合箇所を確認するために、以下の4つのパターンについて確認する。
+\begin{itemize}
+    \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に削除されている
+    \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に削除されていない
+    \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に追加されている
+    \item 画像比較に基づく差分箇所通りにHTMLコードに基づく変更箇所に追加されていない
+\end{itemize}
+図\ref{fig: 5_app3}より、レイアウトの不具合箇所表示が、正しく行われていることを確認できる。
+\begin{figure}[tp]
+    \begin{center}
+        \includegraphics[width=1.0\columnwidth]{image/5/5_app_3.png}
+        \caption{図\ref{fig:bf_original}と図\ref{fig:af_original}の適用例におけるレイアウトの不具合箇所表示}
+        \label{fig: 5_app3}
+    \end{center}
+\end{figure}
+
+
+
+
+\subsection{パターン1: 差分箇所通りに削除されている}\label{sec:result_area_detection}
+適用例を用いて、差分箇所通りに削除されていることを確認する。
+図\ref{fig: 5_app2}の画面を確認すると、変更前画像上の一番下のリンクが赤枠で囲まれていることが分かる。
+この赤枠に着目すると、赤枠は変更後画像上で削除されていることが分かる。
+次に、差分箇所通りに削除されているかどうかを確かめるために、
+図\ref{fig: 5_app1}のHTMLコードの比較に基づく変更箇所表示タブを確認すると、
+赤枠で囲まれているため、HTMLコードに基づいて削除された箇所だと分かる。
+最後に、図\ref{fig: 5_app3}のレイアウトの不具合箇所表示タブで確認すると、
+レイアウトの不具合箇所として赤枠で囲まれていないことが分かる。
 \par
-レイアウトの副作用
-まず、レイアウトの不具合が発生していないかを確認するために、レイアウトの不具合箇所表示タブを確認する。
-レイアウトの不具合箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を、
-図\ref{fig: ex1_subeffect}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/ex1_subeffect.png}
-        \caption{オリジナル表示タブで変更後画像として表示する画像}
-        \label{fig: ex1_subeffect}
-    \end{center}
-\end{figure}
-図\ref{fig: ex1_subeffect}を見ると、画面要素の隠れが発生していないWebページの画像上に赤枠で囲まれた画面要素が存在するが、
-その画面要素と一致する緑枠で囲まれた画面要素は、画面要素の隠れが発生したWebページの画像上には存在しない。
-このことから、画面要素の隠れが発生していると推測できる。
-次に、赤枠で囲まれた画面要素がHTMLコードの変更による影響を受けているのかを確認する。
-HTMLコードの変更による影響箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を、
-図\ref{fig: ex1_html}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/ex1_html.png}
-        \caption{HTMLコードに基づく影響箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像}
-        \label{fig: ex1_html}
-    \end{center}
-\end{figure}
-図\ref{fig: ex1_html}を見ると、レイアウトの不具合箇所表示タブでは赤枠で囲まれた画面要素が、
-図\ref{fig: ex1_html}の画面要素の隠れが発生していないWebページの画像上には存在しない。
-つまり、赤枠で囲まれた画面要素は、HTMLコードによる影響を受けて
-以上より、\toolName は、画面要素の隠れを可視化できることを確認できた。
-% オリジナル表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を、
-% 図\ref{fig: ex1_original}に示す。
-% \begin{figure}[tp]
-%     \begin{center}
-%         \includegraphics[width=1.0\columnwidth]{image/5/ex1_original.png}
-%         \caption{オリジナル表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像}
-%         \label{fig: ex1_original}
-%     \end{center}
-% \end{figure}
-% 次に、画像比較に基づく差分箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を、
-% 図\ref{fig: ex1_img}に示す。
-% \begin{figure}[tp]
-%     \begin{center}
-%         \includegraphics[width=1.0\columnwidth]{image/5/ex1_img.png}
-%         \caption{画像比較に基づく差分箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像}
-%         \label{fig: ex1_img}
-%     \end{center}
-% % \end{figure}
-% その次に、HTMLコードに基づく影響箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を、
-% 図\ref{fig: ex1_html}に示す。
-% \begin{figure}[tp]
-%     \begin{center}
-%         \includegraphics[width=1.0\columnwidth]{image/5/ex1_html.png}
-%         \caption{HTMLコードに基づく影響箇所表示タブにおける、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像}
-%         \label{fig: ex1_html}
-%     \end{center}
-% \end{figure}
+よって、\toolName は、差分箇所通りに削除されていることを確認できる。
 
-% 図\ref{fig: ex1_original}より、画面要素の隠れが発生していないWebページの画像と画面要素の隠れが発生したWebページの画像を確認できる。
-% 図\ref{fig: ex1_img}により、レイアウトの変更があった画面要素を
-図\ref{fig: ex1_subeffect}を見ると、変更前画像上に赤枠で囲んだ画面要素が存在するが、その画面要素と一致する、緑枠で囲まれた画面要素は存在しない。
-このことから、画面要素の隠れが発生していると判断できる。
+
+
+\subsection{パターン2: 差分箇所通りに削除されていない}\label{sec:result_area2}
+適用例を用いて、差分箇所通りに削除されていないことを確認する。
+図\ref{fig: 5_app2}の画面を確認すると、変更前画像上のログインボタンが赤枠で囲まれていることが分かる。
+この赤枠に着目すると、変更後画像上で削除されていることが分かる。
+次に、差分箇所通りに削除されているかどうかを確かめるために、
+図\ref{fig: 5_app1}のHTMLコードの比較に基づく変更箇所表示タブを確認すると、
+赤枠で囲まれていないため、HTMLコードに基づいて削除されていない箇所だと分かる。
+このことから、緑枠で囲まれたテキストによって、ログインボタンが隠れた状態になっていると推測できる。
+最後に、図\ref{fig: 5_app3}のレイアウトの不具合箇所表示タブで確認すると、
+レイアウトの不具合箇所として赤枠で囲まれていることが分かる。
 \par
-以上のことから、\toolName は、画面要素の隠れを可視化できることを確認できた。
-% \toolName に対して、画面要素の隠れを埋め込む前のWebページのURLを入力として実行した時に取得した変更前画像と、
-% 画面要素の隠れを埋め込んだ後のWebページのURLを入力として実行した時に取得した変更後画像を
-% 画面要素の隠れを埋め込む前のWebページの画像と埋め込んだ後のWebページの画像を、図\ref{fig: ex1_original}に示す。
+よって、\toolName は、差分箇所通りに削除されていないことを確認できた。
 
-\section{画面要素の見切れの可視化}\label{sec:result_area_detec}
-適用例を用いて、\toolName が画面要素の見切れを、可視化できることを確認する。
-\toolName は、画面要素の見切れを埋め込んだ変更前後のWebページのURLをそれぞれ入力として受け取り、
-図\ref{fig: ex4_original}に対して画面要素の見切れを可視化した変更前画像と変更後画像を生成する。
-% 図\ref{fig: ex1_original}を見ると、変更前画像と変更後画像を比較して、コンテナ内に
-画面要素の見切れを可視化した変更前画像と変更後画像を、図\ref{fig: ex4_subeffect}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/ex4_original.png}
-        \caption{画面要素の見切れを埋め込んだWebページの変更前画像と変更後画像}
-        \label{fig: ex4_original}
-    \end{center}
-\end{figure}
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/ex4_subeffect.png}
-        \caption{図\ref{fig: ex4_original}に対して画面要素の見切れを可視化した変更前画像と変更後画像}
-        \label{fig: ex4_subeffect}
-    \end{center}
-\end{figure}
-図\ref{fig: ex4_subeffect}を見ると、変更前画像上に赤枠で囲んだ画面要素が存在し、その画面要素の一部と一致する、緑枠で囲まれた画面要素が存在する。
-このことから、画面要素の見切れが発生していると判断できる。
+
+\subsection{パターン3: 差分箇所通りに追加されている}\label{sec:result_area3}
+適用例を用いて、差分箇所通りに追加されていることを確認する。
+図\ref{fig: 5_app2}の画面を確認すると、変更後画像上の左上テキスト「受講科目登録」が緑枠で囲まれていることが分かる。
+この緑枠に着目すると、変更前画像上から追加されていることが分かる。
+次に、差分箇所通りに追加されているかどうかを確かめるために、
+図\ref{fig: 5_app1}のHTMLコードの比較に基づく変更箇所表示タブを確認すると、
+緑枠で囲まれているため、HTMLコードに基づいて追加された箇所だと分かる。
+最後に、図\ref{fig: 5_app3}のレイアウトの不具合箇所表示タブで確認すると、
+レイアウトの不具合箇所として緑枠で囲まれていないことが分かる。
 \par
-以上のことから、\toolName は、画面要素の見切れを可視化できることを確認できた。
+よって、\toolName は、差分箇所通りに追加されていることを確認できた。
 
-\section{画面要素の重なりの可視化}\label{sec:result_area_detecti}
-適用例を用いて、\toolName が画面要素の重なりを、可視化できることを確認する。
-\toolName は、画面要素の重なりを埋め込んだ変更前後のWebページのURLをそれぞれ入力として受け取り、
-図\ref{fig: ex3_original}に対して画面要素の重なりを可視化した変更前画像と変更後画像を生成する。
-% 図\ref{fig: ex1_original}を見ると、変更前画像と変更後画像を比較して、コンテナ内に
-画面要素の重なりを可視化した変更前画像と変更後画像を、図\ref{fig: ex3_subeffect}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/ex3_original.png}
-        \caption{画面要素の重なりを埋め込んだWebページの変更前画像と変更後画像}
-        \label{fig: ex3_original}
-    \end{center}
-\end{figure}
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/5/ex3_subeffect.png}
-        \caption{図\ref{fig: ex3_original}に対して画面要素の重なりを可視化した変更前画像と変更後画像}
-        \label{fig: ex3_subeffect}
-    \end{center}
-\end{figure}
-図\ref{fig: ex3_subeffect}を見ると、変更後画像上にテキストとフッターの2つの画面要素が緑枠内で重なっていることが確認できる。
-また、変更前画像上には、先ほど述べたテキストとフッターが赤枠で囲まれていることから、それらの画面要素が重なってできた画面要素の重なりであると確認できる。
-このことから、画面要素の重なりが発生していると判断できる。
+
+\subsection{パターン4: 差分箇所通りに追加されていない}\label{sec:result_area4}
+適用例を用いて、差分箇所通りに追加されていないことを確認する。
+図\ref{fig: 5_app2}の画面を確認すると、変更後画像上の右上テキスト「登録可能科目一覧」が緑枠で囲まれていることが分かる。
+この緑枠に着目すると、緑枠内のテキストと完全一致するテキストが変更前画像上に赤枠で囲まれているため、
+変更前画像上から削除され、変更後画像上に新しく追加されていることが分かる。
+% つまり、変更後にテキストの配置の変更があったと推測できる。
+次に、差分箇所通りに追加されているかどうかを確かめるために、
+図\ref{fig: 5_app1}のHTMLコードの比較に基づく変更箇所表示タブを確認すると、
+緑枠で囲まれていないため、HTMLコードに基づいて追加されていない箇所だと分かる。
+最後に、図\ref{fig: 5_app3}のレイアウトの不具合箇所表示タブで確認すると、
+レイアウトの不具合箇所として緑枠で囲まれていることが分かる。
 \par
-以上のことから、\toolName は、画面要素の重なりを可視化することを確認できた。
-
-
+よって、\toolName は、差分箇所通りに削除されていないことを確認できた。
 % \section{画面要素の隠れが発生したWebページ}\label{subsec:result_rect_area}
 % \subsection{Case1：開発者の意図しないレイアウトの不具合}\label{subsec:result_rect_area}
 

@@ -9,11 +9,11 @@
 %     \item 画像比較に基づく削除箇所を赤枠で囲むことで強調表示した、変更前画像
 %     \item 画像比較に基づく追加箇所を緑枠で囲むことで強調表示した、変更後画像
 %     \item HTMLコードにおけるbody要素内の追加とstyle要素内の追加のどちらか、
-%           または両方の追加による変更を受けた箇所を赤枠で囲むことで強調表示した、変更前画像
+%           または両方の追加による影響を受けた箇所を赤枠で囲むことで強調表示した、変更前画像
 %     \item HTMLコードにおけるbody要素内の削除とstyle要素内の削除のどちらか、
-%           または両方の削除による変更を受けた箇所を緑枠で囲むことで強調表示した、変更後画像
-%     \item HTMLコードの変更に基づく変更箇所を色付きの枠で囲むことで強調表示した、変更前画像
-%     \item HTMLコードの変更に基づく変更箇所を色付きの枠で囲むことで強調表示した、変更後画像
+%           または両方の削除による影響を受けた箇所を緑枠で囲むことで強調表示した、変更後画像
+%     \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、変更前画像
+%     \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、変更後画像
 %     \item レイアウトの不具合箇所を色付きの枠で囲むことで強調表示した、変更前画像
 %     \item レイアウトの不具合箇所を色付きの枠で囲むことで強調表示した、変更後画像
 % \end{itemize}
@@ -21,7 +21,7 @@
 \toolName のシステム構成を、図\ref{fig:System}に示す。
 \begin{figure}[tp]
     \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/4_System_6.png}
+        \includegraphics[width=1.0\columnwidth]{image/4_System_4.png}
         \caption{\toolName のシステム構成}
         \label{fig:System}
     \end{center}
@@ -53,7 +53,7 @@
 %           \begin{enumerate}
 %               \item 差分コード生成
 %               \item 差分コード解析
-%               \item 変更箇所強調HTMLコード生成
+%               \item 影響箇所強調HTMLコード生成
 %           \end{enumerate}
 %     \item レイアウト副作用箇所抽出部
 %     \item 表示部
@@ -71,17 +71,16 @@
 % データ管理部と表示部の間におけるデータのやり取りは、データ管理部から表示部への一方向のみである。
 \par
 データ管理部における最初のデータのやり取りの相手は、取得部である。
-取得部からデータを受け取ると、そのデータをデータ管理部のbase\_dirディレクトリ(後述)に保持する。
+取得部からデータを受け取ると、そのデータをデータ管理部のbase\_dirディレクトリ(表\ref{tb: base_dir_data}を参照)に保持する。
 保持した後、\toolName の初期設定時の場合、
 % Flaskを用いて構築したローカルサーバ上で動作するWebページ(
-\toolName が生成した画像を閲覧できるWebページ(\ref{sec:Flask}節を参照)に、
+\toolName による生成した画像を閲覧できるWebページ(\ref{sec:Flask}節を参照)に、
 変更前画像のみを出力し、全体の処理を終了する。
-\toolName の初期設定時ではない場合、取得部に続き、
+\toolName の初期設定時でない場合、取得部に続き、
 画像比較部(\ref{sec:Difference_extraction_section}節で後述)、HTML比較部(\ref{sec:Affected_area_extraction}節で後述)、不具合検出部(\ref{sec:Layout_bug_extraction_section}節で後述)の順に
-データのやり取りを行う。やり取りしたデータはデータ管理部のdiff\_dirディレクトリ(後述)に保持する。
-\par
+データのやり取りを行う。やり取りしたデータはデータ管理部のdiff\_dirディレクトリ(表\ref{tb: diff_dir_data})に保持する。
 各処理部とのやり取りを終えると、
-データ管理部は、\toolName が生成した画像を閲覧できるWebページに、
+データ管理部は、\toolName による生成した画像を閲覧できるWebページに、
 \ref{subsec:MixVRT_IO}節で述べた8つのPNG形式の画像を出力し、全体の処理を終了する。
 % なお、出力先のWebページは、\toolName による視覚的回帰テストで生成した画像の確認が効率的に行えるWebページを開発者に提供する。
 \par
@@ -92,10 +91,10 @@
           base\_dirディレクトリに保持するデータの詳細を、表\ref{tb: base_dir_data}に示す。
           表\ref{tb: base_dir_data}中の変更後画像と変更後HTMLコードに関しては、
           \toolName の3回目以降の実行時は、前回実行時の変更後画像と変更後HTMLコードが存在するため、
-          そのデータを削除してから、新たに、変更後画像と変更後HTMLコードを保持する。
+          そのデータを削除してから、3回目以降の実行時に取得する、変更後画像と変更後HTMLコードを保持する。
           また、表\ref{tb: base_dir_data}中の変更前画像と変更前HTMLコードに関しては、
           開発者が「\$ make save」(\ref{subsec:MixVRT_evaluate}を参照)を実行することで、
-          変更後画像と変更後HTMLコードを、それぞれ変更前画像と変更前HTMLコードとして更新する。
+          変更前画像と変更前HTMLコードをそれぞれ変更後画像と変更後HTMLコードとして上書きし更新する。
     \item diff\_dirディレクトリ:\\
           画像比較部、HTML比較部、不具合検出部でやり取りしたデータを保持する。
           diff\_dirディレクトリに保持するデータの詳細を、表\ref{tb: diff_dir_data}に示す。
@@ -136,9 +135,10 @@
         追加箇所強調二値化画像     & 追加箇所二値化画像の白い部分を強調した画像                   \\ \hline
         差分箇所赤枠強調マスク画像 & 削除箇所強調二値化画像の白い部分を囲む赤枠のみを抽出した画像 \\ \hline
         差分箇所緑枠強調マスク画像 & 追加箇所強調二値化画像の白い部分を囲む緑枠のみを抽出した画像 \\ \hline    
-        \begin{tabular}{l}差分箇所変更前後画像\\\end{tabular}  & \begin{tabular}{l}画像比較に基づく差分箇所を、\\色付きの枠で囲むことで強調表示した、変更前画像と変更後画像\end{tabular}                                   \\ \hline
-        \begin{tabular}{l}枠付き変更前HTMLコード\\\end{tabular} & \begin{tabular}{l}変更箇所における削除または変更があった画面要素を\\赤枠で囲むCSSクラスを付加した変更前HTMLコード\end{tabular}                                   \\ \hline
-        \begin{tabular}{l} 枠付き変更後HTMLコード\\\end{tabular} & \begin{tabular}{l}変更箇所における追加または変更があった画面要素を\\緑枠で囲むCSSクラスを付加した変更後HTMLコード\end{tabular}                                   \\ \hline
+        % \begin{tabular}{l}差分箇所赤枠強調画像\\\end{tabular}  & \begin{tabular}{l}画像比較に基づく差分箇所を、\\色付きの枠で囲むことで強調表示した、変更前画像\end{tabular}                                      \\ \hline
+        % \begin{tabular}{l}差分箇所緑枠強調画像\\\end{tabular}  & \begin{tabular}{l}画像比較に基づく差分箇所を、\\色付きの枠で囲むことで強調表示した、変更後画像\end{tabular}                                      \\ \hline
+        \begin{tabular}{l}枠付き変更前HTMLコード\\\end{tabular}  & \begin{tabular}{l}影響箇所における削除または変更があった画面要素を\\赤枠で囲むCSSクラスを付加した変更前HTMLコード\end{tabular}                                   \\ \hline
+        \begin{tabular}{l} 枠付き変更後HTMLコード\\\end{tabular} & \begin{tabular}{l}影響箇所における追加または変更があった画面要素を\\緑枠で囲むCSSクラスを付加した変更後HTMLコード\end{tabular}                                   \\ \hline
         枠付き変更前画像           & 
         \begin{tabular}{l}
             枠付き変更前HTMLコードをWebページとして表示した画面を \\スクリーンショットした画像 \\
@@ -147,27 +147,114 @@
         \begin{tabular}{l}
             枠付き変更後HTMLコードをWebページとして表示した画面を \\スクリーンショットした画像 \\
         \end{tabular}                                                                \\  \hline                                               
-        変更箇所赤枠強調マスク画像 & 枠付き変更前画像から赤枠のみを抽出した画像                   \\ \hline
-        変更箇所緑枠強調マスク画像 & 枠付き変更後画像から緑枠のみを抽出した画像                   \\ \hline
-        \begin{tabular}{l}変更箇所変更前後画像\\\end{tabular} & \begin{tabular}{l}HTMLコードの変更に基づく変更箇所を、\\色付きの枠で囲むことで強調表示した、変更前画像と変更後画像\end{tabular}                                   \\ \hline
-        \begin{tabular}{l}不具合箇所変更前後画像\\\end{tabular} & \begin{tabular}{l}レイアウトの不具合箇所を、\\色付きの枠で囲むことで強調表示した、変更前画像と変更後画像\end{tabular}                                   \\ \hline
+        影響箇所赤枠強調マスク画像 & 枠付き変更前画像から赤枠のみを抽出した画像                   \\ \hline
+        影響箇所緑枠強調マスク画像 & 枠付き変更後画像から緑枠のみを抽出した画像                   \\ \hline
     \end{tabular}
 \end{table}
 
+% \toolName を2回実行した際の、データ管理部と各処理部とのやり取りを行ったデータを保持するディレクトリの構造を、以下に示す。
+
+% directory
+
+% \begin{lstlisting}[language=, basicstyle=\ttfamily]
+% .
+% ├── base_dir/
+% │   ├── (2回目実行時のタイムスタンプ)/
+% │   │   ├── html/
+% │   │   │   └── html_(2回目実行時のタイムスタンプ).html
+% │   │   └── img/
+% │   │       └── img_(2回目実行時のタイムスタンプ).png
+% │   ├── current/ 
+% │   │   ├── html/
+% │   │   │   └── html_(1回目実行時のタイムスタンプ).html
+% │   │   └── img/
+% │   │       └── img_(1回目実行時のタイムスタンプ).png
+% │   ├── initial/
+% │   │   ├── html/
+% │   │   │   └── html_(1回目実行時のタイムスタンプ).html
+% │   │   └── img/
+% │   │       └── img_(1回目実行時のタイムスタンプ).png
+% │   └── latest/
+% │       ├── html/
+% │       │   └── html_(2回目実行時のタイムスタンプ).html
+% │       └── img/
+% │           └── img_(2回目実行時のタイムスタンプ).png
+% └── diff_dir/
+%      ├── diff_img_png/
+%      │   ├── diff_af_img.png
+%      │   └── diff_bf_img.png
+%      ├── diff_rec_html_high_png/
+%      │   ├── diff_rec_af_html.png
+%      │   └── diff_rec_bf_html.png
+%      ├── diff_rec_img_high_png/
+%      │   ├── diff_rec_af_img.png
+%      │   └── diff_rec_bf_img.png
+%      ├── diff_html_txt/
+%      │   └── diff_html.txt
+%      ├── modified_html/
+%      │   └── templates/
+%      │       ├── modified_testPage_af.html
+%      │       └── modified_testPage_bf.html
+%      ├── modified_html_png/
+%      │   ├── modified_testPage_af.png
+%      │   └── modified_testPage_bf.png
+%      ├── modifiled_html_high_png/
+%      │   ├── modified_testPage_af_high.png
+%      │   └── modified_testPage_bf_high.png
+%      ├── original_high_png/
+%      │   ├── img_af_high.png
+%      │   └── img_bf_high.png
+%      └── sub_effect_png/
+%          ├── subEffect_af.png
+%          └── subEffect_bf.png
+% \end{lstlisting}
+
+% \begin{itemize}
+%     \item 取得部からデータ管理部
+%     \item データ管理部から表示部
+% \end{itemize}
+
+% 5つの各処理部から受け付けるデータを、以下に示す。
+% \begin{itemize}
+%     \item 取得部:
+%           \begin{itemize}
+%               \item 変更前画像と変更後画像
+%           \end{itemize}
+%     \item 画像比較部:
+%           \begin{itemize}
+%               \item 画像比較に基づく差分箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像
+%               \item 上記の画像を高解像度にし、枠のみを抽出した、削除強調マスク画像と追加強調マスク画像
+%           \end{itemize}
+%     \item HTML比較部:
+%           \begin{itemize}
+%               \item HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像
+%               \item 上記の画像を高解像度にし、枠のみを抽出した、削除強調マスク画像と追加強調マスク画像
+%           \end{itemize}
+%     \item 副作用抽出部:
+%           \begin{itemize}
+%               \item レイアウトの副作用箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像
+%           \end{itemize}
+%     \item 不具合抽出部:
+%           \begin{itemize}
+%               \item レイアウトの不具合箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像
+%           \end{itemize}
+% \end{itemize}
+
+% なお、\toolName の初期設定時は、取得部からWebページの画像とHTMLを受け取ると、\toolName 全体の処理を終了する。
 
 \section{取得部}\label{sec:Web_data_get_section}
 取得部は、コマンドライン上から入力対象とするWebページのURLを入力として受け取り、URLから取得したWebページの画像とHTMLコードを、データ管理部のbase\_dirディレクトリに出力する。
 なお、HTML比較部から取得部に、枠付きWebページのURL(\ref{sec:Flask}節を参照)を渡して呼び出す場合があり(図\ref{fig:System}と\ref{sec:Affected_area_extraction}節を参照)、
-その場合は、取得した画像をデータ管理部のdiff\_dirディレクトリに出力する。
+その場合は、取得したデータをデータ管理部のdiff\_dirディレクトリに出力する。
 \par
 Webページの画像取得は、Selenium WebDriver(\ref{sec:Selenium_WebDriver}節を参照)を用いて、WebページのURLからWebページの画像を取得する。
 なお、取得するWebページの画像は、フルページのスクリーンショット画像である。
-WebページのHTMLコード取得は、Pythonライブラリであるrequests(\ref{sec:requests}節を参照)を用いて、
+WebページのHTMLコード取得は、PythonライブラリであるRequests(\ref{sec:requests}節を参照)を用いて、
 WebページのURLからWebページのHTMLコードを取得する。
 
 \section{画像比較部}\label{sec:Difference_extraction_section}
 画像比較部は、データ管理部のbase\_dirディレクトリから変更前画像と変更後画像を受け取り、
-「差分箇所変更前後画像」を生成する。
+画像比較に基づく差分箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像を生成する。
 また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、差分箇所を囲む色付きの枠のみを抽出した、
 「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」も生成する。
 生成したマスク画像は、不具合検出部(\ref{sec:Layout_bug_extraction_section}節で後述)でレイアウトの不具合箇所を検出する際に用いる。
@@ -203,15 +290,6 @@ WebページのURLからWebページのHTMLコードを取得する。
     \end{center}
 \end{figure}
 この処理は、輪郭検出処理(\ref{subsec:contour_detection_processing}節で後述)の精度を向上するために必要である。
-図\ref{fig: img_original_bf_af}に示した、変更前画像と変更後画像に高解像度画像生成処理を適用して生成した
-「変更前高解像度画像」と「変更後高解像度画像」を、図\ref{fig: high_img}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/4_img_high_original_bf_af}
-        \caption{「変更前高解像度画像」と「変更後高解像度画像」}
-        \label{fig: high_img}
-    \end{center}
-\end{figure}
 なお、生成した高解像度画像は他の処理部で使用するため、「変更前高解像度画像」と「変更後高解像度画像」をデータ管理部のdiff\_dirディレクトリに出力する。
 \par
 高解像度画像を生成する流れを、以下に示す。なお、リサイズに使用するリサンプリングフィルタには、LANCZOSフィルタ(\ref{sec:pillow}節を参照)を用いる。
@@ -229,7 +307,8 @@ WebページのURLからWebページのHTMLコードを取得する。
 「変更前高解像度二値化画像」と「変更後高解像度二値化画像」を生成する。
 この処理により、画像の一部が明るく、他の部分が暗い場合においても、均一な二値化画像を生成できるため、
 輪郭検出処理(\ref{subsec:contour_detection_processing}節で後述)の精度向上につながる。
-図\ref{fig: high_img}に示した、「変更前高解像度画像」と「変更後高解像度画像」に適応的二値化処理を適用して生成した
+
+生成した画像は、diff\_dirディレクトリに出力する。
 「変更前高解像度二値化画像」と「変更後高解像度二値化画像」を、図\ref{fig: img_high_bin_bf_af}に示す。
 \begin{figure}[tp]
     \begin{center}
@@ -241,10 +320,9 @@ WebページのURLからWebページのHTMLコードを取得する。
 \par
 「変更前高解像度画像」と「変更後高解像度画像」に対して、それぞれ適応的二値化を行う流れを、以下に示す。
 \begin{enumerate}
-    \item imread関数(\ref{sec:opencv}節を参照)を用いて、変更前画像と変更後画像をそれぞれ読み込む。
-    \item cvtColor関数(\ref{sec:opencv}節を参照)を用いて、変更前画像と変更後画像をそれぞれグレースケール化する。
-    \item adaptiveThreshold関数(\ref{sec:opencv}節を参照)を用いて、2つのグレースケール画像に対して白黒反転を伴う適応的二値化をそれぞれ行う。
-    \item 3.の処理結果により、「変更前高解像度二値化画像」と「変更後高解像度二値化画像」を生成する。
+    \item imread関数(\ref{sec:opencv}節を参照)を用いて、画像を読み込む。
+    \item cvtColor関数(\ref{sec:opencv}節を参照)を用いて、画像をグレースケール化する。
+    \item adaptiveThreshold関数(\ref{sec:opencv}節を参照)を用いて、グレースケール画像に対して白黒反転を伴う適応的二値化を行う。
 \end{enumerate}
 
 \subsection{差分検出処理}\label{subsec:difference_detection_process}
@@ -304,15 +382,14 @@ WebページのURLからWebページのHTMLコードを取得する。
 
 \subsection{枠描画処理}\label{subsec:Bounding box drawing process}
 枠描画処理は、変更前画像と変更後画像に対して輪郭検出処理(\ref{subsec:contour_detection_processing}節を参照)で取得した輪郭リストを用いて、
-「変更箇所変更前後画像」を生成する。
+画像比較に基づく差分箇所を、色付きの枠で囲むことで強調表示した、変更前画像と変更後画像を生成する。
 また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、差分箇所を囲む色付きの枠のみを抽出した、
 「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」を生成する。
-なお、「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」を総称して、「変更箇所変更前後画像」と呼ぶ。
-「変更箇所変更前後画像」を、図\ref{fig: img_diff_highlight}に示す。
+画像比較に基づく差分箇所を、色付きの枠で囲むことで強調表示した、変更前画像と変更後画像を、図\ref{fig: img_diff_highlight}に示す。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/4_img_diff_highlight.png}
-        \caption{「変更箇所変更前後画像」}
+        \caption{画像比較に基づく差分箇所を、色付きの枠で囲むことで強調表示した、変更前画像と変更後画像}
         \label{fig: img_diff_highlight}
     \end{center}
 \end{figure}
@@ -328,8 +405,8 @@ WebページのURLからWebページのHTMLコードを取得する。
 枠描画処理の流れを、以下に示す。
 \begin{enumerate}
     \item boundingRect関数(\ref{sec:opencv}節を参照)を用いて、削除箇所の輪郭リストと追加箇所の輪郭リストのそれぞれの各要素である輪郭データから、輪郭を囲む矩形の座標と幅、高さを取得する。
-    \item 取得した矩形情報を引数に指定したrectangle関数(\ref{sec:opencv}節を参照)を用いて、変更前画像上に赤枠、変更後画像上に緑枠を描画し、「差分箇所赤枠強調画像」と「差分箇所緑枠強調画像」をそれぞれ生成する。
-    \item np.zeros関数(\ref{sec:numpy}節を参照)を用いて、変更前画像、または、変更後画像と同じサイズの2つの黒画像を生成する。
+    \item 取得した矩形情報を引数に指定したrectangle関数(\ref{sec:opencv}節を参照)を用いて、変更前画像上に赤枠、変更後画像上に緑枠を描画する。
+    \item np.zeros関数(\ref{sec:numpy}節を参照)を用いて、変更前画像と変更後画像のそれぞれと同じサイズの2つの黒画像を生成する。
     \item 取得した矩形情報を引数に指定したrectangle関数を用いて、3.で生成した2つの黒画像に対して、
           一方の黒画像に赤枠のみを描画した「差分箇所赤枠強調マスク画像」、もう一方の黒画像に緑枠を描画した「差分箇所緑枠強調マスク画像」をそれぞれ生成する。
 \end{enumerate}
@@ -360,9 +437,9 @@ WebページのURLからWebページのHTMLコードを取得する。
 % \end{figure}
 % 以降、具体例に図\ref{fig: img_original_bf_af}を用いて、画像比較部の各処理について説明する。
 \section{HTML比較部}\label{sec:Affected_area_extraction}
-HTML比較部は、データ管理部のbase\_dirディレクトリ(\ref{tb: base_dir_data})から変更前HTMLコードと変更後HTMLコードを受け取り、
-「変更箇所変更前後画像」を生成する。
-また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、変更箇所を囲む色付きの枠のみを抽出した、「変更箇所赤枠強調マスク画像」と「変更箇所緑枠強調マスク画像」も生成する。
+HTML比較部は、データ管理部のbase\_dirディレクトリから変更前HTMLコードと変更後HTMLコードを受け取り、
+HTMLコードの変更に基づく影響箇所を色付きの枠で囲むことで強調表示した、変更前画像と変更後画像を生成する。
+また、それらの画像から枠のみを残してそれ以外の部分を黒くすることで、影響箇所を囲む色付きの枠のみを抽出した、「影響箇所赤枠強調マスク画像」と「影響箇所緑枠強調マスク画像」も生成する。
 \par
 HTML比較部の処理の流れを、以下に示す。
 \begin{enumerate}
@@ -404,7 +481,7 @@ HTML比較部の処理の流れを、以下に示す。
 差分コードを生成する処理を、以下に示す。
 \begin{enumerate}
     \item 変更前HTMLコードと変更後HTMLコードをそれぞれHTMLデータとして読み込む。
-    \item HTMLデータ内の$<$p$>$タグ内のテキスト内に存在する余分な空白や改行を取り除くために、以下を行う。
+    \item HTMLデータ内の$<$p$>$タグ内のテキスト内に存在する余分な空白や改行を取り除く(\ref{sec:text_change}節を参照)ために、以下を行う。
           \begin{enumerate}
               \item 変更前と変更後のHTMLデータを解析するためのBeautifulSoupオブジェクト(\ref{sec:beautifulsoup}節を参照)をそれぞれ初期化する。
               \item BeautifulSoupオブジェクトに対して、find\_all関数(\ref{sec:beautifulsoup}節を参照)を用い、HTMLデータ内の全ての$<$p$>$タグを格納したリストを生成する。
@@ -444,7 +521,7 @@ HTML比較部の処理の流れを、以下に示す。
 \subsection{枠付きHTMLコード生成処理}\label{subsec:modified_html_generate}
 枠付きHTMLコード生成処理は、差分コード生成処理から差分コードを受け取り、
 枠付き変更前HTMLコードと枠付き変更後HTMLコードを生成する。
-生成した枠付き変更前HTMLコードと枠付き変更後HTMLコードは、データ管理部のdiff\_dirディレクトリ(\ref{tb: diff_dir_data}節を参照)に出力する。
+生成した枠付き変更前HTMLコードと枠付き変更後HTMLコードは、データ管理部のdiff\_dirディレクトリに出力する。
 \par
 差分コードから、枠付き変更前HTMLコードと枠付き変更後HTMLコードを生成する処理を、以下に示す。
 \begin{enumerate}
@@ -473,20 +550,22 @@ body要素解析処理の流れを、以下に示す。
           \begin{enumerate}
               \item 行の先頭を調べて、以下の処理を行う。
                     \begin{enumerate}
-                        \item 行の先頭が“-”、または、“+”以外のflag\_beforeとflag\_afterの両方の値をFalseにする。
-                        \item 行の先頭が“-”の場合、flag\_beforeの値をTrueにする。
-                        \item 行の先頭が“+”の場合、flag\_afterの値をTrueにする。
+                        \item 行の先頭が“-”の場合、flag\_beforeの値をTrueにし、“-”を取り除く
+                        \item 行の先頭が“+”の場合、flag\_afterの値をTrueにし、“+”を取り除く
+                        \item 行中に“\textless img“を含む場合:
                               \begin{enumerate}
-                                  \item 行中に“\textless img”を含む場合は、imgタグ用のCSSクラスを付加したdivタグでimgタグを囲む。
-                                  \item 行中に“\textless img”を含まない場合は、以下のどちらかの処理を行う。
-                                        \begin{itemize}
-                                            \item 行中に“class=”を含む場合、開始タグのstyle属性にbody要素用のCSSクラスを付加する。
-                                            \item 行中に“class=”を含まない場合、開始タグの終了記号直前にbody要素用のCSSクラスを付加する。
-                                        \end{itemize}
-                                  \item flag\_beforeの値がTrue、かつ、True、flag\_afterの値がFalseの場合、modified\_before\_linesに行を追加する。
-                                  \item flag\_beforeの値がFalse、かつ、True、flag\_afterの値がTrueの場合、modified\_after\_linesに行を追加する。
-                                  \item flag\_beforeの値がflag\_afterの値がTrue場合、modified\_before\_linesとmodified\_after\_linesの両方に行を追加する。
+                                  \item imgタグ用のCSSクラスを付加したdivタグでimgタグを囲む。
                               \end{enumerate}
+                        \item 行中に“\textless img”を含まない場合:
+                              \begin{enumerate}
+                                  \item 行中に“class=”を含む場合、開始タグのstyle属性にbody要素用のCSSクラスを付加する。
+                                  \item 行中に“class=”を含まない場合、開始タグの終了記号直前にbody要素用のCSSクラスを付加する。
+                              \end{enumerate}
+                        \item 行の先頭がそれ以外の場合、
+                              flag\_beforeとflag\_afterの両方の値をFalseにする。
+                        \item flag\_beforeの値とflag\_afterの値を調べて、TrueかつFalseの場合、modified\_before\_linesに行を追加する。
+                        \item flag\_beforeの値とflag\_afterの値を調べて、FalseかつTrueの場合、modified\_after\_linesに行を追加する。
+                        \item それ以外の場合、modified\_before\_linesとmodified\_after\_linesの両方に行を追加する。
                     \end{enumerate}
           \end{enumerate}
     \item modified\_before\_linesとmodified\_after\_linesを、後述するCSSクラス付加処理に出力する。
@@ -508,15 +587,18 @@ CSSセレクタ抽出処理の流れを、以下に示す。
                         \item changed\_selectors内に抽出したセレクタが存在せず、かつ、行が変更を示す“+”、または、“-”で始まる場合、
                               CSSセレクタをchanged\_selectorsに格納する。
                         \item current\_selectorの値にCSSセレクタを格納し、現在処理中のCSSセレクタを更新する。
+                        \item 3.に戻る
                     \end{enumerate}
               \item current\_selectorの値にCSSセレクタが格納されており、行が変更を示す"+"、または、"-"で始まる場合:
                     \begin{enumerate}
                         \item changed\_selectors内に、current\_selectorに格納されているCSSセレクタが存在しないならば、
                               そのCSSセレクタをchanged\_selectorsに格納する。
+                              3.に戻る
                     \end{enumerate}
-              \item CSSセレクタの終了を示す“\}”を含む行を見つけた場合は、以下の処理を行う。
+              \item CSSセレクタの終了を示す“\}”を含む行を見つけた場合:
                     \begin{enumerate}
                         \item current\_selectorの値にNoneを格納し、現在処理中のCSSセレクタをリセットする。
+                        \item 3.に戻る。
                     \end{enumerate}
           \end{enumerate}
     \item changed\_selectorsを、後述するCSSクラス付加処理に出力する。
@@ -524,11 +606,11 @@ CSSセレクタ抽出処理の流れを、以下に示す。
 
 \subsubsection{CSSクラス付加処理}\label{subsubsec: css_define}
 CSSクラス付加処理は、body要素内で変更があったタグ要素のstyle属性にCSSクラス\cite{CssSelector}を付加した変更前HTMLコードのstyle要素の末尾に、
-変更箇所における削除箇所に赤枠をつけるCSSクラスを付加し、枠付き変更前HTMLコードを生成する。
-また、body要素内で変更があったタグ要素のstyle属性にCSSクラスを付加した変更後HTMLコードのstyle要素の末尾に、
-変更箇所における追加箇所に緑枠をつけるCSSクラスを付加し、枠付き変更後HTMLコードを生成する。
+影響箇所における削除箇所に赤枠をつけるCSSクラスを付加し、枠付き変更前HTMLコードを生成する。
+また、body要素内で変更があったタグ要素のstyle属性にCSSクラス\cite{CssSelector}を付加した変更後HTMLコードのstyle要素の末尾に、
+影響箇所における追加箇所に緑枠をつけるCSSクラスを付加し、枠付き変更後HTMLコードを生成する。
 \par
-変更箇所に色枠をつける6種類のCSSクラスを、以下に定義する。
+影響箇所に色枠をつける6種類のCSSクラスを、以下に定義する。
 \begin{itemize}
     \setlength{\itemsep}{0pt}
           \setlength{\parsep}{0pt}
@@ -554,7 +636,7 @@ CSSクラス付加処理の流れを、以下に示す。
     \item modified\_before\_lines内の先頭行から順に、各行に対して、以下の処理を行う。
           \begin{itemize}
               \item "$<$/style$>$"を含まない行の場合、final\_before\_linesに行を追加する。
-              \item "$<$/style$>$"を含む行を見つけた場合は、以下の処理を行う。
+              \item "$<$/style$>$"を含む行を見つけた場合:
                     \begin{enumerate}
                         \item final\_before\_linesに、UNIQUE\_CLASS\_BEFORE\_CSSと\\IMAGE\_WRAPPER\_CLASS\_BEFORE\_CSSを追加する。
                         \item changed\_selectorsの要素数が$0$より大きい場合、final\_before\_linesに、\\SELECTORS\_CLASS\_BEFORE\_CSSを追加する。
@@ -564,15 +646,14 @@ CSSクラス付加処理の流れを、以下に示す。
     \item modified\_after\_lines内の先頭行から順に、各行に対して、以下の処理を行う。
           \begin{itemize}
               \item "$<$/style$>$"を含まない行の場合、final\_after\_linesに行を追加する。
-              \item "$<$/style$>$"を含む行を見つけた場合は、以下の処理を行う。
+              \item "$<$/style$>$"を含む行を見つけた場合:
                     \begin{enumerate}
                         \item final\_after\_linesに、UNIQUE\_CLASS\_AFTER\_CSSと\\IMAGE\_WRAPPER\_CLASS\_AFTER\_CSSを追加する。
                         \item changed\_selectorsの要素数が$0$より大きい場合、final\_after\_linesに、\\SELECTORS\_CLASS\_AFTER\_CSSを追加する。
                         \item final\_after\_linesに、"$<$/style$>$"を含む行を加える。
                     \end{enumerate}
           \end{itemize}
-    \item final\_before\_linesをHTMLコード形式で保存し、枠付き変更前HTMLコードを生成する。
-    \item final\_after\_linesをHTMLコード形式で保存し、枠付き変更後HTMLコードを生成する。
+    \item final\_before\_lineとfinal\_after\_linesをそれぞれHTMLコード形式で保存し、枠付き変更前HTMLコードと枠付き変更後HTMLコードを生成する。
 \end{enumerate}
 % style要素内の末尾に、body要素内で変更があった、画像以外のタグ要素にCSSクラスを付加する。なお、画像の追加や削除、変更があれば、imgタグ用のCSSクラスを付加する。
 % また、CSSセレクタ抽出処理から受け取った、変更があったCSSセレクタを格納するリストchanged\_selectorsに、1つ以上のCSSセレクタを含む場合は、
@@ -580,22 +661,21 @@ CSSクラス付加処理の流れを、以下に示す。
 
 \subsection{枠抽出処理}\label{subsec:frame_extraction}
 枠抽出処理は、
-変更前画像と「枠付き変更前画像」を比較し、赤枠のみを抽出した「変更箇所赤枠強調マスク画像」を生成する。
-また、変更後画像と「枠付き変更後画像」を比較し、緑枠のみを抽出した「変更箇所緑枠強調マスク画像」を生成する。
-「変更箇所変更前後画像」を、図\ref{fig: html_waku}に示す。
-なお、「枠付き変更前画像」と「枠付き変更後画像」の2つの画像を総称して、「変更箇所変更前後画像」と呼ぶ。
+変更前画像と「枠付き変更前画像」を比較し、赤枠のみを抽出した「影響箇所赤枠強調マスク画像」を生成する。
+また、変更後画像と「枠付き変更後画像」を比較し、緑枠のみを抽出した「影響箇所緑枠強調マスク画像」を生成する。
+「枠付き変更前画像」と「枠付き変更後画像」を、図\ref{fig: html_waku}に示す。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/4_html_waku.png}
-        \caption{「変更箇所変更前後画像」}
+        \caption{「枠付き変更前画像」と「枠付き変更後画像」}
         \label{fig: html_waku}
     \end{center}
 \end{figure}
-また、「変更箇所赤枠強調マスク画像」と「変更箇所緑枠強調マスク画像」を、図\ref{fig: html_diff_mask}に示す。
+また、「影響箇所赤枠強調マスク画像」と「影響箇所緑枠強調マスク画像」を、図\ref{fig: html_diff_mask}に示す。
 \begin{figure}[tp]
     \begin{center}
         \includegraphics[width=1.0\columnwidth]{image/4_html_diff_mask.png}
-        \caption{「変更箇所赤枠強調マスク画像」と「変更箇所緑枠強調マスク画像」}
+        \caption{「影響箇所赤枠強調マスク画像」と「影響箇所緑枠強調マスク画像」}
         \label{fig: html_diff_mask}
     \end{center}
 \end{figure}
@@ -608,12 +688,12 @@ CSSクラス付加処理の流れを、以下に示す。
     \item 3で公開したそれぞれのWebページのURLを、取得部に渡す。これにより、取得部は、
           枠付き変更前画像と枠付き変更後画像を取得し、取得した2つの画像を、データ管理部のdiff\_dirディレクトリに出力する。
     \item データ管理部のdiff\_dirディレクトリから、枠付き変更前画像と枠付き変更後画像を取得する。
-    \item absdiff関数を用いて、変更前画像と枠付き変更前画像を比較し、「変更箇所赤枠強調マスク画像」を生成する
-    \item absdiff関数を用いて、変更後画像と枠付き変更後画像を比較し、「変更箇所緑枠強調マスク画像」を生成する
+    \item absdiff関数を用いて、変更前画像と枠付き変更前画像を比較し、「影響箇所赤枠強調マスク画像」を生成する
+    \item absdiff関数を用いて、変更後画像と枠付き変更後画像を比較し、「影響箇所緑枠強調マスク画像」を生成する
 \end{enumerate}
 
-% \section{変更箇所検出部}\label{sec:Affected_area_extraction}
-% HTMLコードの変更に基づく変更箇所抽出部は、Webページ情報取得部で取得した変更前後のWebページのHTMLコードを用いて変更箇所を特定する。
+% \section{影響箇所検出部}\label{sec:Affected_area_extraction}
+% HTMLコードの変更に基づく影響箇所抽出部は、Webページ情報取得部で取得した変更前後のWebページのHTMLコードを用いて影響箇所を特定する。
 % 概要としては、差分コードを生成し、差分コードから枠付き処理を行った変更前後のHTMLコードを生成した後、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページを表示し、Webページ情報取得部によってそのWebページの画像を取得する。
 % 元のWebページ画像と枠付き処理をしたWebページ画像を比較して枠のみを抽出する。
 % 具体的には、まず、Pythonライブラリの一つであるdifflibモジュールを用いて、変更前後のHTMLコードから差分コードを生成する。
@@ -625,42 +705,41 @@ CSSクラス付加処理の流れを、以下に示す。
 % 差分コードから枠付き処理を行った変更前後のHTMLコードを生成した後は、そのHTMLコードをFlaskのテンプレートエンジンを用いてWebページとして表示し、そのWebページの画像を取得する。
 % そして、元のWebページ画像と枠付き処理をしたWebページ画像を比較して枠のみを抽出する。
 \section{不具合検出部}\label{sec:Layout_bug_extraction_section}
-不具合検出部は、データ管理部のbase\_dirディレクトリから「変更前画像」と「変更後画像」を受け取り、また、
-データ管理部のdiff\_dirディレクトリから「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」、「変更箇所赤枠強調マスク画像」と「変更箇所緑枠強調マスク画像」
-をそれぞれ受け取ることで、「不具合箇所変更前後画像」を生成する。
-「不具合箇所変更前後画像」を、図\ref{fig: 4_subeffect}に示す。
-\begin{figure}[tp]
-    \begin{center}
-        \includegraphics[width=1.0\columnwidth]{image/4_subEffect.png}
-        \caption{「不具合箇所変更前後画像」}
-        \label{fig: 4_subeffect}
-    \end{center}
-\end{figure}
-\par
+不具合検出部は、データ管理部のdiff\_dirディレクトリから「差分箇所赤枠強調マスク画像」と「差分箇所緑枠強調マスク画像」、「影響箇所赤枠強調マスク画像」と「影響箇所緑枠強調マスク画像」、
+「変更前画像」と「変更後画像」を受け取り、
+レイアウトの不具合箇所を、色付きの枠で囲むことで強調表示した、変更前画像と変更後画像を生成する。
 % なお、レイアウトの不具合箇所を、赤枠で囲むことで強調表示した、変更前画像を「不具合箇所赤枠強調画像」、
 % レイアウトの不具合箇所を、緑枠で囲むことで強調表示した、変更後画像を「不具合箇所緑枠強調画像」と定義する。
 生成した画像は、データ管理部のdiff\_dirディレクトリに出力する。
 \par
 不具合検出部の処理の流れを、以下に示す。
-「差分箇所赤枠強調マスク画像」と「変更箇所赤枠強調マスク画像」を比較することで、
-「差分箇所赤枠強調マスク画像」に存在する赤枠の中から、レイアウトの不具合箇所によって生じた赤枠の輪郭座標のみを抽出する。
-また、「差分箇所緑枠強調マスク画像」と「変更箇所緑枠強調マスク画像」を比較することで、
-「差分箇所緑枠強調マスク画像」に存在する緑枠の中から、レイアウトの不具合箇所によって生じた緑枠の輪郭座標のみを抽出する。
-なお、二値化した「差分箇所赤枠強調マスク画像」からレイアウトの不具合箇所によって生じた赤枠の輪郭座標のみを格納するリストをunique\_contours\_bf、
-レイアウトの不具合箇所によって生じた緑枠の輪郭座標のみを格納するリストをunique\_contours\_afとする。
 \begin{enumerate}
-    \item 「差分箇所赤枠強調マスク画像」と「変更箇所赤枠強調マスク画像」をimread関数(sec:opencv節を参照)を用いて、読み込む。
-    \item cvtColor関数(sec:opencv節を参照)を用いて、グレースケール化する。
-    \item threshold関数(sec:opencv節を参照)を用いて、グレースケール画像に対して白黒反転を伴う二値化を行う。
-    \item 二値化した「差分箇所赤枠強調マスク画像」に対して、findContours関数(sec:opencv節を参照)を用いて、赤枠の輪郭リストを格納するリストcontours\_img\_bfを取得する。
-    \item 二値化した「変更箇所赤枠強調マスク画像」に対して、findContours関数を用いて、緑枠の輪郭リストを格納するリストcontours\_html\_bfを取得する。
+    \item 副作用抽出処理
+    \item 不具合抽出処理
+\end{enumerate}
+以降、不具合検出部の各処理について説明する。
+
+\subsection{副作用抽出処理}\label{subsec:Layout_subeffect_extraction}
+副作用抽出処理は、「差分箇所赤枠強調マスク画像」と「影響箇所赤枠強調マスク画像」を比較することで、
+「差分箇所赤枠強調マスク画像」に存在する赤枠の中から、レイアウトの副作用によって生じた赤枠の輪郭座標のみを抽出する。
+また、「差分箇所緑枠強調マスク画像」と「影響箇所緑枠強調マスク画像」を比較することで、
+「差分箇所緑枠強調マスク画像」に存在する緑枠の中から、レイアウトの副作用によって生じた緑枠の輪郭座標のみを抽出する。
+なお、レイアウトの副作用によって生じた赤枠の輪郭座標のみを格納するリストをunique\_contours\_bf、
+レイアウトの副作用によって生じた緑枠の輪郭座標のみを格納するリストをunique\_contours\_afとする。
+\par
+副作用抽出処理を、以下に示す。
+\begin{enumerate}
+    \item 「差分箇所赤枠強調マスク画像」と「影響箇所赤枠強調マスク画像」をimread関数を用いて、読み込む。
+    \item cvtColor関数を用いて、グレースケール化する。
+    \item threshold関数を用いて、グレースケール画像に対して白黒反転を伴う二値化を行う。
+    \item 二値化した「差分箇所赤枠強調マスク画像」に対して、findContours関数を用いて、輪郭リストcontours\_img\_bfを取得する。
+    \item 二値化した「影響箇所赤枠強調マスク画像」に対して、findContours関数を用いて、輪郭リストcontours\_html\_bfを取得する。
     \item contours\_img\_bfの各輪郭要素の数だけループして、以下の処理を行う。
           \begin{enumerate}
               \item contours\_html\_bfの各輪郭要素の数だけループして、以下の処理を行う。
                     \begin{enumerate}
-                        \item contours\_img\_bfとcontours\_html\_bfのそれぞれの輪郭要素のバウンディングボックスを、boundingRect関数(sec:opencv節を参照)を用いて取得する。
-                        \item 2つのバウンディングボックスが重なっているかどうかを判定する変数matchの値をFalseに設定する。
-                        \item バウンディングボックスが重なっているかどうかを判定する
+                        \item contours\_img\_bfとcontours\_html\_bfのそれぞれの輪郭要素のバウンディングボックスを、boundingRect関数を用いて取得する。
+                        \item バウンディングボックスが重なっているか判定する
                               \begin{enumerate}
                                   \item  重なっている場合は、重なり部分のバウンディングボックスの面積を計算する。
                                         小さい方のバウンディングボックスの面積を計算し、
@@ -668,14 +747,12 @@ CSSクラス付加処理の流れを、以下に示す。
                                         大きい方のバウンディングボックスと小さい方のバウンディングボックスが重なっていると判定し、Trueを返す。そうでなければ、Falseを返す。
                                   \item 重なっていない場合は、Falseを返す。
                               \end{enumerate}
-                        \item matchの値がTrueの場合は、ループ処理から抜ける。
+                        \item matchの値がTrueなら、ループ処理から抜ける。
                     \end{enumerate}
-              \item matchの値がTrueの場合に、contours\_img\_bfのうち、どのcontours\_html\_bfの輪郭要素とも重ならなかった輪郭要素を、unique\_contours\_bfに格納する。
+              \item matchの値がTrueなら、contours\_img\_bfのうち、どのcontours\_html\_bfの輪郭要素とも重ならなかった輪郭要素を、unique\_contours\_bfに格納する。
           \end{enumerate}
-    \item 「差分箇所緑枠強調マスク画像」と「変更箇所緑枠強調マスク画像」に対しても、同様に1.～6.の操作を行い、
-          matchの値がTrueの場合、contours\_img\_afのうち、どのcontours\_html\_afの輪郭要素とも重ならなかった輪郭要素を、unique\_contours\_afに格納する。
-    \item boundingRect関数を用いて、unique\_contours\_bfとunique\_contours\_afのそれぞれの輪郭リストの各要素である輪郭データから、輪郭を囲む矩形の座標と幅、高さを、矩形情報として取得する。
-    \item 取得した矩形情報を引数に指定したrectangle関数を用いて、変更前画像上に赤枠、変更後画像上に緑枠を描画し、「変更箇所変更前後画像」を生成する。
+    \item 「差分箇所緑枠強調マスク画像」と「影響箇所緑枠強調マスク画像」に対しても、同様に1～6の操作を行う。
+    \item unique\_contours\_bfとunique\_contours\_afを、不具合抽出処理に渡す。
 \end{enumerate}
 
 % \subsection{不具合抽出処理}\label{subsec:Layout_bug_extraction}
@@ -705,9 +782,9 @@ CSSクラス付加処理の流れを、以下に示す。
 %                         %       そのバウンディングボックスに基づいて変更後画像から特定の領域を切り出す。
 %                         \item unique\_contours\_bfとunique\_contours\_afのそれぞれの輪郭要���のバウンディングボックスを、boundingRect関数を用いて取得する。
 %                         \item unique\_contours\_bfで取得したバウンディングボックスの座標とサイズに基づき、「変更前高解像���画像������対応する画像領域region\_bfを抽出する。
-%                         \item unique\_contours\_afで取得したバウンディングボ�����クスの座標とサイズに基づき、「�����更後高解像度画像」から対応する画像領域region\_afを抽出する。
+%                         \item unique\_contours\_afで取得したバウンディングボックスの座標とサイズに基づき、「変更後高解像度画像」から対応する画像領域region\_afを抽出する。
 %                         \item absdiff関数を用いて、region\_bfとregion\_afの画像領域間の各ピクセル値の絶対値の差を計算し、類似度を求める。
-%                         \item 類似度が9.5割を超えれば、レイアウトの不具合は無いと判定し、unique\_contours\_bfとunique\_contours\_afからそれぞれ現在処理中の輪郭要素を削除する��
+%                         \item 類似度が9.5割を超えれば、レイアウトの不具合は無いと判定し、unique\_contours\_bfとunique\_contours\_afからそれぞれ現在処理中の輪郭要素を削除する。
 %                     \end{enumerate}
 %           \end{enumerate}
 %     \item boundingRect関数を用いて、unique\_contours\_bfとunique\_contours\_afのそれぞれの輪郭リストの各要素である輪郭データから、輪郭を囲む矩形の座標と幅、高さを取得する。
@@ -716,8 +793,8 @@ CSSクラス付加処理の流れを、以下に示す。
 
 
 % \section{表示部}\label{sec:Interface_Display_Section}
-% 表示部����データ管理部��よってdisp\_dirディレクトリ内に保持されたデータを受け取り、
-% そのデータを、Flask\ref{sec:Flask}を用いて作成したローカルサー��上のWebペー�����に配置し、表示する。
+% 表示部は、データ管理部��よってdisp\_dirディレクトリ内に保持されたデータを受け取り、
+% そのデータを、Flask\ref{sec:Flask}を用いて作成したローカルサーバ上のWebページに配置し、表示する。
 % \toolName の実行コマンド初期設定時は、\ref{sec:Web_data_get_section}節で取得したWebページの画像を表示する。
-% \toolName の実行コマンド2回目以降実行時は、初期設定時に取��する画像に加えて、\ref{sec:Difference_extraction_section}節で取得した画像、
-% \ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_bug_extraction_section}節で生成した画像��表示する。
+% \toolName の実行コマンド2回目以降実行時は、初期設定時に取得する画像に加えて、\ref{sec:Difference_extraction_section}節で取得した画像、
+% \ref{sec:Affected_area_extraction}節で生成した画像、\ref{sec:Layout_bug_extraction_section}節で生成した画像を表示する。
