@@ -509,7 +509,7 @@ body要素解析処理の流れを、以下に示す。
                     \begin{itemize}
                         \item flag\_beforeの値がTrue、かつ、flag\_afterの値がFalseの場合、modified\_before\_linesに行を追加する。
                         \item flag\_beforeの値がFalse、かつ、flag\_afterの値がTrueの場合、modified\_after\_linesに行を追加する。
-                        \item flag\_beforeの値とflag\_afterの値がともにTrueの場合、modified\_before\_linesとmodified\_after\_linesの両方に行を追加する。
+                        \item flag\_beforeの値とflag\_afterの値がそれ以外の場合、modified\_before\_linesとmodified\_after\_linesの両方に行を追加する。
                     \end{itemize}
           \end{enumerate}
     \item modified\_before\_linesとmodified\_after\_linesを、後述するCSSクラス付加処理に出力する。
@@ -537,7 +537,7 @@ CSSセレクタ抽出処理の流れを、以下に示す。
                         \item changed\_selectors内に、current\_selectorに格納されているCSSセレクタが存在しないならば、
                               そのCSSセレクタをchanged\_selectorsに格納する。
                     \end{itemize}
-              \item CSSセレクタの終了を示す“\}”を含む行を見つけた場合は、以下の処理を行う。
+              \item CSSセレクタの終了を示す“\}”を含む行を見つけた場合:
                     \begin{itemize}
                         \item current\_selectorの値にNoneを格納し、現在処理中のCSSセレクタをリセットする。
                     \end{itemize}
